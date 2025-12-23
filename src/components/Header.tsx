@@ -20,23 +20,18 @@ export default function Header() {
           </button>
           <h1 className="ml-4 text-xl font-semibold">
             <Link to="/" className="hover:text-cyan-400 transition-colors">
-              DevFolio
+              Portlunch
             </Link>
           </h1>
         </div>
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <Link to="/Contact" className="px-4 py-2 text-white hover:text-cyan-400 transition-colors">
-            Contact
-          </Link>
-          <Link to="/About" className="px-4 py-2 text-white hover:text-cyan-400 transition-colors">
-            About
-          </Link>
+        
           
-          <button className="px-4 py-2 text-white hover:text-cyan-400 transition-colors">
+          {/* <button className="px-4 py-2 text-white hover:text-cyan-400 transition-colors">
             Sign In
-          </button>
+          </button> */}
           <button className="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors">
             Get Started
           </button>

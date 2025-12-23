@@ -10,12 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ContactRouteImport } from './routes/Contact'
+import { Route as BuilderRouteImport } from './routes/Builder'
 import { Route as AboutRouteImport } from './routes/About'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRegisterRouteImport } from './routes/auth/Register'
+import { Route as AuthLoginRouteImport } from './routes/auth/Login'
+import { Route as SiteSiteIdRouteImport } from './routes/Site.$siteId'
 
 const ContactRoute = ContactRouteImport.update({
   id: '/Contact',
   path: '/Contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuilderRoute = BuilderRouteImport.update({
+  id: '/Builder',
+  path: '/Builder',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -28,35 +37,88 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/Register',
+  path: '/auth/Register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/Login',
+  path: '/auth/Login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteSiteIdRoute = SiteSiteIdRouteImport.update({
+  id: '/Site/$siteId',
+  path: '/Site/$siteId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/About': typeof AboutRoute
+  '/Builder': typeof BuilderRoute
   '/Contact': typeof ContactRoute
+  '/Site/$siteId': typeof SiteSiteIdRoute
+  '/auth/Login': typeof AuthLoginRoute
+  '/auth/Register': typeof AuthRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/About': typeof AboutRoute
+  '/Builder': typeof BuilderRoute
   '/Contact': typeof ContactRoute
+  '/Site/$siteId': typeof SiteSiteIdRoute
+  '/auth/Login': typeof AuthLoginRoute
+  '/auth/Register': typeof AuthRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/About': typeof AboutRoute
+  '/Builder': typeof BuilderRoute
   '/Contact': typeof ContactRoute
+  '/Site/$siteId': typeof SiteSiteIdRoute
+  '/auth/Login': typeof AuthLoginRoute
+  '/auth/Register': typeof AuthRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/About' | '/Contact'
+  fullPaths:
+    | '/'
+    | '/About'
+    | '/Builder'
+    | '/Contact'
+    | '/Site/$siteId'
+    | '/auth/Login'
+    | '/auth/Register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/About' | '/Contact'
-  id: '__root__' | '/' | '/About' | '/Contact'
+  to:
+    | '/'
+    | '/About'
+    | '/Builder'
+    | '/Contact'
+    | '/Site/$siteId'
+    | '/auth/Login'
+    | '/auth/Register'
+  id:
+    | '__root__'
+    | '/'
+    | '/About'
+    | '/Builder'
+    | '/Contact'
+    | '/Site/$siteId'
+    | '/auth/Login'
+    | '/auth/Register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BuilderRoute: typeof BuilderRoute
   ContactRoute: typeof ContactRoute
+  SiteSiteIdRoute: typeof SiteSiteIdRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/Contact'
       fullPath: '/Contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Builder': {
+      id: '/Builder'
+      path: '/Builder'
+      fullPath: '/Builder'
+      preLoaderRoute: typeof BuilderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/About': {
@@ -82,13 +151,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/Register': {
+      id: '/auth/Register'
+      path: '/auth/Register'
+      fullPath: '/auth/Register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/Login': {
+      id: '/auth/Login'
+      path: '/auth/Login'
+      fullPath: '/auth/Login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Site/$siteId': {
+      id: '/Site/$siteId'
+      path: '/Site/$siteId'
+      fullPath: '/Site/$siteId'
+      preLoaderRoute: typeof SiteSiteIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BuilderRoute: BuilderRoute,
   ContactRoute: ContactRoute,
+  SiteSiteIdRoute: SiteSiteIdRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
