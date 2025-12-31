@@ -1,4 +1,4 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { useEffect } from 'react'
@@ -13,6 +13,11 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const { initialize, initialized } = useAuthStore()
+  const router = useRouterState()
+  const currentPath = router.location.pathname
+
+  // Hide header for public portfolio routes and preview routes
+  const hideHeader = currentPath.startsWith('/site/') || currentPath.startsWith('/preview/')
 
   useEffect(() => {
     if (!initialized) {
@@ -22,7 +27,7 @@ function RootComponent() {
 
   return (
     <>
-      <Header />
+      {!hideHeader && <Header />}
       <Outlet />
       <Toaster position="top-right" richColors />
       <TanStackDevtools

@@ -5,6 +5,8 @@ import { ProjectsSection } from '@/components/sections/ProjectsSection'
 import { SkillsSection } from '@/components/sections/SkillsSection'
 import { ExperienceSection } from '@/components/sections/ExperienceSection'
 import { ContactSection } from '@/components/sections/ContactSection'
+import { PortfolioNavbar } from '@/components/sections/PortfolioNavbar'
+import { PortfolioFooter } from '@/components/sections/PortfolioFooter'
 
 interface PreviewAreaProps {
   portfolio: Portfolio
@@ -27,37 +29,37 @@ export function PreviewArea({ portfolio, selectedSectionId, onSelectSection, isP
     switch (section.type) {
       case 'hero':
         return (
-          <div key={section.id} className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
+          <div className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
             <HeroSection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
           </div>
         )
       case 'about':
         return (
-          <div key={section.id} className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
+          <div className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
             <AboutSection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
           </div>
         )
       case 'projects':
         return (
-          <div key={section.id} className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
+          <div className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
             <ProjectsSection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
           </div>
         )
       case 'skills':
         return (
-          <div key={section.id} className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
+          <div className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
             <SkillsSection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
           </div>
         )
       case 'experience':
         return (
-          <div key={section.id} className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
+          <div className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
             <ExperienceSection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
           </div>
         )
       case 'contact':
         return (
-          <div key={section.id} className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
+          <div className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
             <ContactSection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
           </div>
         )
@@ -82,7 +84,17 @@ export function PreviewArea({ portfolio, selectedSectionId, onSelectSection, isP
           </div>
         </div>
       ) : (
-        <div>{sortedSections.map(renderSection)}</div>
+        <>
+          {isPreviewMode && <PortfolioNavbar portfolio={portfolio} />}
+          <div>
+            {sortedSections.map((section) => (
+              <div key={section.id} id={`section-${section.type}`}>
+                {renderSection(section)}
+              </div>
+            ))}
+          </div>
+          {isPreviewMode && <PortfolioFooter portfolio={portfolio} />}
+        </>
       )}
     </div>
   )

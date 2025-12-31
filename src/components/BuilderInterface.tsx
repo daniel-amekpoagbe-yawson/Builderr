@@ -17,6 +17,7 @@ export function BuilderInterface() {
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null)
   const [previewMode, setPreviewMode] = useState(false)
   const [showPublishDialog, setShowPublishDialog] = useState(false)
+  const [showThemeSettings, setShowThemeSettings] = useState(false)
 
   if (!currentPortfolio) return null
 
@@ -85,6 +86,10 @@ export function BuilderInterface() {
         saving={saving}
         onBack={() => navigate({ to: '/dashboard' })}
         onPreview={() => setPreviewMode(true)}
+        onThemeSettings={() => {
+          setShowThemeSettings(true)
+          setSelectedSectionId(null)
+        }}
         onPublish={currentPortfolio.isPublished ? handleUnpublish : handlePublish}
         onExport={handleExport}
         isPublished={currentPortfolio.isPublished || false}
@@ -97,7 +102,10 @@ export function BuilderInterface() {
           <SectionSidebar
             sections={currentPortfolio.sections}
             selectedSectionId={selectedSectionId}
-            onSelectSection={setSelectedSectionId}
+            onSelectSection={(id) => {
+              setSelectedSectionId(id)
+              setShowThemeSettings(false)
+            }}
             onAddSection={(type: SectionType) => {
               usePortfolioStore.getState().addSection(type)
               toast.success('Section added!')
@@ -110,30 +118,30 @@ export function BuilderInterface() {
           <PreviewArea
             portfolio={currentPortfolio}
             selectedSectionId={selectedSectionId}
-            onSelectSection={setSelectedSectionId}
+            onSelectSection={(id) => {
+              setSelectedSectionId(id)
+              setShowThemeSettings(false)
+            }}
             isPreviewMode={false}
           />
         </div>
 
         {/* Right Sidebar - Configuration Panel */}
         <div className="w-80 bg-white border-l border-gray-200 overflow-y-auto">
-          {selectedSection ? (
-            <ConfigPanel
-              section={selectedSection}
-              portfolio={currentPortfolio}
-              onUpdate={(updates) => {
-                usePortfolioStore.getState().updateSection(selectedSection.id, updates)
-              }}
-              onDelete={() => {
-                usePortfolioStore.getState().removeSection(selectedSection.id)
-                setSelectedSectionId(null)
-                toast.success('Section removed')
-              }}
-            />
-          ) : (
+          {showThemeSettings || !selectedSection ? (
             <div className="p-6">
               <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Theme Settings</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-gray-900">Theme Settings</h3>
+                  {selectedSection && (
+                    <button
+                      onClick={() => setShowThemeSettings(false)}
+                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                      Back to Section
+                    </button>
+                  )}
+                </div>
                 <ThemeConfig
                   theme={currentPortfolio.theme}
                   onUpdate={(theme) => {
@@ -149,13 +157,29 @@ export function BuilderInterface() {
                   onChange={(e) => {
                     usePortfolioStore.getState().updateTitle(e.target.value)
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                 />
               </div>
-              <div className="mt-6 text-center text-gray-500 text-sm">
-                <p>Select a section to configure</p>
-              </div>
+              {!selectedSection && (
+                <div className="mt-6 text-center text-gray-500 text-sm">
+                  <p>Select a section to configure</p>
+                </div>
+              )}
             </div>
+          ) : (
+            <ConfigPanel
+              section={selectedSection}
+              portfolio={currentPortfolio}
+              onUpdate={(updates) => {
+                usePortfolioStore.getState().updateSection(selectedSection.id, updates)
+              }}
+              onDelete={() => {
+                usePortfolioStore.getState().removeSection(selectedSection.id)
+                setSelectedSectionId(null)
+                setShowThemeSettings(false)
+                toast.success('Section removed')
+              }}
+            />
           )}
         </div>
       </div>
@@ -179,6 +203,10 @@ export function BuilderInterface() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-center transition-colors"
+                onClick={() => {
+                  // Ensure it opens in a new tab
+                  window.open(`/site/${currentPortfolio.slug}`, '_blank', 'noopener,noreferrer')
+                }}
               >
                 View Live Site
               </a>

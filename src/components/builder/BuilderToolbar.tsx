@@ -1,11 +1,12 @@
 import type { Portfolio } from '@/interfaces/Portfolio'
-import { ArrowLeft, Eye, Globe, Download, Save } from 'lucide-react'
+import { ArrowLeft, Eye, Globe, Download, Save, Palette } from 'lucide-react'
 
 interface BuilderToolbarProps {
   portfolio: Portfolio
   saving: boolean
   onBack: () => void
   onPreview: () => void
+  onThemeSettings: () => void
   onPublish: () => void
   onExport: () => void
   isPublished: boolean
@@ -16,6 +17,7 @@ export function BuilderToolbar({
   saving,
   onBack,
   onPreview,
+  onThemeSettings,
   onPublish,
   onExport,
   isPublished,
@@ -41,6 +43,14 @@ export function BuilderToolbar({
       </div>
 
       <div className="flex items-center gap-2">
+        <button
+          onClick={onThemeSettings}
+          className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          title="Theme Settings"
+        >
+          <Palette className="w-4 h-4" />
+          Theme
+        </button>
         <button
           onClick={onPreview}
           className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"

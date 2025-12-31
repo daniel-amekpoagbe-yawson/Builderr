@@ -116,7 +116,7 @@ export function ContactSection({ data, theme }: ContactSectionProps) {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-2 focus:border-transparent`}
+                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors`}
                   style={{ '--tw-ring-color': theme.primaryColor } as React.CSSProperties}
                 />
               </div>
@@ -127,7 +127,7 @@ export function ContactSection({ data, theme }: ContactSectionProps) {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-2 focus:border-transparent`}
+                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors`}
                 />
               </div>
               <div>
@@ -137,7 +137,7 @@ export function ContactSection({ data, theme }: ContactSectionProps) {
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   required
                   rows={5}
-                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-2 focus:border-transparent`}
+                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors`}
                 />
               </div>
               <button

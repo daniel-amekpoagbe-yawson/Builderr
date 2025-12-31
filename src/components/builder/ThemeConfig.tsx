@@ -55,7 +55,7 @@ export function ThemeConfig({ theme, onUpdate }: ThemeConfigProps) {
             type="text"
             value={theme.primaryColor}
             onChange={(e) => onUpdate({ primaryColor: e.target.value })}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-transparent"
             placeholder="#4f46e5"
           />
         </div>
