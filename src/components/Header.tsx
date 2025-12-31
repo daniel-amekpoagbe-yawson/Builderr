@@ -1,11 +1,18 @@
-import { Link } from '@tanstack/react-router';
-
-
-import { useState } from 'react';
-import { Menu, X, Home, Sparkles, DollarSign, LogIn } from 'lucide-react';
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useState } from 'react'
+import { Menu, X, Home, LogIn, LogOut, LayoutDashboard } from 'lucide-react'
+import { useAuthStore } from '@/store/auth.store'
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
+  const { user, signOut } = useAuthStore()
+
+  const handleSignOut = async () => {
+    await signOut()
+    navigate({ to: '/' })
+    setIsOpen(false)
+  }
 
   return (
     <>
@@ -16,25 +23,48 @@ export default function Header() {
             className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
             aria-label="Open menu"
           >
-            <Menu strokeWidth={1}  />
+            <Menu strokeWidth={1} />
           </button>
           <h1 className="ml-4 text-xl font-semibold">
-            <Link to="/" className="hover:text-cyan-400 transition-colors">
-              Portlunch
+            <Link to="/" className="hover:text-indigo-400 transition-colors">
+              Buildrr
             </Link>
           </h1>
         </div>
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-4">
-        
-          
-          {/* <button className="px-4 py-2 text-white hover:text-cyan-400 transition-colors">
-            Sign In
-          </button> */}
-          <button className="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors">
-            Get Started
-          </button>
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="px-4 py-2 text-white hover:text-indigo-400 transition-colors"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="px-4 py-2 text-white hover:text-indigo-400 transition-colors"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth/Login"
+                className="px-4 py-2 text-white hover:text-indigo-400 transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/auth/Register"
+                className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
       </header>
 
@@ -55,52 +85,55 @@ export default function Header() {
         </div>
 
         <nav className="flex-1 p-4 overflow-y-auto">
-          <a
-            href="#home"
+          <Link
+            to="/"
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
           >
             <Home size={20} />
             <span className="font-medium">Home</span>
-          </a>
+          </Link>
 
-          <a
-            href="#features"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-          >
-            <Sparkles size={20} />
-            <span className="font-medium">Features</span>
-          </a>
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+              >
+                <LayoutDashboard size={20} />
+                <span className="font-medium">Dashboard</span>
+              </Link>
+              <div className="mt-6 pt-6 border-t border-gray-700">
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2 w-full text-left"
+                >
+                  <LogOut size={20} />
+                  <span className="font-medium">Sign Out</span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="mt-6 pt-6 border-t border-gray-700">
+              <Link
+                to="/auth/Login"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2 w-full text-left"
+              >
+                <LogIn size={20} />
+                <span className="font-medium">Sign In</span>
+              </Link>
 
-          <a
-            href="#examples"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-          >
-            <Home size={20} />
-            <span className="font-medium">Examples</span>
-          </a>
-
-          <a
-            href="#pricing"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-          >
-            <DollarSign size={20} />
-            <span className="font-medium">Pricing</span>
-          </a>
-
-          <div className="mt-6 pt-6 border-t border-gray-700">
-            <button className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2 w-full text-left">
-              <LogIn size={20} />
-              <span className="font-medium">Sign In</span>
-            </button>
-
-            <button className="w-full p-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium">
-              Get Started
-            </button>
-          </div>
+              <Link
+                to="/auth/Register"
+                onClick={() => setIsOpen(false)}
+                className="w-full p-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium block text-center"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
         </nav>
       </aside>
 
@@ -112,5 +145,5 @@ export default function Header() {
         />
       )}
     </>
-  );
+  )
 }

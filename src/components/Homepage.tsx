@@ -1,9 +1,12 @@
-import {  Zap, Palette, Globe,  } from 'lucide-react';
-import Preview from './Preview';
-import Divider from './Divider';
-import Footer from './Footer';
+import { Zap, Palette, Globe } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
+import Preview from './Preview'
+import Divider from './Divider'
+import Footer from './Footer'
 
 export default function App() {
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-screen bg-gray-50">
       
@@ -17,11 +20,17 @@ export default function App() {
             No coding required. Choose from beautiful section layouts, customize your content, and deploy instantly with a public URL.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3 bg-cyan-600 text-white text-lg rounded-lg hover:bg-cyan-700 transition-colors font-medium">
+            <button
+              onClick={() => navigate({ to: '/auth/Register' })}
+              className="px-8 py-3 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+            >
               Start Building Free
             </button>
-            <button className="px-6 py-3 bg-white text-gray-700 text-lg rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors font-medium">
-              View Examples
+            <button
+              onClick={() => navigate({ to: '/auth/Login' })}
+              className="px-6 py-3 bg-white text-gray-700 text-lg rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors font-medium"
+            >
+              Sign In
             </button>
           </div>
           <p className="mt-4 text-sm text-gray-500">
@@ -101,7 +110,10 @@ export default function App() {
           <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
             Join hundreds of developers who've already created their portfolios with DevFolio
           </p>
-          <button className="px-8 py-4 bg-cyan-600 text-white text-lg rounded-lg hover:bg-cyan-700 transition-colors font-medium">
+          <button
+            onClick={() => navigate({ to: '/auth/Register' })}
+            className="px-8 py-4 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+          >
             Get Started Free
           </button>
         </div>

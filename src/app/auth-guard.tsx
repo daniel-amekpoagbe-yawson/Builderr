@@ -1,22 +1,33 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "@tanstack/react-router"
-import { supabase } from "@/libs/Supabase"
+import { useEffect } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { useAuthStore } from '@/store/auth.store'
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(true)
+  const { user, initialized, initialize } = useAuthStore()
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) {
-        navigate({ to: "/auth/Login" })
-      } else {
-        setLoading(false)
-      }
-    })
-  }, [])
+    if (!initialized) {
+      initialize()
+    }
+  }, [initialized, initialize])
 
-  if (loading) return <p>Checking auth...</p>
+  useEffect(() => {
+    if (initialized && !user) {
+      navigate({ to: '/auth/Login' })
+    }
+  }, [initialized, user, navigate])
+
+  if (!initialized || !user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
 
   return <>{children}</>
 }
