@@ -1,5 +1,5 @@
 import type { Portfolio } from '@/interfaces/Portfolio'
-import { Moon, Sun, Palette, Type } from 'lucide-react'
+import { Moon, Sun, Palette, Type, Navigation } from 'lucide-react'
 
 interface ThemeConfigProps {
   theme: Portfolio['theme']
@@ -101,6 +101,40 @@ export function ThemeConfig({ theme, onUpdate }: ThemeConfigProps) {
             Roboto
           </button>
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+          <Navigation className="w-4 h-4" />
+          Navbar Style
+        </label>
+        <div className="flex gap-2">
+          <button
+            onClick={() => onUpdate({ navbarVariant: 'default' })}
+            className={`flex-1 px-4 py-2 rounded-lg border-2 transition-colors ${
+              (theme.navbarVariant || 'default') === 'default'
+                ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
+                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Default
+          </button>
+          <button
+            onClick={() => onUpdate({ navbarVariant: 'A' })}
+            className={`flex-1 px-4 py-2 rounded-lg border-2 transition-colors ${
+              theme.navbarVariant === 'A'
+                ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
+                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Floating
+          </button>
+        </div>
+        <p className="text-xs text-gray-500 mt-2">
+          {theme.navbarVariant === 'A'
+            ? 'Floating navbar with glassmorphism effect'
+            : 'Standard sticky navbar'}
+        </p>
       </div>
     </div>
   )

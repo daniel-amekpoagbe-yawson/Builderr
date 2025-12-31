@@ -322,8 +322,40 @@ function AboutConfigForm({ data, onUpdate }: { data: AboutData; onUpdate: (updat
     onUpdate({ highlights })
   }
 
+  const updateSocialLink = (platform: string, value: string) => {
+    onUpdate({
+      social: {
+        ...(data.social || {}),
+        [platform]: value,
+      },
+    })
+  }
+
+  const updateCTAButton = (type: 'primary' | 'secondary', field: 'text' | 'link', value: string) => {
+    onUpdate({
+      ctaButtons: {
+        ...(data.ctaButtons || {}),
+        [type]: {
+          ...(data.ctaButtons?.[type] || { text: '', link: '' }),
+          [field]: value,
+        },
+      },
+    })
+  }
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      <div>
+        <Label>Professional Title/Subtitle (for Variant B)</Label>
+        <Input
+          value={data.title || ''}
+          onChange={(e) => onUpdate({ title: e.target.value })}
+          placeholder="e.g., I am Professional User Experience Designer"
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          This appears as a subtitle below "About" heading
+        </p>
+      </div>
       <div>
         <Label>Bio</Label>
         <Textarea
@@ -368,6 +400,115 @@ function AboutConfigForm({ data, onUpdate }: { data: AboutData; onUpdate: (updat
               </Button>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Social Links */}
+      <div>
+        <Label className="mb-3 block">Social Media Links (for Variant B)</Label>
+        <div className="space-y-3">
+          <div>
+            <Label className="text-xs text-gray-500 mb-1">Facebook</Label>
+            <Input
+              type="url"
+              value={data.social?.facebook || ''}
+              onChange={(e) => updateSocialLink('facebook', e.target.value)}
+              placeholder="https://facebook.com/username"
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-gray-500 mb-1">Dribbble</Label>
+            <Input
+              type="url"
+              value={data.social?.dribbble || ''}
+              onChange={(e) => updateSocialLink('dribbble', e.target.value)}
+              placeholder="https://dribbble.com/username"
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-gray-500 mb-1">Instagram</Label>
+            <Input
+              type="url"
+              value={data.social?.instagram || ''}
+              onChange={(e) => updateSocialLink('instagram', e.target.value)}
+              placeholder="https://instagram.com/username"
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-gray-500 mb-1">LinkedIn</Label>
+            <Input
+              type="url"
+              value={data.social?.linkedin || ''}
+              onChange={(e) => updateSocialLink('linkedin', e.target.value)}
+              placeholder="https://linkedin.com/in/username"
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-gray-500 mb-1">Behance</Label>
+            <Input
+              type="url"
+              value={data.social?.behance || ''}
+              onChange={(e) => updateSocialLink('behance', e.target.value)}
+              placeholder="https://behance.net/username"
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-gray-500 mb-1">Twitter/X</Label>
+            <Input
+              type="url"
+              value={data.social?.twitter || ''}
+              onChange={(e) => updateSocialLink('twitter', e.target.value)}
+              placeholder="https://twitter.com/username"
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-gray-500 mb-1">GitHub</Label>
+            <Input
+              type="url"
+              value={data.social?.github || ''}
+              onChange={(e) => updateSocialLink('github', e.target.value)}
+              placeholder="https://github.com/username"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Buttons */}
+      <div>
+        <Label className="mb-3 block">Call-to-Action Buttons (for Variant B)</Label>
+        <div className="space-y-4">
+          <Card>
+            <CardContent className="p-4 space-y-3">
+              <Label className="text-sm font-semibold">Primary Button</Label>
+              <Input
+                value={data.ctaButtons?.primary?.text || ''}
+                onChange={(e) => updateCTAButton('primary', 'text', e.target.value)}
+                placeholder="Button text (e.g., My Projects)"
+              />
+              <Input
+                type="url"
+                value={data.ctaButtons?.primary?.link || ''}
+                onChange={(e) => updateCTAButton('primary', 'link', e.target.value)}
+                placeholder="Button link URL"
+              />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 space-y-3">
+              <Label className="text-sm font-semibold">Secondary Button</Label>
+              <Input
+                value={data.ctaButtons?.secondary?.text || ''}
+                onChange={(e) => updateCTAButton('secondary', 'text', e.target.value)}
+                placeholder="Button text (e.g., Download CV)"
+              />
+              <Input
+                type="url"
+                value={data.ctaButtons?.secondary?.link || ''}
+                onChange={(e) => updateCTAButton('secondary', 'link', e.target.value)}
+                placeholder="Button link URL"
+              />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

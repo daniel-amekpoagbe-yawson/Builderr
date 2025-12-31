@@ -31,6 +31,7 @@ const defaultTheme: Portfolio['theme'] = {
   mode: 'light',
   primaryColor: '#4f46e5', // indigo-600
   fontFamily: 'inter',
+  navbarVariant: 'default',
 }
 
 export const usePortfolioStore = create<PortfolioStore>((set, get) => ({

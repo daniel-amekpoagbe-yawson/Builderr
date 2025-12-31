@@ -86,7 +86,13 @@ export function PreviewArea({ portfolio, selectedSectionId, onSelectSection, isP
       ) : (
         <>
           {isPreviewMode && <PortfolioNavbar portfolio={portfolio} />}
-          <div>
+          <div
+            className={
+              isPreviewMode && portfolio.theme.navbarVariant === 'A'
+                ? 'pt-24 sm:pt-28'
+                : ''
+            }
+          >
             {sortedSections.map((section) => (
               <div key={section.id} id={`section-${section.type}`}>
                 {renderSection(section)}

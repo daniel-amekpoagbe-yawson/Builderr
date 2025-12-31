@@ -6,6 +6,7 @@ export interface Portfolio {
     mode: 'light' | 'dark'
     primaryColor: string
     fontFamily: 'inter' | 'roboto'
+    navbarVariant?: 'default' | 'A'
   }
   sections: Section[]
   slug?: string
@@ -61,6 +62,26 @@ export interface AboutData {
   bio: string
   imageUrl?: string
   highlights: string[]
+  title?: string // Professional title/role
+  social?: {
+    facebook?: string
+    dribbble?: string
+    instagram?: string
+    linkedin?: string
+    behance?: string
+    twitter?: string
+    github?: string
+  }
+  ctaButtons?: {
+    primary?: {
+      text: string
+      link: string
+    }
+    secondary?: {
+      text: string
+      link: string
+    }
+  }
 }
 
 // Experience Section Data
