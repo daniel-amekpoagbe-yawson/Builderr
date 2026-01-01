@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import type { Portfolio, Section, SectionType } from '@/interfaces/Portfolio'
 import { portfolioService } from '@/services/portfolio.service'
 import { useAuthStore } from '@/store/auth.store'
+import type { PortfolioTemplate } from '@/lib/templates'
 
 interface PortfolioStore {
   currentPortfolio: Portfolio | null
@@ -12,6 +13,7 @@ interface PortfolioStore {
   loadPortfolio: (id: string) => Promise<void>
   loadUserPortfolios: () => Promise<void>
   createPortfolio: (title: string) => Promise<Portfolio>
+  createPortfolioFromTemplate: (template: PortfolioTemplate, title: string) => Promise<Portfolio>
   updateSection: (sectionId: string, updates: Partial<Section>) => void
   addSection: (type: SectionType) => void
   removeSection: (sectionId: string) => void
@@ -88,6 +90,38 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
       return saved
     } catch (error) {
       console.error('Failed to create portfolio:', error)
+      throw error
+    }
+  },
+
+  createPortfolioFromTemplate: async (template: PortfolioTemplate, title: string) => {
+    const user = useAuthStore.getState().user
+    if (!user) throw new Error('User not authenticated')
+
+    // Create portfolio with template's theme and sections
+    const newPortfolio: Portfolio = {
+      id: crypto.randomUUID(),
+      title,
+      userId: user.id,
+      theme: { ...template.theme },
+      sections: template.sections.map((section, index) => ({
+        ...section,
+        id: crypto.randomUUID(),
+        order: index,
+      })),
+      templateId: template.id,
+    }
+
+    try {
+      const saved = await portfolioService.createPortfolio(newPortfolio)
+      set((state) => ({
+        portfolios: [...state.portfolios, saved],
+        currentPortfolio: saved,
+      }))
+      get().scheduleAutoSave()
+      return saved
+    } catch (error) {
+      console.error('Failed to create portfolio from template:', error)
       throw error
     }
   },
@@ -416,6 +450,14 @@ function getDefaultSectionData(type: SectionType): Record<string, any> {
       return {
         email: '',
         social: {},
+      }
+    case 'gallery':
+      return {
+        title: 'Gallery',
+        description: '',
+        layout: 'masonry',
+        categories: ['All'],
+        images: [],
       }
     default:
       return {}

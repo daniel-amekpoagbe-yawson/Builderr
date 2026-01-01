@@ -72,6 +72,8 @@ function getVariantsForSection(type: Section['type']): string[] {
       return ['A', 'B']
     case 'about':
       return ['A', 'B']
+    case 'gallery':
+      return ['A', 'B', 'C']
     case 'experience':
     case 'contact':
       return ['A']

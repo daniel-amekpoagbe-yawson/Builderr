@@ -1,3 +1,13 @@
+export type FontFamily = 
+  | 'inter' 
+  | 'roboto' 
+  | 'poppins' 
+  | 'playfair' 
+  | 'space-grotesk' 
+  | 'dm-sans'
+  | 'jetbrains-mono'
+  | 'source-serif'
+
 export interface Portfolio {
   id: string
   title: string
@@ -5,7 +15,10 @@ export interface Portfolio {
   theme: {
     mode: 'light' | 'dark'
     primaryColor: string
-    fontFamily: 'inter' | 'roboto'
+    secondaryColor?: string
+    accentColor?: string
+    fontFamily: FontFamily
+    headingFont?: FontFamily
     navbarVariant?: 'default' | 'A'
   }
   sections: Section[]
@@ -13,9 +26,10 @@ export interface Portfolio {
   isPublished?: boolean
   createdAt?: string
   updatedAt?: string
+  templateId?: string // Track which template was used
 }
 
-export type SectionType = 'hero' | 'projects' | 'skills' | 'about' | 'experience' | 'contact'
+export type SectionType = 'hero' | 'projects' | 'skills' | 'about' | 'experience' | 'contact' | 'gallery'
 
 export interface Section {
   id: string // unique section instance ID
@@ -106,6 +120,21 @@ export interface ContactData {
     linkedin?: string
     twitter?: string
   }
+}
+
+// Gallery Section Data (for Photographers)
+export interface GalleryData {
+  title?: string
+  description?: string
+  images: Array<{
+    id: string
+    url: string
+    title?: string
+    description?: string
+    category?: string
+  }>
+  layout: 'grid' | 'masonry' | 'carousel'
+  categories?: string[]
 }
 
 // Database Portfolio (as stored in Supabase)

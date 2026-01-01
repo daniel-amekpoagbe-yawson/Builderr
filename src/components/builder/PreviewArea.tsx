@@ -1,12 +1,25 @@
-import type { Portfolio, Section } from '@/interfaces/Portfolio'
+import type { Portfolio, Section, FontFamily } from '@/interfaces/Portfolio'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { AboutSection } from '@/components/sections/AboutSection'
 import { ProjectsSection } from '@/components/sections/ProjectsSection'
 import { SkillsSection } from '@/components/sections/SkillsSection'
 import { ExperienceSection } from '@/components/sections/ExperienceSection'
 import { ContactSection } from '@/components/sections/ContactSection'
+import { GallerySection } from '@/components/sections/GallerySection'
 import { PortfolioNavbar } from '@/components/sections/PortfolioNavbar'
 import { PortfolioFooter } from '@/components/sections/PortfolioFooter'
+
+// Font family CSS mapping
+const fontFamilyMap: Record<FontFamily, string> = {
+  inter: "'Inter', sans-serif",
+  roboto: "'Roboto', sans-serif",
+  poppins: "'Poppins', sans-serif",
+  playfair: "'Playfair Display', serif",
+  'space-grotesk': "'Space Grotesk', sans-serif",
+  'dm-sans': "'DM Sans', sans-serif",
+  'jetbrains-mono': "'JetBrains Mono', monospace",
+  'source-serif': "'Source Serif Pro', serif",
+}
 
 interface PreviewAreaProps {
   portfolio: Portfolio
@@ -63,17 +76,27 @@ export function PreviewArea({ portfolio, selectedSectionId, onSelectSection, isP
             <ContactSection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
           </div>
         )
+      case 'gallery':
+        return (
+          <div className={baseClasses} onClick={() => onSelectSection?.(section.id)}>
+            <GallerySection data={section.data as any} variant={section.variant} theme={portfolio.theme} />
+          </div>
+        )
       default:
         return null
     }
   }
 
+  const fontFamily = fontFamilyMap[portfolio.theme.fontFamily] || fontFamilyMap.inter
+
   return (
     <div
       className={`min-h-full ${portfolio.theme.mode === 'dark' ? 'bg-gray-900' : 'bg-white'}`}
       style={{
-        fontFamily: portfolio.theme.fontFamily === 'roboto' ? 'Roboto, sans-serif' : 'Inter, sans-serif',
+        fontFamily,
         '--primary-color': portfolio.theme.primaryColor,
+        '--secondary-color': portfolio.theme.secondaryColor || portfolio.theme.primaryColor,
+        '--accent-color': portfolio.theme.accentColor || portfolio.theme.primaryColor,
       } as React.CSSProperties}
     >
       {sortedSections.length === 0 ? (

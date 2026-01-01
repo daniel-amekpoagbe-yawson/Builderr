@@ -1,11 +1,11 @@
-import type { Section, Portfolio, HeroData, ProjectsData, SkillsData, AboutData, ExperienceData, ContactData } from '@/interfaces/Portfolio'
+import type { Section, Portfolio, HeroData, ProjectsData, SkillsData, AboutData, ExperienceData, ContactData, GalleryData } from '@/interfaces/Portfolio'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { ImageUpload } from '@/components/ui/image-upload'
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2, Grid, LayoutGrid, Image } from 'lucide-react'
 
 interface SectionConfigFormProps {
   section: Section
@@ -33,6 +33,8 @@ export function SectionConfigForm({ section, onUpdate }: SectionConfigFormProps)
       return <ExperienceConfigForm data={section.data as ExperienceData} onUpdate={updateData} />
     case 'contact':
       return <ContactConfigForm data={section.data as ContactData} onUpdate={updateData} />
+    case 'gallery':
+      return <GalleryConfigForm data={section.data as GalleryData} onUpdate={updateData} />
     default:
       return <div className="text-sm text-gray-500">No configuration available</div>
   }
@@ -675,6 +677,161 @@ function ContactConfigForm({ data, onUpdate }: { data: ContactData; onUpdate: (u
           onChange={(e) => onUpdate({ social: { ...data.social, twitter: e.target.value } })}
           placeholder="https://twitter.com/username"
         />
+      </div>
+    </div>
+  )
+}
+
+function GalleryConfigForm({ data, onUpdate }: { data: GalleryData; onUpdate: (updates: Partial<GalleryData>) => void }) {
+  const addImage = () => {
+    const newImage = {
+      id: crypto.randomUUID(),
+      url: '',
+      title: '',
+      description: '',
+      category: data.categories?.[0] || '',
+    }
+    onUpdate({ images: [...(data.images || []), newImage] })
+  }
+
+  const updateImage = (id: string, updates: Partial<GalleryData['images'][0]>) => {
+    onUpdate({
+      images: (data.images || []).map((img) => (img.id === id ? { ...img, ...updates } : img)),
+    })
+  }
+
+  const removeImage = (id: string) => {
+    onUpdate({ images: (data.images || []).filter((img) => img.id !== id) })
+  }
+
+  const layouts = [
+    { value: 'masonry', label: 'Masonry', icon: LayoutGrid },
+    { value: 'grid', label: 'Grid', icon: Grid },
+    { value: 'carousel', label: 'Featured', icon: Image },
+  ] as const
+
+  return (
+    <div className="space-y-6">
+      {/* Gallery Title & Description */}
+      <div className="space-y-4">
+        <div>
+          <Label>Gallery Title</Label>
+          <Input
+            value={data.title || ''}
+            onChange={(e) => onUpdate({ title: e.target.value })}
+            placeholder="My Gallery"
+          />
+        </div>
+        <div>
+          <Label>Description</Label>
+          <Textarea
+            value={data.description || ''}
+            onChange={(e) => onUpdate({ description: e.target.value })}
+            placeholder="A brief description of your work"
+            rows={2}
+          />
+        </div>
+      </div>
+
+      {/* Layout Selection */}
+      <div>
+        <Label className="mb-3 block">Layout Style</Label>
+        <div className="grid grid-cols-3 gap-2">
+          {layouts.map(({ value, label, icon: Icon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => onUpdate({ layout: value })}
+              className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                data.layout === value
+                  ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                  : 'border-gray-200 hover:border-gray-300 text-gray-600'
+              }`}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="text-xs font-medium">{label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Categories */}
+      <div>
+        <Label className="mb-2 block">Categories (comma-separated)</Label>
+        <Input
+          value={(data.categories || []).join(', ')}
+          onChange={(e) => {
+            const cats = e.target.value.split(',').map((c) => c.trim()).filter(Boolean)
+            // Always include 'All' at the start
+            const uniqueCats = ['All', ...cats.filter((c) => c !== 'All')]
+            onUpdate({ categories: uniqueCats })
+          }}
+          placeholder="Portrait, Landscape, Street"
+        />
+        <p className="text-xs text-gray-500 mt-1">"All" category is added automatically</p>
+      </div>
+
+      {/* Images */}
+      <div>
+        <div className="flex justify-between items-center mb-3">
+          <Label>Gallery Images</Label>
+          <Button onClick={addImage} size="sm" variant="outline">
+            <Plus className="w-4 h-4 mr-1" />
+            Add Image
+          </Button>
+        </div>
+        <div className="space-y-4">
+          {(data.images || []).map((image, index) => (
+            <Card key={image.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex justify-between items-start">
+                  <span className="text-sm font-medium text-gray-500">Image {index + 1}</span>
+                  <Button
+                    onClick={() => removeImage(image.id)}
+                    size="sm"
+                    variant="ghost"
+                    className="text-red-600 hover:text-red-700 h-7"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                <ImageUpload
+                  value={image.url || ''}
+                  onChange={(url) => updateImage(image.id, { url })}
+                  aspectRatio="video"
+                  placeholder="Upload gallery image"
+                />
+                <Input
+                  value={image.title || ''}
+                  onChange={(e) => updateImage(image.id, { title: e.target.value })}
+                  placeholder="Image title"
+                  className="text-sm"
+                />
+                <Input
+                  value={image.description || ''}
+                  onChange={(e) => updateImage(image.id, { description: e.target.value })}
+                  placeholder="Image description"
+                  className="text-sm"
+                />
+                {data.categories && data.categories.length > 1 && (
+                  <select
+                    value={image.category || ''}
+                    onChange={(e) => updateImage(image.id, { category: e.target.value })}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    <option value="">Select category</option>
+                    {data.categories.filter((c) => c !== 'All').map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+          {(!data.images || data.images.length === 0) && (
+            <p className="text-sm text-gray-500 text-center py-4">No images yet. Add one to get started.</p>
+          )}
+        </div>
       </div>
     </div>
   )

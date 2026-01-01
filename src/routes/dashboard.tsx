@@ -1,30 +1,57 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { AuthGuard } from '@/app/auth-guard'
 import { usePortfolioStore } from '@/store/portfolio.store'
 import { useAuthStore } from '@/store/auth.store'
+import { TemplateSelector } from '@/components/TemplateSelector'
+import type { PortfolioTemplate } from '@/lib/templates'
 import { toast } from 'sonner'
-import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut } from 'lucide-react'
+import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut, Sparkles, Code2, Palette, Camera } from 'lucide-react'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
 })
 
+// Template badge component for portfolio cards
+function TemplateBadge({ templateId }: { templateId?: string }) {
+  if (!templateId || templateId === 'blank') return null
+
+  const templateConfig: Record<string, { icon: React.ElementType; label: string; className: string }> = {
+    developer: { icon: Code2, label: 'Developer', className: 'bg-blue-100 text-blue-700' },
+    designer: { icon: Palette, label: 'Designer', className: 'bg-pink-100 text-pink-700' },
+    photographer: { icon: Camera, label: 'Photographer', className: 'bg-zinc-100 text-zinc-700' },
+  }
+
+  const config = templateConfig[templateId]
+  if (!config) return null
+
+  const Icon = config.icon
+
+  return (
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${config.className}`}>
+      <Icon className="w-3 h-3" />
+      {config.label}
+    </span>
+  )
+}
+
 function DashboardPage() {
   const navigate = useNavigate()
-  const { portfolios, loading, loadUserPortfolios, deletePortfolio, duplicatePortfolio } =
+  const { portfolios, loading, loadUserPortfolios, deletePortfolio, duplicatePortfolio, createPortfolioFromTemplate } =
     usePortfolioStore()
   const { signOut, user } = useAuthStore()
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false)
 
   useEffect(() => {
     loadUserPortfolios()
   }, [loadUserPortfolios])
 
-  const handleCreateNew = async () => {
+  const handleTemplateSelect = async (template: PortfolioTemplate, title: string) => {
     try {
-      const newPortfolio = await usePortfolioStore.getState().createPortfolio('New Portfolio')
+      const newPortfolio = await createPortfolioFromTemplate(template, title)
+      setShowTemplateSelector(false)
       navigate({ to: '/builder/$portfolioId', params: { portfolioId: newPortfolio.id } })
-      toast.success('Portfolio created!')
+      toast.success(`Portfolio created from ${template.name} template!`)
     } catch (error: any) {
       toast.error(error.message || 'Failed to create portfolio')
     }
@@ -74,52 +101,72 @@ function DashboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50">
+        {/* Header */}
+        <div className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">Buildrr</h1>
+                  <p className="text-sm text-gray-500">{user?.email}</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowTemplateSelector(true)}
+                  className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2.5 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30"
+                >
+                  <Plus className="w-5 h-5" />
+                  New Portfolio
+                </button>
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl hover:bg-gray-200 transition-colors"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">My Portfolios</h1>
-              <p className="text-gray-600 mt-1">Welcome back, {user?.email}</p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={handleCreateNew}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                <Plus className="w-5 h-5" />
-                Create New Portfolio
-              </button>
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
-              >
-                <LogOut className="w-5 h-5" />
-                Sign Out
-              </button>
-            </div>
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900">My Portfolios</h2>
+            <p className="text-gray-600 mt-1">Create and manage your professional portfolios</p>
           </div>
 
           {loading ? (
-            <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className="flex justify-center items-center py-20">
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+                <p className="text-gray-500">Loading portfolios...</p>
+              </div>
             </div>
           ) : portfolios.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-12 text-center">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-12 text-center">
               <div className="max-w-md mx-auto">
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Plus className="w-8 h-8 text-indigo-600" />
+                <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Sparkles className="w-10 h-10 text-indigo-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                  No portfolios yet
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                  Create Your First Portfolio
                 </h2>
-                <p className="text-gray-600 mb-6">
-                  Get started by creating your first portfolio
+                <p className="text-gray-600 mb-8">
+                  Choose from professionally designed templates for developers, designers, photographers, or start from scratch.
                 </p>
                 <button
-                  onClick={handleCreateNew}
-                  className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
+                  onClick={() => setShowTemplateSelector(true)}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-xl text-lg font-medium"
                 >
-                  Create Your First Portfolio
+                  <Plus className="w-6 h-6" />
+                  Choose a Template
                 </button>
               </div>
             </div>
@@ -128,68 +175,118 @@ function DashboardPage() {
               {portfolios.map((portfolio) => (
                 <div
                   key={portfolio.id}
-                  className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6"
+                  className="group bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 overflow-hidden"
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-semibold text-gray-900">{portfolio.title}</h3>
+                  {/* Preview Header */}
+                  <div
+                    className="h-32 relative"
+                    style={{
+                      background: portfolio.theme.mode === 'dark'
+                        ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                        : `linear-gradient(135deg, ${portfolio.theme.primaryColor}22 0%, ${portfolio.theme.primaryColor}44 100%)`,
+                    }}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center"
+                        style={{ backgroundColor: portfolio.theme.primaryColor }}
+                      >
+                        <span className="text-white text-xl font-bold">
+                          {portfolio.title.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+                    {/* Status badges */}
+                    <div className="absolute top-3 left-3 flex gap-2">
+                      <TemplateBadge templateId={portfolio.templateId} />
+                    </div>
                     {portfolio.isPublished && (
-                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
-                        Published
-                      </span>
+                      <div className="absolute top-3 right-3">
+                        <span className="inline-flex items-center gap-1 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                          <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                          Live
+                        </span>
+                      </div>
                     )}
                   </div>
 
-                  <div className="text-sm text-gray-600 mb-4">
-                    <p>
-                      {portfolio.sections.length} section{portfolio.sections.length !== 1 ? 's' : ''}
-                    </p>
-                    {portfolio.updatedAt && (
-                      <p>Updated {new Date(portfolio.updatedAt).toLocaleDateString()}</p>
-                    )}
-                  </div>
+                  {/* Content */}
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">
+                      {portfolio.title}
+                    </h3>
+                    <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
+                      <span>{portfolio.sections.length} section{portfolio.sections.length !== 1 ? 's' : ''}</span>
+                      {portfolio.updatedAt && (
+                        <>
+                          <span className="w-1 h-1 bg-gray-300 rounded-full" />
+                          <span>Updated {new Date(portfolio.updatedAt).toLocaleDateString()}</span>
+                        </>
+                      )}
+                    </div>
 
-                  {portfolio.isPublished && portfolio.slug && (
-                    <div className="mb-4">
+                    {portfolio.isPublished && portfolio.slug && (
                       <a
                         href={getPublicUrl(portfolio.slug) || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center gap-1"
+                        className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 text-sm font-medium mb-4 group/link"
                       >
                         <ExternalLink className="w-4 h-4" />
-                        View Live Site
+                        <span className="group-hover/link:underline">View Live Site</span>
                       </a>
-                    </div>
-                  )}
+                    )}
 
-                  <div className="flex gap-2 pt-4 border-t">
-                    <button
-                      onClick={() => handleEdit(portfolio.id)}
-                      className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white px-3 py-2 rounded hover:bg-indigo-700 transition-colors text-sm"
-                    >
-                      <Edit className="w-4 h-4" />
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDuplicate(portfolio.id)}
-                      className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-3 py-2 rounded hover:bg-gray-200 transition-colors text-sm"
-                      title="Duplicate"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(portfolio.id, portfolio.title)}
-                      className="flex items-center justify-center gap-2 bg-red-100 text-red-700 px-3 py-2 rounded hover:bg-red-200 transition-colors text-sm"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {/* Actions */}
+                    <div className="flex gap-2 pt-4 border-t border-gray-100">
+                      <button
+                        onClick={() => handleEdit(portfolio.id)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors text-sm font-medium"
+                      >
+                        <Edit className="w-4 h-4" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDuplicate(portfolio.id)}
+                        className="flex items-center justify-center bg-gray-100 text-gray-700 px-3 py-2.5 rounded-xl hover:bg-gray-200 transition-colors"
+                        title="Duplicate"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(portfolio.id, portfolio.title)}
+                        className="flex items-center justify-center bg-red-50 text-red-600 px-3 py-2.5 rounded-xl hover:bg-red-100 transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
+
+              {/* Add New Card */}
+              <button
+                onClick={() => setShowTemplateSelector(true)}
+                className="group bg-white/50 rounded-2xl border-2 border-dashed border-gray-300 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all duration-300 p-6 min-h-[280px] flex flex-col items-center justify-center"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-gray-100 group-hover:bg-indigo-100 flex items-center justify-center mb-4 transition-colors">
+                  <Plus className="w-7 h-7 text-gray-400 group-hover:text-indigo-600 transition-colors" />
+                </div>
+                <span className="text-gray-600 group-hover:text-indigo-700 font-medium transition-colors">
+                  Create New Portfolio
+                </span>
+              </button>
             </div>
           )}
         </div>
+
+        {/* Template Selector Modal */}
+        <TemplateSelector
+          isOpen={showTemplateSelector}
+          onClose={() => setShowTemplateSelector(false)}
+          onSelect={handleTemplateSelect}
+        />
       </div>
     </AuthGuard>
   )

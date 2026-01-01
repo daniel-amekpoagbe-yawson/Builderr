@@ -18,6 +18,7 @@ const sectionTypes: { type: SectionType; label: string; icon: string }[] = [
   { type: 'projects', label: 'Projects', icon: '💼' },
   { type: 'skills', label: 'Skills', icon: '🛠️' },
   { type: 'experience', label: 'Experience', icon: '📅' },
+  { type: 'gallery', label: 'Gallery', icon: '🖼️' },
   { type: 'contact', label: 'Contact', icon: '📧' },
 ]
 
