@@ -1,14 +1,12 @@
 {
-  "projectName": "portdevo",
+  "projectName": "Buildrr",
   "mode": "file-router",
   "typescript": true,
   "tailwind": true,
-  "packageManager": "npm",
+  "packageManager": "bun",
   "addOnOptions": {},
   "git": true,
   "version": 1,
-  "framework": "react-cra",
-  "chosenAddOns": [
-    "eslint"
-  ]
+  "framework": "react-vite",
+  "chosenAddOns": ["eslint"]
 }
