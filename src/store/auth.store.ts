@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import type { User, Session } from '@supabase/supabase-js'
-import { supabase } from '@/libs/Supabase'
+import { supabase } from '@/lib/Supabase'
 
 interface AuthStore {
   user: User | null

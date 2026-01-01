@@ -1,4 +1,4 @@
-import { supabase } from '@/libs/Supabase'
+import { supabase } from '@/lib/Supabase'
 import type { Portfolio, DatabasePortfolio } from '@/interfaces/Portfolio'
 
 class PortfolioService {
