@@ -1,6 +1,3 @@
-
-
-
 export default function Divider({ flip = false }) {
   return (
     <div className={`overflow-hidden ${flip ? "rotate-180" : ""}`}>

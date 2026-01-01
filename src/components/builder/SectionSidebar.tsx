@@ -1,20 +1,30 @@
 import type { Section, SectionType } from '@/interfaces/Portfolio'
 import React from 'react'
-import { 
-  Plus, 
-  GripVertical, 
-  Target, 
-  User, 
-  Briefcase, 
-  Wrench, 
-  Calendar, 
-  Image as ImageIcon, 
+import {
+  GripVertical,
+  Target,
+  User,
+  Briefcase,
+  Wrench,
+  Calendar,
+  Image as ImageIcon,
   Mail,
-  FileText
+  FileText,
 } from 'lucide-react'
 import { useSortable } from '@dnd-kit/sortable'
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { usePortfolioStore } from '@/store/portfolio.store'
 
 interface SectionSidebarProps {
@@ -24,7 +34,11 @@ interface SectionSidebarProps {
   onAddSection: (type: SectionType) => void
 }
 
-const sectionTypes: { type: SectionType; label: string; icon: React.ElementType }[] = [
+const sectionTypes: {
+  type: SectionType
+  label: string
+  icon: React.ElementType
+}[] = [
   { type: 'hero', label: 'Hero', icon: Target },
   { type: 'about', label: 'About', icon: User },
   { type: 'projects', label: 'Projects', icon: Briefcase },
@@ -34,10 +48,19 @@ const sectionTypes: { type: SectionType; label: string; icon: React.ElementType 
   { type: 'contact', label: 'Contact', icon: Mail },
 ]
 
-function SectionItem({ section, isSelected, onSelect }: { section: Section; isSelected: boolean; onSelect: () => void }) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: section.id,
-  })
+function SectionItem({
+  section,
+  isSelected,
+  onSelect,
+}: {
+  section: Section
+  isSelected: boolean
+  onSelect: () => void
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: section.id,
+    })
 
   const style = {
     transform: transform ? `translateY(${transform.y}px)` : undefined,
@@ -53,13 +76,21 @@ function SectionItem({ section, isSelected, onSelect }: { section: Section; isSe
       style={style}
       onClick={onSelect}
       className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-        isSelected ? 'bg-indigo-50 border-2 border-indigo-500' : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
+        isSelected
+          ? 'bg-indigo-50 border-2 border-indigo-500'
+          : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
       }`}
     >
-      <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
+      <div
+        {...attributes}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing"
+      >
         <GripVertical className="w-4 h-4 text-gray-400" />
       </div>
-      <div className={`flex-shrink-0 ${isSelected ? 'text-indigo-600' : 'text-gray-500'}`}>
+      <div
+        className={`flex-shrink-0 ${isSelected ? 'text-indigo-600' : 'text-gray-500'}`}
+      >
         <IconComponent className="w-5 h-5" />
       </div>
       <div className="flex-1 min-w-0">
@@ -69,18 +100,25 @@ function SectionItem({ section, isSelected, onSelect }: { section: Section; isSe
         <div className="text-xs text-gray-500">Variant {section.variant}</div>
       </div>
       {!section.enabled && (
-        <span className="text-xs text-gray-400 bg-gray-200 px-2 py-0.5 rounded">Disabled</span>
+        <span className="text-xs text-gray-400 bg-gray-200 px-2 py-0.5 rounded">
+          Disabled
+        </span>
       )}
     </div>
   )
 }
 
-export function SectionSidebar({ sections, selectedSectionId, onSelectSection, onAddSection }: SectionSidebarProps) {
+export function SectionSidebar({
+  sections,
+  selectedSectionId,
+  onSelectSection,
+  onAddSection,
+}: SectionSidebarProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   )
 
   const handleDragEnd = (event: any) => {
@@ -122,8 +160,15 @@ export function SectionSidebar({ sections, selectedSectionId, onSelectSection, o
             <p className="text-xs mt-1">Add a section above</p>
           </div>
         ) : (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={sortedSections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={sortedSections.map((s) => s.id)}
+              strategy={verticalListSortingStrategy}
+            >
               <div className="space-y-2">
                 {sortedSections.map((section) => (
                   <SectionItem
@@ -141,4 +186,3 @@ export function SectionSidebar({ sections, selectedSectionId, onSelectSection, o
     </div>
   )
 }
-
