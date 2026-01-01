@@ -12,6 +12,7 @@ A professional, production-ready portfolio builder web application that allows u
 - 💾 **Auto-Save** - Changes are automatically saved every 3 seconds
 - 🔐 **Secure Authentication** - Built with Supabase Auth
 - 📱 **Responsive Design** - Works beautifully on all devices
+- 📷 **Image Upload** - Drag & drop image uploads with compression and preview
 
 ## Tech Stack
 
@@ -92,7 +93,33 @@ CREATE POLICY "Published portfolios are publicly viewable" ON portfolios
   FOR SELECT USING (is_published = true);
 ```
 
-5. Start the development server:
+5. Set up Supabase Storage for image uploads:
+
+See [SUPABASE_STORAGE_SETUP.md](./SUPABASE_STORAGE_SETUP.md) for detailed instructions, or run this quick setup:
+
+```sql
+-- Create the storage bucket
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'portfolio-images',
+  'portfolio-images',
+  true,
+  5242880,
+  ARRAY['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+);
+
+-- Allow authenticated users to upload to their folder
+CREATE POLICY "Users can upload images"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK (bucket_id = 'portfolio-images' AND (storage.foldername(name))[1] = auth.uid()::text);
+
+-- Allow public viewing of images
+CREATE POLICY "Public image access"
+ON storage.objects FOR SELECT TO public
+USING (bucket_id = 'portfolio-images');
+```
+
+6. Start the development server:
 ```bash
 npm run dev
 ```

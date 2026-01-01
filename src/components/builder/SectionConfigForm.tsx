@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
+import { ImageUpload } from '@/components/ui/image-upload'
 import { Plus, Trash2 } from 'lucide-react'
 
 interface SectionConfigFormProps {
@@ -86,12 +87,15 @@ function HeroConfigForm({ data, onUpdate }: { data: HeroData; onUpdate: (updates
         />
       </div>
       <div>
-        <Label>Image URL (optional)</Label>
-        <Input
-          type="url"
+        <Label>Profile Image</Label>
+        <p className="text-xs text-gray-500 mb-2">
+          Upload a photo or paste an image URL
+        </p>
+        <ImageUpload
           value={data.imageUrl || ''}
-          onChange={(e) => onUpdate({ imageUrl: e.target.value })}
-          placeholder="https://example.com/image.jpg"
+          onChange={(url) => onUpdate({ imageUrl: url })}
+          aspectRatio="square"
+          placeholder="Drag & drop your profile photo"
         />
       </div>
     </div>
@@ -133,7 +137,7 @@ function ProjectsConfigForm({ data, onUpdate }: { data: ProjectsData; onUpdate: 
       </div>
       <div className="space-y-3">
         {(data.projects || []).map((project) => (
-          <div key={project.id} className="border border-gray-200 rounded-lg p-3 space-y-2">
+          <div key={project.id} className="border border-gray-200 rounded-lg p-3 space-y-3">
             <Input
               value={project.title}
               onChange={(e) => updateProject(project.id, { title: e.target.value })}
@@ -147,13 +151,15 @@ function ProjectsConfigForm({ data, onUpdate }: { data: ProjectsData; onUpdate: 
               rows={2}
               className="text-sm"
             />
-            <Input
-              type="url"
-              value={project.imageUrl}
-              onChange={(e) => updateProject(project.id, { imageUrl: e.target.value })}
-              placeholder="Image URL"
-              className="text-sm"
-            />
+            <div>
+              <Label className="text-xs text-gray-500 mb-1.5 block">Project Image</Label>
+              <ImageUpload
+                value={project.imageUrl || ''}
+                onChange={(url) => updateProject(project.id, { imageUrl: url })}
+                aspectRatio="video"
+                placeholder="Add project screenshot"
+              />
+            </div>
             <div className="grid grid-cols-2 gap-2">
               <Input
                 type="url"
@@ -366,12 +372,15 @@ function AboutConfigForm({ data, onUpdate }: { data: AboutData; onUpdate: (updat
         />
       </div>
       <div>
-        <Label>Image URL (optional)</Label>
-        <Input
-          type="url"
+        <Label>About Image</Label>
+        <p className="text-xs text-gray-500 mb-2">
+          Upload a photo for your about section
+        </p>
+        <ImageUpload
           value={data.imageUrl || ''}
-          onChange={(e) => onUpdate({ imageUrl: e.target.value })}
-          placeholder="https://example.com/image.jpg"
+          onChange={(url) => onUpdate({ imageUrl: url })}
+          aspectRatio="portrait"
+          placeholder="Drag & drop your photo"
         />
       </div>
       <div>
@@ -670,4 +679,3 @@ function ContactConfigForm({ data, onUpdate }: { data: ContactData; onUpdate: (u
     </div>
   )
 }
-
