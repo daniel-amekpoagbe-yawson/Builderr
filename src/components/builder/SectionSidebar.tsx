@@ -1,5 +1,17 @@
 import type { Section, SectionType } from '@/interfaces/Portfolio'
-import { Plus, GripVertical } from 'lucide-react'
+import React from 'react'
+import { 
+  Plus, 
+  GripVertical, 
+  Target, 
+  User, 
+  Briefcase, 
+  Wrench, 
+  Calendar, 
+  Image as ImageIcon, 
+  Mail,
+  FileText
+} from 'lucide-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -12,14 +24,14 @@ interface SectionSidebarProps {
   onAddSection: (type: SectionType) => void
 }
 
-const sectionTypes: { type: SectionType; label: string; icon: string }[] = [
-  { type: 'hero', label: 'Hero', icon: '🎯' },
-  { type: 'about', label: 'About', icon: '👤' },
-  { type: 'projects', label: 'Projects', icon: '💼' },
-  { type: 'skills', label: 'Skills', icon: '🛠️' },
-  { type: 'experience', label: 'Experience', icon: '📅' },
-  { type: 'gallery', label: 'Gallery', icon: '🖼️' },
-  { type: 'contact', label: 'Contact', icon: '📧' },
+const sectionTypes: { type: SectionType; label: string; icon: React.ElementType }[] = [
+  { type: 'hero', label: 'Hero', icon: Target },
+  { type: 'about', label: 'About', icon: User },
+  { type: 'projects', label: 'Projects', icon: Briefcase },
+  { type: 'skills', label: 'Skills', icon: Wrench },
+  { type: 'experience', label: 'Experience', icon: Calendar },
+  { type: 'gallery', label: 'Gallery', icon: ImageIcon },
+  { type: 'contact', label: 'Contact', icon: Mail },
 ]
 
 function SectionItem({ section, isSelected, onSelect }: { section: Section; isSelected: boolean; onSelect: () => void }) {
@@ -33,6 +45,7 @@ function SectionItem({ section, isSelected, onSelect }: { section: Section; isSe
   }
 
   const sectionType = sectionTypes.find((st) => st.type === section.type)
+  const IconComponent = sectionType?.icon || FileText
 
   return (
     <div
@@ -46,7 +59,9 @@ function SectionItem({ section, isSelected, onSelect }: { section: Section; isSe
       <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
         <GripVertical className="w-4 h-4 text-gray-400" />
       </div>
-      <span className="text-xl">{sectionType?.icon || '📄'}</span>
+      <div className={`flex-shrink-0 ${isSelected ? 'text-indigo-600' : 'text-gray-500'}`}>
+        <IconComponent className="w-5 h-5" />
+      </div>
       <div className="flex-1 min-w-0">
         <div className="font-medium text-sm text-gray-900 truncate">
           {sectionType?.label || section.type}
@@ -84,16 +99,19 @@ export function SectionSidebar({ sections, selectedSectionId, onSelectSection, o
       <div className="p-4 border-b border-gray-200">
         <h2 className="font-semibold text-gray-900 mb-3">Sections</h2>
         <div className="space-y-2">
-          {sectionTypes.map((st) => (
-            <button
-              key={st.type}
-              onClick={() => onAddSection(st.type)}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add {st.label}</span>
-            </button>
-          ))}
+          {sectionTypes.map((st) => {
+            const IconComponent = st.icon
+            return (
+              <button
+                key={st.type}
+                onClick={() => onAddSection(st.type)}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors"
+              >
+                <IconComponent className="w-4 h-4" />
+                <span>Add {st.label}</span>
+              </button>
+            )
+          })}
         </div>
       </div>
 

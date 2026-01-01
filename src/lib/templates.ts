@@ -13,7 +13,10 @@ export interface PortfolioTemplate {
 }
 
 // Font configurations for different templates
-export const fontConfigs: Record<FontFamily, { name: string; import: string; css: string }> = {
+export const fontConfigs: Record<
+  FontFamily,
+  { name: string; import: string; css: string }
+> = {
   inter: {
     name: 'Inter',
     import: 'Inter:wght@400;500;600;700',
@@ -62,7 +65,8 @@ export const fontConfigs: Record<FontFamily, { name: string; import: string; css
 const developerTemplate: PortfolioTemplate = {
   id: 'developer',
   name: 'Software Developer',
-  description: 'Clean, code-focused portfolio with GitHub integration and project showcases',
+  description:
+    'Clean, code-focused portfolio with GitHub integration and project showcases',
   category: 'developer',
   icon: 'Code2',
   preview: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
@@ -105,10 +109,10 @@ const developerTemplate: PortfolioTemplate = {
       data: {
         bio: "I'm a full-stack developer with 5+ years of experience building web applications. I specialize in React, Node.js, and cloud architecture. When I'm not coding, you'll find me contributing to open source projects or writing technical blog posts.",
         highlights: [
-          '🚀 5+ years of professional experience',
-          '💻 Open source contributor',
-          '📚 Technical writer & mentor',
-          '☁️ AWS & GCP certified',
+          '5+ years of professional experience',
+          'Open source contributor',
+          'Technical writer & mentor',
+          'AWS & GCP certified',
         ],
         social: {
           github: 'https://github.com',
@@ -126,7 +130,13 @@ const developerTemplate: PortfolioTemplate = {
         categories: [
           {
             name: 'Frontend',
-            skills: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Vue.js'],
+            skills: [
+              'React',
+              'TypeScript',
+              'Next.js',
+              'Tailwind CSS',
+              'Vue.js',
+            ],
           },
           {
             name: 'Backend',
@@ -233,7 +243,8 @@ const developerTemplate: PortfolioTemplate = {
 const designerTemplate: PortfolioTemplate = {
   id: 'designer',
   name: 'Creative Designer',
-  description: 'Visual-first portfolio with elegant typography and creative layouts',
+  description:
+    'Visual-first portfolio with elegant typography and creative layouts',
   category: 'designer',
   icon: 'Palette',
   preview: 'linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fbcfe8 100%)',
@@ -277,10 +288,10 @@ const designerTemplate: PortfolioTemplate = {
         title: 'I am a Creative Designer passionate about visual storytelling',
         bio: "With over 6 years of experience in design, I've had the privilege of working with brands ranging from ambitious startups to Fortune 500 companies. My approach combines strategic thinking with creative execution to deliver designs that not only look beautiful but drive results.",
         highlights: [
-          '✨ Award-winning designer',
-          '🎨 Brand identity specialist',
-          '📱 Mobile-first approach',
-          '🌍 Worked with clients worldwide',
+          'Award-winning designer',
+          'Brand identity specialist',
+          'Mobile-first approach',
+          'Worked with clients worldwide',
         ],
         imageUrl: '',
         social: {
@@ -310,11 +321,23 @@ const designerTemplate: PortfolioTemplate = {
         categories: [
           {
             name: 'Design',
-            skills: ['UI Design', 'UX Design', 'Brand Identity', 'Typography', 'Illustration'],
+            skills: [
+              'UI Design',
+              'UX Design',
+              'Brand Identity',
+              'Typography',
+              'Illustration',
+            ],
           },
           {
             name: 'Tools',
-            skills: ['Figma', 'Adobe XD', 'Photoshop', 'Illustrator', 'After Effects'],
+            skills: [
+              'Figma',
+              'Adobe XD',
+              'Photoshop',
+              'Illustrator',
+              'After Effects',
+            ],
           },
           {
             name: 'Development',
@@ -393,7 +416,8 @@ const designerTemplate: PortfolioTemplate = {
 const photographerTemplate: PortfolioTemplate = {
   id: 'photographer',
   name: 'Photographer',
-  description: 'Gallery-focused portfolio with lightbox and stunning image presentations',
+  description:
+    'Gallery-focused portfolio with lightbox and stunning image presentations',
   category: 'photographer',
   icon: 'Camera',
   preview: 'linear-gradient(135deg, #18181b 0%, #27272a 50%, #3f3f46 100%)',
@@ -421,7 +445,8 @@ const photographerTemplate: PortfolioTemplate = {
       data: {
         name: 'Marcus Lens',
         title: 'Visual Storyteller',
-        description: 'Capturing moments that speak louder than words. Specializing in portrait, landscape, and editorial photography.',
+        description:
+          'Capturing moments that speak louder than words. Specializing in portrait, landscape, and editorial photography.',
         ctaText: 'View Gallery',
         ctaLink: '#gallery',
         imageUrl: '',
@@ -433,12 +458,12 @@ const photographerTemplate: PortfolioTemplate = {
       variant: 'A',
       order: 1,
       data: {
-        bio: "Photography has been my passion for over a decade. I believe every frame tells a story, and my mission is to capture the authentic essence of every moment. From intimate portraits to sweeping landscapes, I approach each project with curiosity and dedication to craft.",
+        bio: 'Photography has been my passion for over a decade. I believe every frame tells a story, and my mission is to capture the authentic essence of every moment. From intimate portraits to sweeping landscapes, I approach each project with curiosity and dedication to craft.',
         highlights: [
-          '📸 10+ years experience',
-          '🏆 National Geographic featured',
-          '🌎 Traveled to 40+ countries',
-          '📰 Published in major magazines',
+          '10+ years experience',
+          'National Geographic featured',
+          'Traveled to 40+ countries',
+          'Published in major magazines',
         ],
         imageUrl: '',
         social: {
@@ -607,4 +632,3 @@ export function createPortfolioFromTemplate(
     templateId: template.id,
   }
 }
-
