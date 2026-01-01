@@ -1,6 +1,7 @@
 import type { ContactData, Portfolio } from '@/interfaces/Portfolio'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { Mail, Phone, Github, Linkedin, Twitter, Send, CheckCircle2 } from 'lucide-react'
 
 interface ContactSectionProps {
   data: ContactData
@@ -10,142 +11,220 @@ interface ContactSectionProps {
 
 export function ContactSection({ data, theme }: ContactSectionProps) {
   const isDark = theme.mode === 'dark'
-  const bgClass = isDark ? 'bg-gray-800' : 'bg-gray-50'
+  const bgClass = isDark ? 'bg-gray-900' : 'bg-white'
+  const cardBgClass = isDark ? 'bg-gray-800/50' : 'bg-gray-50'
   const textClass = isDark ? 'text-white' : 'text-gray-900'
-  const inputBgClass = isDark ? 'bg-gray-700' : 'bg-white'
+  const subtextClass = isDark ? 'text-gray-400' : 'text-gray-600'
+  const inputBgClass = isDark ? 'bg-gray-800' : 'bg-white'
   const inputTextClass = isDark ? 'text-white' : 'text-gray-900'
+  const borderClass = isDark ? 'border-gray-700' : 'border-gray-200'
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    // In a real app, this would send an email or save to database
+    setIsSubmitting(true)
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
+    setIsSubmitting(false)
+    setTimeout(() => {
+      setSubmitted(false)
+      setFormData({ name: '', email: '', message: '' })
+    }, 3000)
   }
 
+  const socialLinks = [
+    { key: 'github', icon: Github, url: data.social?.github, label: 'GitHub' },
+    { key: 'linkedin', icon: Linkedin, url: data.social?.linkedin, label: 'LinkedIn' },
+    { key: 'twitter', icon: Twitter, url: data.social?.twitter, label: 'Twitter' },
+  ].filter((link) => link.url)
+
   return (
-    <section className={`${bgClass} py-16 px-4`}>
-      <div className="max-w-4xl mx-auto">
-        <h2 className={`text-4xl font-bold ${textClass} mb-12 text-center`}>Get In Touch</h2>
-        <div className="grid md:grid-cols-2 gap-12">
-          <div>
-            <h3 className={`text-2xl font-semibold ${textClass} mb-6`}>Contact Information</h3>
-            <div className="space-y-4">
+    <section className={`${bgClass} py-20 px-4 sm:px-6 lg:px-8`}>
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className={`text-4xl md:text-5xl font-bold ${textClass} mb-4`}>Get In Touch</h2>
+          <p className={`text-lg ${subtextClass} max-w-2xl mx-auto`}>
+            Have a project in mind or want to collaborate? I'd love to hear from you.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Contact Information Card */}
+          <div className={`${cardBgClass} rounded-2xl p-8 border ${borderClass}`}>
+            <h3 className={`text-2xl font-bold ${textClass} mb-6`}>Contact Information</h3>
+            <div className="space-y-6">
               {data.email && (
-                <div>
-                  <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
-                    Email
-                  </p>
-                  <a
-                    href={`mailto:${data.email}`}
-                    className={`text-lg ${textClass} hover:opacity-80`}
-                    style={{ color: theme.primaryColor }}
+                <a
+                  href={`mailto:${data.email}`}
+                  className="flex items-start gap-4 group"
+                >
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
+                    style={{
+                      backgroundColor: `${theme.primaryColor}15`,
+                      color: theme.primaryColor,
+                    }}
                   >
-                    {data.email}
-                  </a>
-                </div>
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <p className={`text-sm font-medium ${subtextClass} mb-1`}>Email</p>
+                    <p
+                      className={`text-lg font-semibold ${textClass} group-hover:opacity-80 transition-opacity`}
+                      style={{ color: theme.primaryColor }}
+                    >
+                      {data.email}
+                    </p>
+                  </div>
+                </a>
               )}
+
               {data.phone && (
-                <div>
-                  <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
-                    Phone
-                  </p>
-                  <a
-                    href={`tel:${data.phone}`}
-                    className={`text-lg ${textClass} hover:opacity-80`}
-                    style={{ color: theme.primaryColor }}
+                <a
+                  href={`tel:${data.phone}`}
+                  className="flex items-start gap-4 group"
+                >
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
+                    style={{
+                      backgroundColor: `${theme.primaryColor}15`,
+                      color: theme.primaryColor,
+                    }}
                   >
-                    {data.phone}
-                  </a>
-                </div>
+                    <Phone className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <p className={`text-sm font-medium ${subtextClass} mb-1`}>Phone</p>
+                    <p
+                      className={`text-lg font-semibold ${textClass} group-hover:opacity-80 transition-opacity`}
+                      style={{ color: theme.primaryColor }}
+                    >
+                      {data.phone}
+                    </p>
+                  </div>
+                </a>
               )}
-              {(data.social?.github || data.social?.linkedin || data.social?.twitter) && (
+
+              {socialLinks.length > 0 && (
                 <div>
-                  <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-3`}>
-                    Social
-                  </p>
-                  <div className="flex gap-4">
-                    {data.social.github && (
+                  <p className={`text-sm font-medium ${subtextClass} mb-4`}>Follow Me</p>
+                  <div className="flex gap-3">
+                    {socialLinks.map(({ key, icon: Icon, url, label }) => (
                       <a
-                        href={data.social.github}
+                        key={key}
+                        href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-2xl hover:opacity-80"
-                        style={{ color: theme.primaryColor }}
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg ${
+                          isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-50'
+                        } border ${borderClass}`}
+                        style={{
+                          color: theme.primaryColor,
+                        }}
+                        aria-label={label}
                       >
-                        GitHub
+                        <Icon className="w-5 h-5" />
                       </a>
-                    )}
-                    {data.social.linkedin && (
-                      <a
-                        href={data.social.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-2xl hover:opacity-80"
-                        style={{ color: theme.primaryColor }}
-                      >
-                        LinkedIn
-                      </a>
-                    )}
-                    {data.social.twitter && (
-                      <a
-                        href={data.social.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-2xl hover:opacity-80"
-                        style={{ color: theme.primaryColor }}
-                      >
-                        Twitter
-                      </a>
-                    )}
+                    ))}
                   </div>
                 </div>
               )}
             </div>
           </div>
 
-          <div>
-            <h3 className={`text-2xl font-semibold ${textClass} mb-6`}>Send a Message</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Contact Form Card */}
+          <div className={`${cardBgClass} rounded-2xl p-8 border ${borderClass}`}>
+            <h3 className={`text-2xl font-bold ${textClass} mb-6`}>Send a Message</h3>
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
+                <label htmlFor="name" className={`block text-sm font-medium ${subtextClass} mb-2`}>
+                  Your Name
+                </label>
                 <input
+                  id="name"
                   type="text"
-                  placeholder="Your Name"
+                  placeholder="John Doe"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors`}
-                  style={{ '--tw-ring-color': theme.primaryColor } as React.CSSProperties}
+                  className={`w-full px-4 py-3 rounded-xl border ${inputBgClass} ${inputTextClass} ${borderClass} focus:ring-2 focus:border-transparent transition-all outline-none`}
+                  style={{
+                    '--tw-ring-color': theme.primaryColor,
+                  } as React.CSSProperties}
                 />
               </div>
+
               <div>
+                <label htmlFor="email" className={`block text-sm font-medium ${subtextClass} mb-2`}>
+                  Your Email
+                </label>
                 <input
+                  id="email"
                   type="email"
-                  placeholder="Your Email"
+                  placeholder="john@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors`}
+                  className={`w-full px-4 py-3 rounded-xl border ${inputBgClass} ${inputTextClass} ${borderClass} focus:ring-2 focus:border-transparent transition-all outline-none`}
+                  style={{
+                    '--tw-ring-color': theme.primaryColor,
+                  } as React.CSSProperties}
                 />
               </div>
+
               <div>
+                <label htmlFor="message" className={`block text-sm font-medium ${subtextClass} mb-2`}>
+                  Message
+                </label>
                 <textarea
-                  placeholder="Your Message"
+                  id="message"
+                  placeholder="Tell me about your project..."
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   required
-                  rows={5}
-                  className={`w-full px-4 py-3 rounded-lg border ${inputBgClass} ${inputTextClass} border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors`}
+                  rows={6}
+                  className={`w-full px-4 py-3 rounded-xl border ${inputBgClass} ${inputTextClass} ${borderClass} focus:ring-2 focus:border-transparent transition-all resize-none outline-none`}
+                  style={{
+                    '--tw-ring-color': theme.primaryColor,
+                  } as React.CSSProperties}
                 />
               </div>
+
               <button
                 type="submit"
-                className="w-full px-6 py-3 rounded-lg font-medium text-white transition-colors hover:opacity-90"
-                style={{ backgroundColor: theme.primaryColor }}
+                disabled={isSubmitting || submitted}
+                className={`w-full px-6 py-4 rounded-xl font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2 ${
+                  submitted
+                    ? 'bg-green-500'
+                    : isSubmitting
+                      ? 'opacity-70 cursor-not-allowed'
+                      : 'hover:opacity-90 hover:shadow-lg hover:scale-[1.02]'
+                }`}
+                style={{
+                  backgroundColor: submitted ? undefined : theme.primaryColor,
+                }}
               >
-                {submitted ? 'Message Sent!' : 'Send Message'}
+                {submitted ? (
+                  <>
+                    <CheckCircle2 className="w-5 h-5" />
+                    Message Sent!
+                  </>
+                ) : isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Send Message
+                  </>
+                )}
               </button>
             </form>
           </div>
@@ -154,4 +233,3 @@ export function ContactSection({ data, theme }: ContactSectionProps) {
     </section>
   )
 }
-
