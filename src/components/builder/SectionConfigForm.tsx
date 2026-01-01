@@ -652,6 +652,30 @@ function ContactConfigForm({ data, onUpdate }: { data: ContactData; onUpdate: (u
         />
       </div>
       <div>
+        <Label>Profile Image</Label>
+        <p className="text-xs text-gray-500 mb-2">
+          Upload a profile photo to display in the contact section
+        </p>
+        <ImageUpload
+          value={data.imageUrl || ''}
+          onChange={(url) => onUpdate({ imageUrl: url })}
+          aspectRatio="square"
+          placeholder="Drag & drop your profile photo"
+        />
+      </div>
+      <div>
+        <Label>Bio (optional)</Label>
+        <Textarea
+          value={data.bio || ''}
+          onChange={(e) => onUpdate({ bio: e.target.value })}
+          placeholder="A brief bio about yourself"
+          rows={3}
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          This will appear below your profile image
+        </p>
+      </div>
+      <div>
         <Label>GitHub</Label>
         <Input
           type="url"

@@ -115,6 +115,8 @@ export interface ExperienceData {
 export interface ContactData {
   email: string
   phone?: string
+  imageUrl?: string
+  bio?: string
   social: {
     github?: string
     linkedin?: string

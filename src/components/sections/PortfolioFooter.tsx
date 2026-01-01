@@ -40,7 +40,7 @@ export function PortfolioFooter({ portfolio }: PortfolioFooterProps) {
 
   return (
     <footer className={`${bgClass} border-t ${borderClass}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col items-center gap-6">
           {/* Social Links */}
           {socialLinks.length > 0 && (
