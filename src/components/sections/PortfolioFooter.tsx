@@ -72,11 +72,11 @@ export function PortfolioFooter({ portfolio }: PortfolioFooterProps) {
 
           {/* Copyright */}
           <div className="flex items-center gap-2">
-            <p className={`${subtextClass} text-sm`}>
-              © {new Date().getFullYear()} {portfolio.title}
+            <p className={`${subtextClass} text-xs sm:text-sm`}>
+              &copy; {new Date().getFullYear()} {portfolio.title}
             </p>
             <span className={subtextClass}>•</span>
-            <p className={`${subtextClass} text-sm`}>
+            <p className={`${subtextClass} text-xs sm:text-sm`}>
               Built with{' '}
               <Heart
                 className="w-3.5 h-3.5 inline mx-0.5"
@@ -86,7 +86,7 @@ export function PortfolioFooter({ portfolio }: PortfolioFooterProps) {
               using{' '}
               <a
                 href="/"
-                className="font-medium hover:opacity-80 transition-opacity"
+                className="font-medium text-xs sm:text-sm hover:opacity-80 transition-opacity"
                 style={{ color: portfolio.theme.primaryColor }}
               >
                 {ProjectName}
