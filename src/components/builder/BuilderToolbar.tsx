@@ -1,5 +1,5 @@
 import type { Portfolio } from '@/interfaces/Portfolio'
-import { ArrowLeft, Eye, Globe, Download, Save, Palette } from 'lucide-react'
+import { ArrowLeft, Eye, Globe, Save, Palette } from 'lucide-react'
 
 interface BuilderToolbarProps {
   portfolio: Portfolio
@@ -8,7 +8,7 @@ interface BuilderToolbarProps {
   onPreview: () => void
   onThemeSettings: () => void
   onPublish: () => void
-  onExport: () => void
+  // onExport: () => void
   isPublished: boolean
 }
 
@@ -19,7 +19,7 @@ export function BuilderToolbar({
   onPreview,
   onThemeSettings,
   onPublish,
-  onExport,
+  // onExport,
   isPublished,
 }: BuilderToolbarProps) {
   return (
@@ -58,13 +58,13 @@ export function BuilderToolbar({
           <Eye className="w-4 h-4" />
           Preview
         </button>
-        <button
+        {/* <button
           onClick={onExport}
           className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
         >
           <Download className="w-4 h-4" />
           Export HTML
-        </button>
+        </button> */}
         <button
           onClick={onPublish}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${

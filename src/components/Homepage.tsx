@@ -10,7 +10,6 @@ import {
   Rocket,
   Shield,
   Smartphone,
-  Star,
   UserPlus,
   Zap,
 } from 'lucide-react'

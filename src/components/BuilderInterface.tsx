@@ -12,7 +12,7 @@ import { X } from 'lucide-react'
 
 export function BuilderInterface() {
   const navigate = useNavigate()
-  const { currentPortfolio, saving, publishPortfolio, unpublishPortfolio, exportHTML } =
+  const { currentPortfolio, saving, publishPortfolio, unpublishPortfolio } =
     usePortfolioStore()
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null)
   const [previewMode, setPreviewMode] = useState(false)
@@ -42,19 +42,19 @@ export function BuilderInterface() {
     }
   }
 
-  const handleExport = () => {
-    const html = exportHTML()
-    const blob = new Blob([html], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${currentPortfolio.title.replace(/\s+/g, '-')}.html`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-    toast.success('Portfolio exported!')
-  }
+  // const handleExport = () => {
+  //   const html = exportHTML()
+  //   const blob = new Blob([html], { type: 'text/html' })
+  //   const url = URL.createObjectURL(blob)
+  //   const a = document.createElement('a')
+  //   a.href = url
+  //   a.download = `${currentPortfolio.title.replace(/\s+/g, '-')}.html`
+  //   document.body.appendChild(a)
+  //   a.click()
+  //   document.body.removeChild(a)
+  //   URL.revokeObjectURL(url)
+  //   toast.success('Portfolio exported!')
+  // }
 
   if (previewMode) {
     return (
@@ -91,7 +91,7 @@ export function BuilderInterface() {
           setSelectedSectionId(null)
         }}
         onPublish={currentPortfolio.isPublished ? handleUnpublish : handlePublish}
-        onExport={handleExport}
+        // onExport={handleExport}
         isPublished={currentPortfolio.isPublished || false}
       />
 
