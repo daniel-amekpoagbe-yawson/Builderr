@@ -7,6 +7,7 @@ import { TemplateSelector } from '@/components/TemplateSelector'
 import type { PortfolioTemplate } from '@/lib/templates'
 import { toast } from 'sonner'
 import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut, Sparkles, Code2, Palette, Camera } from 'lucide-react'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -41,6 +42,7 @@ function DashboardPage() {
     usePortfolioStore()
   const { signOut, user } = useAuthStore()
   const [showTemplateSelector, setShowTemplateSelector] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; title: string } | null>(null)
 
   useEffect(() => {
     loadUserPortfolios()
@@ -61,14 +63,17 @@ function DashboardPage() {
     navigate({ to: '/builder/$portfolioId', params: { portfolioId: id } })
   }
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!confirm(`Are you sure you want to delete "${title}"? This action cannot be undone.`)) {
-      return
-    }
+  const handleDelete = (id: string, title: string) => {
+    setDeleteConfirm({ id, title })
+  }
+
+  const confirmDelete = async () => {
+    if (!deleteConfirm) return
 
     try {
-      await deletePortfolio(id)
+      await deletePortfolio(deleteConfirm.id)
       toast.success('Portfolio deleted')
+      setDeleteConfirm(null)
     } catch (error: any) {
       toast.error(error.message || 'Failed to delete portfolio')
     }
@@ -101,13 +106,13 @@ function DashboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50">
+      <div className="min-h-screen bg-white">
         {/* Header */}
-        <div className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="border-b border-gray-200 bg-white sticky top-0 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -118,14 +123,14 @@ function DashboardPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowTemplateSelector(true)}
-                  className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2.5 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30"
+                  className="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl hover:bg-gray-900 transition-all"
                 >
                   <Plus className="w-5 h-5" />
                   New Portfolio
                 </button>
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl hover:bg-gray-200 transition-colors"
+                  className="flex items-center gap-2 bg-white text-gray-900 px-4 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-50 transition-colors"
                 >
                   <LogOut className="w-5 h-5" />
                   <span className="hidden sm:inline">Sign Out</span>
@@ -145,15 +150,15 @@ function DashboardPage() {
           {loading ? (
             <div className="flex justify-center items-center py-20">
               <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+                <div className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full animate-spin" />
                 <p className="text-gray-500">Loading portfolios...</p>
               </div>
             </div>
           ) : portfolios.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-12 text-center">
               <div className="max-w-md mx-auto">
-                <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-10 h-10 text-indigo-600" />
+                <div className="w-20 h-20 bg-black rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Sparkles className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-3">
                   Create Your First Portfolio
@@ -163,7 +168,7 @@ function DashboardPage() {
                 </p>
                 <button
                   onClick={() => setShowTemplateSelector(true)}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-xl text-lg font-medium"
+                  className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 rounded-xl hover:bg-gray-900 transition-all text-lg font-medium"
                 >
                   <Plus className="w-6 h-6" />
                   Choose a Template
@@ -175,7 +180,7 @@ function DashboardPage() {
               {portfolios.map((portfolio) => (
                 <div
                   key={portfolio.id}
-                  className="group bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 overflow-hidden"
+                  className="group bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-xl hover:border-gray-400 transition-all duration-300 overflow-hidden"
                 >
                   {/* Preview Header */}
                   <div
@@ -230,7 +235,7 @@ function DashboardPage() {
                         href={getPublicUrl(portfolio.slug) || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 text-sm font-medium mb-4 group/link"
+                        className="inline-flex items-center gap-1.5 text-black hover:text-gray-700 text-sm font-medium mb-4 group/link"
                       >
                         <ExternalLink className="w-4 h-4" />
                         <span className="group-hover/link:underline">View Live Site</span>
@@ -241,7 +246,7 @@ function DashboardPage() {
                     <div className="flex gap-2 pt-4 border-t border-gray-100">
                       <button
                         onClick={() => handleEdit(portfolio.id)}
-                        className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors text-sm font-medium"
+                        className="flex-1 flex items-center justify-center gap-2 bg-black text-white px-4 py-2.5 rounded-xl hover:bg-gray-900 transition-colors text-sm font-medium"
                       >
                         <Edit className="w-4 h-4" />
                         Edit
@@ -268,12 +273,12 @@ function DashboardPage() {
               {/* Add New Card */}
               <button
                 onClick={() => setShowTemplateSelector(true)}
-                className="group bg-white/50 rounded-2xl border-2 border-dashed border-gray-300 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all duration-300 p-6 min-h-[280px] flex flex-col items-center justify-center"
+                className="group bg-white rounded-2xl border-2 border-dashed border-gray-300 hover:border-black hover:bg-gray-50 transition-all duration-300 p-6 min-h-[280px] flex flex-col items-center justify-center"
               >
-                <div className="w-14 h-14 rounded-2xl bg-gray-100 group-hover:bg-indigo-100 flex items-center justify-center mb-4 transition-colors">
-                  <Plus className="w-7 h-7 text-gray-400 group-hover:text-indigo-600 transition-colors" />
+                <div className="w-14 h-14 rounded-2xl bg-gray-100 group-hover:bg-black flex items-center justify-center mb-4 transition-colors">
+                  <Plus className="w-7 h-7 text-gray-400 group-hover:text-white transition-colors" />
                 </div>
-                <span className="text-gray-600 group-hover:text-indigo-700 font-medium transition-colors">
+                <span className="text-gray-600 group-hover:text-black font-medium transition-colors">
                   Create New Portfolio
                 </span>
               </button>
@@ -286,6 +291,18 @@ function DashboardPage() {
           isOpen={showTemplateSelector}
           onClose={() => setShowTemplateSelector(false)}
           onSelect={handleTemplateSelect}
+        />
+
+        {/* Delete Confirmation Dialog */}
+        <ConfirmDialog
+          open={!!deleteConfirm}
+          title="Delete Portfolio"
+          message={`Are you sure you want to delete "${deleteConfirm?.title}"? This action cannot be undone.`}
+          confirmText="Delete"
+          cancelText="Cancel"
+          variant="destructive"
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteConfirm(null)}
         />
       </div>
     </AuthGuard>

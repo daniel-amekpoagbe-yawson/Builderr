@@ -22,13 +22,13 @@ export default function App() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate({ to: '/auth/Register' })}
-              className="px-8 py-3 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+              className="px-8 py-3 bg-black text-white text-lg rounded-lg hover:bg-gray-900 transition-colors font-medium"
             >
               Start Building Free
             </button>
             <button
               onClick={() => navigate({ to: '/auth/Login' })}
-              className="px-6 py-3 bg-white text-gray-700 text-lg rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors font-medium"
+              className="px-6 py-3 bg-white text-gray-900 text-lg rounded-lg border-2 border-black hover:bg-gray-50 transition-colors font-medium"
             >
               Sign In
             </button>
@@ -112,7 +112,7 @@ export default function App() {
           </p>
           <button
             onClick={() => navigate({ to: '/auth/Register' })}
-            className="px-8 py-4 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+            className="px-8 py-4 bg-black text-white text-lg rounded-lg hover:bg-gray-900 transition-colors font-medium"
           >
             Get Started Free
           </button>

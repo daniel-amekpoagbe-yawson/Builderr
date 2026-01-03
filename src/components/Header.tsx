@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Menu, X, Home, LogIn, LogOut, LayoutDashboard } from 'lucide-react'
+import { Home, LayoutDashboard, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 
 export default function Header() {
@@ -26,7 +26,7 @@ export default function Header() {
             <Menu strokeWidth={1} />
           </button>
           <h1 className="ml-4 text-xl font-semibold">
-            <Link to="/" className="hover:text-indigo-400 transition-colors">
+            <Link to="/" className="hover:text-gray-300 transition-colors">
               Buildrr
             </Link>
           </h1>
@@ -38,13 +38,13 @@ export default function Header() {
             <>
               <Link
                 to="/dashboard"
-                className="px-4 py-2 text-white hover:text-indigo-400 transition-colors"
+                className="px-4 py-2 text-white hover:text-gray-300 transition-colors"
               >
                 Dashboard
               </Link>
               <button
                 onClick={handleSignOut}
-                className="px-4 py-2 text-white hover:text-indigo-400 transition-colors"
+                className="px-4 py-2 text-white hover:text-gray-300 transition-colors"
               >
                 Sign Out
               </button>
@@ -53,13 +53,13 @@ export default function Header() {
             <>
               <Link
                 to="/auth/Login"
-                className="px-4 py-2 text-white hover:text-indigo-400 transition-colors"
+                className="px-4 py-2 text-white hover:text-gray-300 transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 to="/auth/Register"
-                className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors"
               >
                 Get Started
               </Link>
@@ -128,7 +128,7 @@ export default function Header() {
               <Link
                 to="/auth/Register"
                 onClick={() => setIsOpen(false)}
-                className="w-full p-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium block text-center"
+                className="w-full p-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors font-medium block text-center"
               >
                 Get Started
               </Link>

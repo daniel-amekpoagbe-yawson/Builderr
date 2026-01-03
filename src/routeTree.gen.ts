@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SiteSlugRouteImport } from './routes/site.$slug'
 import { Route as PreviewPortfolioIdRouteImport } from './routes/preview.$portfolioId'
 import { Route as BuilderPortfolioIdRouteImport } from './routes/builder.$portfolioId'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthRegisterRouteImport } from './routes/auth/Register'
 import { Route as AuthLoginRouteImport } from './routes/auth/Login'
 
@@ -54,6 +55,11 @@ const BuilderPortfolioIdRoute = BuilderPortfolioIdRouteImport.update({
   path: '/builder/$portfolioId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/auth/Register',
   path: '/auth/Register',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/auth/Login': typeof AuthLoginRoute
   '/auth/Register': typeof AuthRegisterRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/builder/$portfolioId': typeof BuilderPortfolioIdRoute
   '/preview/$portfolioId': typeof PreviewPortfolioIdRoute
   '/site/$slug': typeof SiteSlugRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/auth/Login': typeof AuthLoginRoute
   '/auth/Register': typeof AuthRegisterRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/builder/$portfolioId': typeof BuilderPortfolioIdRoute
   '/preview/$portfolioId': typeof PreviewPortfolioIdRoute
   '/site/$slug': typeof SiteSlugRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/auth/Login': typeof AuthLoginRoute
   '/auth/Register': typeof AuthRegisterRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/builder/$portfolioId': typeof BuilderPortfolioIdRoute
   '/preview/$portfolioId': typeof PreviewPortfolioIdRoute
   '/site/$slug': typeof SiteSlugRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/Login'
     | '/auth/Register'
+    | '/auth/callback'
     | '/builder/$portfolioId'
     | '/preview/$portfolioId'
     | '/site/$slug'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/Login'
     | '/auth/Register'
+    | '/auth/callback'
     | '/builder/$portfolioId'
     | '/preview/$portfolioId'
     | '/site/$slug'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/Login'
     | '/auth/Register'
+    | '/auth/callback'
     | '/builder/$portfolioId'
     | '/preview/$portfolioId'
     | '/site/$slug'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   BuilderPortfolioIdRoute: typeof BuilderPortfolioIdRoute
   PreviewPortfolioIdRoute: typeof PreviewPortfolioIdRoute
   SiteSlugRoute: typeof SiteSlugRoute
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BuilderPortfolioIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/Register': {
       id: '/auth/Register'
       path: '/auth/Register'
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   BuilderPortfolioIdRoute: BuilderPortfolioIdRoute,
   PreviewPortfolioIdRoute: PreviewPortfolioIdRoute,
   SiteSlugRoute: SiteSlugRoute,

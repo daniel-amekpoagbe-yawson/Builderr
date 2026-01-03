@@ -46,14 +46,21 @@ npm install
 
 3. Set up environment variables:
 ```bash
-cp .env.example .env
+# Create .env file in the root directory
+touch .env
 ```
 
 Edit `.env` and add your Supabase credentials:
-```
+```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
+
+**Where to find your Supabase credentials:**
+1. Go to [Supabase Dashboard](https://app.supabase.com)
+2. Select your project (or create a new one)
+3. Go to Settings → API
+4. Copy the "Project URL" and "anon/public" key
 
 4. Set up the Supabase database:
 

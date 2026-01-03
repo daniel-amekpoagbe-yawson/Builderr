@@ -68,9 +68,15 @@ export const useAuthStore = create<AuthStore>((set) => ({
   signUp: async (email: string, password: string) => {
     set({ loading: true })
     try {
+      // Get the current site URL for email redirect
+      const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${siteUrl}/auth/callback`,
+        },
       })
       if (error) throw error
 
