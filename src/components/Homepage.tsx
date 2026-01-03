@@ -279,7 +279,7 @@ export default function App() {
       {/* How It Works Section */}
       <section className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <h2 className="text-xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               How It Works
             </h2>
@@ -316,17 +316,17 @@ export default function App() {
               },
             ].map((step, idx) => (
               <div key={idx} className="relative">
-                <div className="bg-white rounded-2xl p-4 border border-gray-200 hover:border-black transition-all text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full text-white text-2xl font-bold mb-6">
+                <div className="bg-white rounded-2xl p-4 border border-gray-200 hover:border-black/40 hover:shadow-md transition-all text-center">
+                  <div className="flex items-center justify-center w-14 h-14 rounded-full text-gray-800/40 text-3xl font-bold ">
                     {step.step}
                   </div>
-                  <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                  <div className="w-14 h-14 bg-gray-100/60 rounded-xl flex items-center justify-center mx-auto mb-6">
                     <step.icon className="w-8 h-8 text-black" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">
                     {step.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
                     {step.description}
                   </p>
                 </div>

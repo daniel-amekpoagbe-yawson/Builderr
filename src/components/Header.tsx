@@ -16,17 +16,17 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 p-4 flex items-center justify-between bg-gray-800 text-white shadow-lg">
+      <header className="sticky top-0 z-50 p-4 flex items-center justify-between bg-stone-800 text-white shadow-lg">
         <div className="flex items-center">
           <button
             onClick={() => setIsOpen(true)}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-stone-700 rounded-lg transition-colors"
             aria-label="Open menu"
           >
             <Menu strokeWidth={1} />
           </button>
           <h1 className="ml-4 text-xl font-semibold">
-            <Link to="/" className="hover:text-gray-300 transition-colors">
+            <Link to="/" className="hover:text-stone-300 transition-colors">
               Buildrr
             </Link>
           </h1>
@@ -38,13 +38,13 @@ export default function Header() {
             <>
               <Link
                 to="/dashboard"
-                className="px-4 py-2 text-white hover:text-gray-300 transition-colors"
+                className="px-4 py-2 text-white hover:text-stone-300 transition-colors"
               >
                 Dashboard
               </Link>
               <button
                 onClick={handleSignOut}
-                className="px-4 py-2 text-white hover:text-gray-300 transition-colors"
+                className="px-4 py-2 text-white hover:text-stone-300 transition-colors"
               >
                 Sign Out
               </button>
@@ -69,26 +69,26 @@ export default function Header() {
       </header>
 
       <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
+        className={`fixed top-0 left-0 h-full w-80 bg-stone-800 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
+        <div className="flex items-center justify-between p-4 border-b border-stone-700">
           <h2 className="text-xl font-bold">Navigation</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-stone-700 rounded-lg transition-colors"
             aria-label="Close menu"
           >
             <X strokeWidth={1} />
           </button>
         </div>
 
-        <nav className="flex-1 p-4 overflow-y-auto">
+        <nav className="flex-1 p-4 overflow-y-auto flex flex-col">
           <Link
             to="/"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2"
           >
             <Home size={20} />
             <span className="font-medium">Home</span>
@@ -99,15 +99,15 @@ export default function Header() {
               <Link
                 to="/dashboard"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2"
               >
                 <LayoutDashboard size={20} />
                 <span className="font-medium">Dashboard</span>
               </Link>
-              <div className="mt-6 pt-6 border-t border-gray-700">
+              <div className="mt-auto pt-6 border-t border-stone-700">
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2 w-full text-left"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2 w-full text-left"
                 >
                   <LogOut size={20} />
                   <span className="font-medium">Sign Out</span>
@@ -115,11 +115,11 @@ export default function Header() {
               </div>
             </>
           ) : (
-            <div className="mt-6 pt-6 border-t border-gray-700">
+            <div className="mt-auto pt-2 border-t border-stone-700">
               <Link
                 to="/auth/Login"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2 w-full text-left"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2 w-full text-left"
               >
                 <LogIn size={20} />
                 <span className="font-medium">Sign In</span>
@@ -128,7 +128,7 @@ export default function Header() {
               <Link
                 to="/auth/Register"
                 onClick={() => setIsOpen(false)}
-                className="w-full p-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors font-medium block text-center"
+                className="w-full p-3 bg-black text-white rounded-lg hover:bg-gray-50/10 transition-colors font-medium block text-center"
               >
                 Get Started
               </Link>
