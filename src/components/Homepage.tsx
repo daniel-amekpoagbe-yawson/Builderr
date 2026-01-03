@@ -18,6 +18,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import Preview from './Preview'
 import Footer from './Footer'
+import Testimonials from './Testimonials'
 
 export default function App() {
   const navigate = useNavigate()
@@ -32,7 +33,7 @@ export default function App() {
       {/* Hero Section - BOLD */}
       <section
         id="home"
-        className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100"
+        className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-linear-to-br from-gray-50 via-white to-gray-100"
       >
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
@@ -46,74 +47,69 @@ export default function App() {
 
         {/* Floating Badges */}
         <div className="absolute top-20 left-10 hidden lg:block animate-bounce-slow">
-          <div className="bg-black text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg backdrop-blur-sm bg-opacity-90">
+          <div className="bg-black text-white px-2 py-2 rounded-full text-xs font-medium shadow-lg backdrop-blur-sm bg-opacity-90">
             ⚡ No Code Required
           </div>
         </div>
         <div className="absolute top-32 right-20 hidden lg:block animate-bounce-slow-delayed">
-          <div className="bg-black text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg backdrop-blur-sm bg-opacity-90">
+          <div className="bg-black text-white px-2 py-2 rounded-full text-xs font-medium shadow-lg backdrop-blur-sm bg-opacity-90">
             🚀 10 Min Setup
           </div>
         </div>
-        <div className="absolute bottom-40 left-20 hidden lg:block animate-bounce-slow-delayed-2">
-          <div className="bg-black text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg backdrop-blur-sm bg-opacity-90">
-            💯 Free Forever
-          </div>
-        </div>
+       
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 ">
           <div className="text-center max-w-5xl mx-auto">
             {/* Social Proof Badge */}
-            <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 mb-8 shadow-sm hover:shadow-md transition-shadow">
+            <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 mb-8 shadow-sm hover:shadow-sm transition-shadow">
               <div className="flex -space-x-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 border-2 border-white"
+                    className="w-8 h-8 rounded-full bg-linear-to-br from-gray-300 to-gray-400 border-2 border-white"
                   />
                 ))}
               </div>
               <span className="text-sm font-medium text-gray-700">
-                Join <span className="font-bold text-black">10,000+</span>{' '}
+                Join <span className="font-bold text-black">100+</span>{' '}
                 developers
               </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
               Build a Portfolio That{' '}
               <span className="relative inline-block">
                 <span className="relative z-10">Gets You Hired</span>
-                <span className="absolute bottom-2 left-0 right-0 h-3 bg-black opacity-10 -rotate-1"></span>
               </span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg  text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
               Create stunning developer portfolios in minutes—no coding, no
               hassle. Choose from professional layouts, customize everything,
               and go live instantly.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <button
                 onClick={() => navigate({ to: '/auth/Register' })}
-                className="group px-8 py-4 bg-black text-white text-lg rounded-xl hover:bg-gray-900 transition-all font-semibold shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2"
+                className="group px-4 py-3 bg-black text-white text-base rounded-xl hover:bg-gray-900 transition-all font-semibold shadow-xl hover:shadow-2xl hover:scale-102 flex items-center justify-center gap-2"
               >
-                Create My Portfolio Free
+                Start Creating
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <button
                 onClick={() => navigate({ to: '/auth/Login' })}
-                className="px-8 py-4 bg-white text-gray-900 text-lg rounded-xl border-2 border-black hover:bg-gray-50 transition-all font-semibold"
+                className="px-4  py-3 bg-white text-gray-900 text-base rounded-xl border border-black hover:bg-gray-50 transition-all font-semibold"
               >
                 Sign In
               </button>
             </div>
 
             {/* Stats Row */}
-            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 text-sm md:text-base">
+            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 text-xs md:text-sm">
               <div className="flex items-center gap-2 text-gray-700">
                 <Zap className="w-5 h-5 text-black" />
                 <span className="font-semibold">10 min</span> setup
@@ -139,97 +135,42 @@ export default function App() {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-6 h-6 text-gray-400" />
-        </div>
+     
       </section>
 
       {/* Social Proof Section */}
-      <section className="py-20 bg-white border-y border-gray-100">
+      <section className="py-10 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Metrics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-black mb-2">
-                15,000+
+              <div className="text-xl md:text-2xl font-bold text-black mb-2">
+                15+
               </div>
-              <div className="text-gray-600">Portfolios Created</div>
+              <div className="text-gray-600 text-xs">Portfolios Created</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-black mb-2">
+              <div className="text-xl md:text-2xl font-bold text-black mb-2">
                 98%
               </div>
-              <div className="text-gray-600">Deployment Success</div>
+              <div className="text-gray-600 text-xs">Deployment Success</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-black mb-2">
+              <div className="text-xl md:text-2xl font-bold text-black mb-2">
                 8 min
               </div>
-              <div className="text-gray-600">Avg. Time to Deploy</div>
+              <div className="text-gray-600 text-xs">Avg. Time to Deploy</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-black mb-2">
+              <div className="text-xl md:text-2xl font-bold text-black mb-2">
                 4.9/5
               </div>
-              <div className="text-gray-600">User Rating</div>
+              <div className="text-gray-600 text-xs">User Rating</div>
             </div>
           </div>
 
           {/* Testimonials */}
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {[
-              {
-                name: 'Sarah Chen',
-                role: 'Frontend Developer at Stripe',
-                quote:
-                  'I got 3 interview requests within a week of sharing my Buildrr portfolio!',
-                avatar: 'SC',
-              },
-              {
-                name: 'Marcus Johnson',
-                role: 'Full-Stack Developer',
-                quote:
-                  "The best portfolio builder I've used. Clean, fast, and exactly what recruiters want to see.",
-                avatar: 'MJ',
-              },
-              {
-                name: 'Emily Rodriguez',
-                role: 'UI/UX Designer',
-                quote:
-                  'Finally, a tool that lets me showcase my work without spending days coding.',
-                avatar: 'ER',
-              },
-            ].map((testimonial, idx) => (
-              <div
-                key={idx}
-                className="bg-gray-50 rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-all"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="w-4 h-4 fill-black text-black" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "{testimonial.quote}"
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-semibold">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">
-                      {testimonial.name}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {testimonial.role}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
+         <Testimonials/>
           {/* Company Logos (Aspirational) */}
           <div className="text-center">
             <p className="text-sm text-gray-500 mb-6">Our users work at:</p>
