@@ -1,5 +1,5 @@
 import type { Portfolio } from '@/interfaces/Portfolio'
-import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react'
+import { Github, Linkedin, Twitter, Mail} from 'lucide-react'
 import { ProjectName } from '@/constant'
 
 interface PortfolioFooterProps {
