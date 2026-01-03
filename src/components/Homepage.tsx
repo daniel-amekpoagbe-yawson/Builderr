@@ -172,7 +172,7 @@ export default function App() {
           {/* Testimonials */}
          <Testimonials/>
           {/* Company Logos (Aspirational) */}
-          <div className="text-center">
+          {/* <div className="text-center">
             <p className="text-sm text-gray-500 mb-6">Our users work at:</p>
             <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
               {['Google', 'Meta', 'Stripe', 'Netflix', 'Airbnb'].map(
@@ -186,21 +186,21 @@ export default function App() {
                 ),
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
 
       {/* Enhanced Features Section */}
       <section
         id="features"
-        className="py-20 bg-gradient-to-b from-white to-gray-50"
+        className="py-10 bg-linear-to-b from-white to-gray-50"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+            <h2 className="text-xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               Everything You Need
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base text-gray-600 max-w-2xl mx-auto">
               Powerful features designed for developers who want results, not
               complexity
             </p>
@@ -259,15 +259,15 @@ export default function App() {
             ].map((feature, idx) => (
               <div
                 key={idx}
-                className="group bg-white rounded-2xl p-8 border border-gray-200 hover:border-black hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                className="group bg-white rounded-2xl p-4 border border-gray-200 hover:border-black/40 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
               >
-                <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <feature.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -277,13 +277,13 @@ export default function App() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-white">
+      <section className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+            <h2 className="text-xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               How It Works
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
               Three simple steps to your professional portfolio
             </p>
           </div>
@@ -316,7 +316,7 @@ export default function App() {
               },
             ].map((step, idx) => (
               <div key={idx} className="relative">
-                <div className="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-black transition-all text-center">
+                <div className="bg-white rounded-2xl p-4 border border-gray-200 hover:border-black transition-all text-center">
                   <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full text-white text-2xl font-bold mb-6">
                     {step.step}
                   </div>
