@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Home, LayoutDashboard, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 
+import { ProjectName } from '@/constant'
+
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const navigate = useNavigate()
@@ -27,7 +29,7 @@ export default function Header() {
           </button>
           <h1 className="ml-4 text-xl font-semibold">
             <Link to="/" className="hover:text-stone-300 transition-colors">
-              Buildrr
+              {ProjectName}
             </Link>
           </h1>
         </div>

@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react'
+import { ProjectName } from '@/constant'
 const Testimonials = () => {
   return (
     <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -7,7 +8,7 @@ const Testimonials = () => {
                 name: 'Sarah Chen',
                 role: 'Photographer',
                 quote:
-                  'I got 3 interview requests within a week of sharing my Buildrr portfolio!',
+                  `I got 3 interview requests within a week of sharing my ${ProjectName} portfolio!`,
                 avatar: 'SC',
               },
               {

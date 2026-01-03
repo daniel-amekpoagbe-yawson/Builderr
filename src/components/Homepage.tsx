@@ -20,6 +20,8 @@ import Preview from './Preview'
 import Footer from './Footer'
 import Testimonials from './Testimonials'
 
+import { ProjectName } from '@/constant'
+
 export default function App() {
   const navigate = useNavigate()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -236,7 +238,7 @@ export default function App() {
                 icon: LinkIcon,
                 title: 'Custom Public URLs',
                 description:
-                  'Get a clean, shareable link instantly: buildrr.com/yourname. Share it anywhere.',
+                  `Get a clean, shareable link instantly: ${ProjectName.toLowerCase()}.com/yourname. Share it anywhere.`,
               },
               {
                 icon: Download,
@@ -349,7 +351,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-              Why Choose Buildrr?
+              Why Choose {ProjectName}?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Compare with other solutions and see why developers choose us
@@ -364,7 +366,7 @@ export default function App() {
                     Feature
                   </th>
                   <th className="text-center p-4 font-bold text-black bg-gray-50">
-                    Buildrr
+                    {ProjectName}
                   </th>
                   <th className="text-center p-4 font-bold text-gray-700">
                     WordPress
@@ -441,23 +443,23 @@ export default function App() {
               Frequently Asked Questions
             </h2>
             <p className="text-xl text-gray-600">
-              Everything you need to know about Buildrr
+              Everything you need to know about {ProjectName}
             </p>
           </div>
 
           <div className="space-y-4">
             {[
               {
-                q: 'Is Buildrr really free?',
+                q: `Is ${ProjectName} really free?`,
                 a: 'Yes! Create unlimited portfolios, deploy instantly, and export HTML—all free. No hidden charges, no credit card required.',
               },
               {
                 q: 'Can I use my own domain?',
-                a: 'Currently, you get a buildrr.com subdomain. Custom domains are coming soon! You can also export HTML and host anywhere.',
+                a: `Currently, you get a ${ProjectName.toLowerCase()}.com subdomain. Custom domains are coming soon! You can also export HTML and host anywhere.`,
               },
               {
                 q: 'Do I need coding skills?',
-                a: 'Not at all! Buildrr is designed for everyone. Just fill in your content and choose layouts—we handle the rest.',
+                a: `Not at all! ${ProjectName} is designed for everyone. Just fill in your content and choose layouts—we handle the rest.`,
               },
               {
                 q: 'Can I edit my portfolio after publishing?',
@@ -514,7 +516,7 @@ export default function App() {
           </h2>
           <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
             Join 10,000+ developers who landed their dream roles with portfolios
-            built on Buildrr
+            built on {ProjectName}
           </p>
 
           <button
@@ -537,7 +539,7 @@ export default function App() {
               ))}
             </div>
             <p className="text-lg italic text-gray-200 mb-4">
-              "I got 3 interview requests within a week of sharing my Buildrr
+              "I got 3 interview requests within a week of sharing my {ProjectName}
               portfolio!"
             </p>
             <p className="text-sm text-gray-400">

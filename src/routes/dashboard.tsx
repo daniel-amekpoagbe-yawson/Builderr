@@ -8,6 +8,7 @@ import type { PortfolioTemplate } from '@/lib/templates'
 import { toast } from 'sonner'
 import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut, Sparkles, Code2, Palette, Camera } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { ProjectName } from '@/constant'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -116,7 +117,7 @@ function DashboardPage() {
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">Buildrr</h1>
+                  <h1 className="text-xl font-bold text-gray-900">{ProjectName}</h1>
                   <p className="text-sm text-gray-500">{user?.email}</p>
                 </div>
               </div>

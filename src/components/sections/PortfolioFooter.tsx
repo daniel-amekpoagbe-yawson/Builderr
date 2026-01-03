@@ -1,5 +1,6 @@
 import type { Portfolio } from '@/interfaces/Portfolio'
 import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react'
+import { ProjectName } from '@/constant'
 
 interface PortfolioFooterProps {
   portfolio: Portfolio
@@ -88,7 +89,7 @@ export function PortfolioFooter({ portfolio }: PortfolioFooterProps) {
                 className="font-medium hover:opacity-80 transition-opacity"
                 style={{ color: portfolio.theme.primaryColor }}
               >
-                Buildrr
+                {ProjectName}
               </a>
             </p>
           </div>

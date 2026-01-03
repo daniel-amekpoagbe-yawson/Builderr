@@ -1,5 +1,6 @@
 import { ExternalLink, Filter } from 'lucide-react'
 import { useState } from 'react'
+import { ProjectName } from '@/constant'
 
 const portfolioExamples = [
   {
@@ -66,7 +67,7 @@ const Preview = () => {
             Built by Developers, For Developers
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-            See what you can build with Buildrr. Real portfolios from real developers.
+            See what you can build with {ProjectName}. Real portfolios from real developers.
           </p>
 
           {/* Category Filters */}

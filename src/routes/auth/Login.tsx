@@ -3,6 +3,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useAuthStore } from '@/store/auth.store'
 import { toast } from 'sonner'
+import { ProjectName } from '@/constant'
 
 export const Route = createFileRoute('/auth/Login')({
   component: LoginPage,
@@ -33,7 +34,7 @@ function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Buildrr</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">{ProjectName}</h1>
           <p className="text-gray-600">Sign in to your account</p>
         </div>
 

@@ -3,6 +3,7 @@ import type { Portfolio, Section, SectionType } from '@/interfaces/Portfolio'
 import { portfolioService } from '@/services/portfolio.service'
 import { useAuthStore } from '@/store/auth.store'
 import type { PortfolioTemplate } from '@/lib/templates'
+import { ProjectName } from '@/constant'
 
 interface PortfolioStore {
   currentPortfolio: Portfolio | null
@@ -374,7 +375,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
 <body>
   ${sectionsHTML}
   <footer style="background: #f3f4f6; padding: 1rem; text-align: center; font-size: 0.875rem; color: #6b7280;">
-    <p>Built with <a href="https://buildrr.com" style="color: ${portfolio.theme.primaryColor}; font-weight: 500;">Buildrr</a></p>
+    <p>Built with <a href="https://${ProjectName.toLowerCase()}.com" style="color: ${portfolio.theme.primaryColor}; font-weight: 500;">${ProjectName}</a></p>
   </footer>
 </body>
 </html>`
