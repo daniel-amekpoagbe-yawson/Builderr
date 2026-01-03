@@ -21,6 +21,7 @@ import Footer from './Footer'
 import Testimonials from './Testimonials'
 
 import { ProjectName } from '@/constant'
+import Tabble from './Tabble'
 
 export default function App() {
   const navigate = useNavigate()
@@ -341,108 +342,21 @@ export default function App() {
       {/* Portfolio Examples Section - Enhanced */}
       <section
         id="examples"
-        className="py-20 bg-gradient-to-b from-gray-50 to-white"
+        className="py-10 bg-linear-to-b from-gray-50 to-white"
       >
         <Preview />
       </section>
 
       {/* Features Comparison Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-              Why Choose {ProjectName}?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Compare with other solutions and see why developers choose us
-            </p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b-2 border-black">
-                  <th className="text-left p-4 font-bold text-gray-900">
-                    Feature
-                  </th>
-                  <th className="text-center p-4 font-bold text-black bg-gray-50">
-                    {ProjectName}
-                  </th>
-                  <th className="text-center p-4 font-bold text-gray-700">
-                    WordPress
-                  </th>
-                  <th className="text-center p-4 font-bold text-gray-700">
-                    Custom Code
-                  </th>
-                  <th className="text-center p-4 font-bold text-gray-700">
-                    Wix
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  {
-                    feature: 'Setup Time',
-                    buildrr: '10 min',
-                    others: ['2+ hours', 'Days/weeks', '1 hour'],
-                  },
-                  {
-                    feature: 'Coding Required',
-                    buildrr: '❌',
-                    others: ['❌', '✅', '❌'],
-                  },
-                  {
-                    feature: 'Developer-Focused',
-                    buildrr: '✅',
-                    others: ['❌', '✅', '❌'],
-                  },
-                  {
-                    feature: 'Export HTML',
-                    buildrr: '✅',
-                    others: ['❌', '✅', '❌'],
-                  },
-                  {
-                    feature: 'Free Forever',
-                    buildrr: '✅',
-                    others: ['❌', '✅', '❌'],
-                  },
-                  {
-                    feature: 'Section Variants',
-                    buildrr: '✅',
-                    others: ['❌', '🤷', '⚠️'],
-                  },
-                ].map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="border-b border-gray-200 hover:bg-gray-50"
-                  >
-                    <td className="p-4 font-semibold text-gray-900">
-                      {row.feature}
-                    </td>
-                    <td className="p-4 text-center font-bold text-black bg-gray-50">
-                      {row.buildrr}
-                    </td>
-                    {row.others.map((other, i) => (
-                      <td key={i} className="p-4 text-center text-gray-600">
-                        {other}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
+      <Tabble />
       {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-10 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+            <h2 className="text-xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xs sm:text-base text-gray-600">
               Everything you need to know about {ProjectName}
             </p>
           </div>
@@ -472,13 +386,13 @@ export default function App() {
             ].map((faq, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-black transition-colors"
+                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-400/60 transition-colors"
               >
                 <button
                   onClick={() => toggleFaq(idx)}
                   className="w-full p-6 flex items-center justify-between text-left"
                 >
-                  <span className="text-lg font-semibold text-gray-900 pr-8">
+                  <span className="text-base font-semibold text-gray-900 pr-8">
                     {faq.q}
                   </span>
                   <ChevronDown
@@ -488,7 +402,7 @@ export default function App() {
                   />
                 </button>
                 {openFaq === idx && (
-                  <div className="px-6 pb-6 text-gray-600 leading-relaxed">
+                  <div className="px-6 pb-6 text-gray-600 text-xs sm:text-sm leading-relaxed">
                     {faq.a}
                   </div>
                 )}
@@ -499,7 +413,7 @@ export default function App() {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="py-20 md:py-32 bg-gradient-to-br from-black to-gray-900 text-white relative overflow-hidden">
+      <section className="py-10 md:py-16 bg-linear-to-br from-black to-gray-900 text-white relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div
@@ -511,45 +425,29 @@ export default function App() {
         </div>
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          <h2 className="text-2xl md:text-5xl lg:text-6xl font-bold mb-6">
             Your Next Opportunity is One Portfolio Away
           </h2>
-          <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-            Join 10,000+ developers who landed their dream roles with portfolios
+          <p className="text-xs sm:text-sm text-gray-300 mb-10 max-w-2xl mx-auto">
+            Join 100+ developers who landed their dream roles with portfolios
             built on {ProjectName}
           </p>
 
           <button
             onClick={() => navigate({ to: '/auth/Register' })}
-            className="group px-10 py-5 bg-white text-black text-lg rounded-xl hover:bg-gray-100 transition-all font-bold shadow-2xl hover:shadow-3xl hover:scale-105 flex items-center justify-center gap-2 mx-auto mb-6"
+            className="group px-4 py-3 bg-white text-black text-base rounded-xl hover:bg-gray-100 transition-all font-bold shadow-2xl hover:shadow-3xl hover:scale-102 flex items-center justify-center gap-2 mx-auto mb-6"
           >
             Create My Portfolio Free
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
 
-          <p className="text-gray-400 mb-8">
+          <p className="text-gray-400 text-[11px] mb-8">
             No credit card • No coding • No kidding
           </p>
 
-          {/* Testimonial Quote */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 max-w-2xl mx-auto">
-            <div className="flex items-center gap-1 mb-3 justify-center">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} className="w-4 h-4 fill-white text-white" />
-              ))}
-            </div>
-            <p className="text-lg italic text-gray-200 mb-4">
-              "I got 3 interview requests within a week of sharing my {ProjectName}
-              portfolio!"
-            </p>
-            <p className="text-sm text-gray-400">
-              — Sarah Chen, Frontend Developer at Stripe
-            </p>
-          </div>
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
     </div>
   )

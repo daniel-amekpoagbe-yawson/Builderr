@@ -60,18 +60,18 @@ const Preview = () => {
       : portfolioExamples.filter((ex) => ex.category === selectedCategory)
 
   return (
-    <section id="examples" className="py-20">
+    <section id="examples" className="py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-            Built by Developers, For Developers
+        <div className="text-center mb-10">
+          <h2 className="text-xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            Built by Developers, For Everyone!
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-xs sm:text-base text-gray-600 max-w-2xl mx-auto mb-8">
             See what you can build with {ProjectName}. Real portfolios from real developers.
           </p>
 
           {/* Category Filters */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
             <Filter className="w-5 h-5 text-gray-400" />
             {categories.map((category) => (
               <button
@@ -93,11 +93,11 @@ const Preview = () => {
           {filteredExamples.map((example) => (
             <div
               key={example.id}
-              className="group bg-white rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-black transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+              className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-black/40 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1"
             >
               {/* Preview Image */}
               <div className={`h-48 ${example.preview} flex items-center justify-center relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="text-center z-10">
                   <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl mx-auto mb-3 flex items-center justify-center">
                     <span className="text-2xl font-bold text-gray-700">
@@ -139,13 +139,13 @@ const Preview = () => {
         </div>
 
         {/* View More CTA */}
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <p className="text-gray-600 mb-4">Want to see your portfolio here?</p>
           <button className="text-black font-semibold hover:underline flex items-center gap-2 mx-auto">
             Create Your Portfolio
             <ExternalLink className="w-4 h-4" />
           </button>
-        </div>
+        </div> */}
       </div>
     </section>
   )
