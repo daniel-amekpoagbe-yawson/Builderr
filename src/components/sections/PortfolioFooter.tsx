@@ -77,13 +77,7 @@ export function PortfolioFooter({ portfolio }: PortfolioFooterProps) {
             </p>
             <span className={subtextClass}>•</span>
             <p className={`${subtextClass} text-[10px] sm:text-sm`}>
-              Built with{' '}
-              <Heart
-                className="w-3.5 h-3.5 inline mx-0.5"
-                style={{ color: portfolio.theme.primaryColor }}
-                fill={portfolio.theme.primaryColor}
-              />{' '}
-              using{' '}
+              Built using{' '}
               <a
                 href="/"
                 className="font-medium text-[10px] sm:text-sm hover:opacity-80 transition-opacity"
