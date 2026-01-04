@@ -185,6 +185,17 @@ export function ThemeConfig({ theme, onUpdate }: ThemeConfigProps) {
             <div className="text-sm font-medium">Floating</div>
             <div className="text-xs opacity-70 mt-0.5">Glassmorphism</div>
           </button>
+          <button
+            onClick={() => onUpdate({ navbarVariant: 'B' })}
+            className={`flex-1 px-4 py-3 rounded-xl border-2 transition-all ${
+              theme.navbarVariant === 'B'
+                ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm'
+                : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300'
+            }`}
+          >
+            <div className="text-sm font-medium">Retro</div>
+            <div className="text-xs opacity-70 mt-0.5">Brutalist</div>
+          </button>
         </div>
       </div>
     </div>

@@ -19,9 +19,9 @@ export interface Portfolio {
     accentColor?: string
     fontFamily: FontFamily
     headingFont?: FontFamily
-    navbarVariant?: 'default' | 'A'
+    navbarVariant?: 'default' | 'A' | 'B'
   }
-  sections: Section[]
+  sections: Array<Section>
   slug?: string
   isPublished?: boolean
   createdAt?: string
@@ -57,7 +57,7 @@ export interface ProjectsData {
     title: string
     description: string
     imageUrl: string
-    technologies: string[]
+    technologies: Array<string>
     liveUrl?: string
     githubUrl?: string
   }>
@@ -67,7 +67,7 @@ export interface ProjectsData {
 export interface SkillsData {
   categories: Array<{
     name: string
-    skills: string[]
+    skills: Array<string>
   }>
 }
 
@@ -75,7 +75,7 @@ export interface SkillsData {
 export interface AboutData {
   bio: string
   imageUrl?: string
-  highlights: string[]
+  highlights: Array<string>
   title?: string // Professional title/role
   social?: {
     facebook?: string
@@ -136,7 +136,7 @@ export interface GalleryData {
     category?: string
   }>
   layout: 'grid' | 'masonry' | 'carousel'
-  categories?: string[]
+  categories?: Array<string>
 }
 
 // Database Portfolio (as stored in Supabase)

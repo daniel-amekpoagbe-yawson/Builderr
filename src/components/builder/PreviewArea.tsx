@@ -111,7 +111,7 @@ export function PreviewArea({ portfolio, selectedSectionId, onSelectSection, isP
           {isPreviewMode && <PortfolioNavbar portfolio={portfolio} />}
           <div
             className={
-              isPreviewMode && portfolio.theme.navbarVariant === 'A'
+              isPreviewMode && (portfolio.theme.navbarVariant === 'A')
                 ? 'pt-24 sm:pt-28'
                 : ''
             }

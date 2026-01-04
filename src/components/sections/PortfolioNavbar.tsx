@@ -1,6 +1,6 @@
-import type { Portfolio } from '@/interfaces/Portfolio'
+import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import type { Portfolio } from '@/interfaces/Portfolio'
 import { Button } from '@/components/ui/button'
 
 interface PortfolioNavbarProps {
@@ -13,9 +13,106 @@ export function PortfolioNavbar({ portfolio }: PortfolioNavbarProps) {
   switch (navbarVariant) {
     case 'A':
       return <FloatingNavbar portfolio={portfolio} />
+    case 'B':
+      return <RetroNavbar portfolio={portfolio} />
     default:
       return <DefaultNavbar portfolio={portfolio} />
   }
+}
+
+function RetroNavbar({ portfolio }: PortfolioNavbarProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const isDark = portfolio.theme.mode === 'dark'
+  const primaryColor = portfolio.theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-stone-50'
+
+  // Get section IDs for smooth scrolling
+  const sectionIds = portfolio.sections
+    .filter((s) => s.enabled)
+    .sort((a, b) => a.order - b.order)
+    .map((s) => s.type)
+
+  const scrollToSection = (sectionType: string) => {
+    const element = document.getElementById(`section-${sectionType}`)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      setIsOpen(false)
+    }
+  }
+
+  return (
+    <nav className={`sticky top-0 z-50 ${bgColor} border-b-2 ${borderColor} shadow-none`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          <div className="flex items-center">
+            <a 
+              href="#" 
+              className={`text-2xl font-black uppercase tracking-tighter ${textColor} border-2 ${borderColor} px-4 py-1 transition-transform hover:-translate-y-0.5`}
+              style={{ boxShadow: `4px 4px 0px 0px ${primaryColor}` }}
+            >
+              {portfolio.title}
+            </a>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            {sectionIds.map((sectionType) => (
+              <button
+                key={sectionType}
+                onClick={() => scrollToSection(sectionType)}
+                className={`
+                  capitalize font-bold text-sm tracking-widest px-4 py-2 
+                  border-2 ${borderColor} transition-all
+                  hover:-translate-y-0.5 active:translate-y-0
+                  ${isDark ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-white'}
+                `}
+                style={{ 
+                  boxShadow: `3px 3px 0px 0px ${isDark ? '#fff' : '#000'}`,
+                }}
+              >
+                {sectionType}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`p-2 border-2 ${borderColor} ${textColor} transition-transform hover:-translate-y-0.5 active:translate-y-0`}
+              style={{ boxShadow: `4px 4px 0px 0px ${primaryColor}` }}
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isOpen && (
+        <div className={`md:hidden ${bgColor} border-t-2 ${borderColor} p-4 space-y-4`}>
+          {sectionIds.map((sectionType) => (
+            <button
+              key={sectionType}
+              onClick={() => scrollToSection(sectionType)}
+              className={`
+                w-full text-left capitalize font-bold text-sm tracking-widest px-4 py-3
+                border-2 ${borderColor} transition-all
+                ${isDark ? 'text-white' : 'text-gray-900'}
+              `}
+              style={{ 
+                boxShadow: `4px 4px 0px 0px ${primaryColor}`,
+              }}
+            >
+              {sectionType}
+            </button>
+          ))}
+        </div>
+      )}
+    </nav>
+  )
 }
 
 function DefaultNavbar({ portfolio }: PortfolioNavbarProps) {

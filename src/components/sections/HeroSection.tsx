@@ -295,10 +295,10 @@ function HeroVariantC({
                     <img
                       src={data.imageUrl}
                       alt={data.name}
-                      className="w-full h-auto object-cover aspect-square lg:aspect-[4/5]"
+                      className="w-full h-auto object-cover aspect-square lg:aspect-4/5"
                     />
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
                   </div>
                 </div>
               </div>
