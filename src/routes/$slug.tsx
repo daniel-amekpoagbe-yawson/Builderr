@@ -5,7 +5,7 @@ import type { Portfolio } from '@/interfaces/Portfolio'
 import { PreviewArea } from '@/components/builder/PreviewArea'
 import SpinnerMini from '@/components/SpinnerMini'
 
-export const Route = createFileRoute('/site/$slug')({
+export const Route = createFileRoute('/$slug')({
   component: PublicSitePage,
 })
 
@@ -37,7 +37,7 @@ function PublicSitePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-    <SpinnerMini/>
+        <SpinnerMini />
       </div>
     )
   }

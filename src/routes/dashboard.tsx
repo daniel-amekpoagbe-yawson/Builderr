@@ -103,7 +103,7 @@ function DashboardPage() {
 
   const getPublicUrl = (slug?: string) => {
     if (!slug) return null
-    return `${window.location.origin}/site/${slug}`
+    return `${window.location.origin}/${slug}`
   }
 
   return (

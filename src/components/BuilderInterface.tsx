@@ -229,18 +229,18 @@ export function BuilderInterface() {
             </p>
             <div className="bg-gray-50 p-3 rounded mb-4">
               <code className="text-sm text-indigo-600 break-all">
-                {window.location.origin}/site/{currentPortfolio.slug}
+                {window.location.origin}/{currentPortfolio.slug}
               </code>
             </div>
             <div className="flex gap-3">
               <a
-                href={`/site/${currentPortfolio.slug}`}
+                href={`/${currentPortfolio.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-center transition-colors"
                 onClick={() => {
                   // Ensure it opens in a new tab
-                  window.open(`/site/${currentPortfolio.slug}`, '_blank', 'noopener,noreferrer')
+                  window.open(`/${currentPortfolio.slug}`, '_blank', 'noopener,noreferrer')
                 }}
               >
                 View Live Site

@@ -20,7 +20,12 @@ function RootComponent() {
   const currentPath = router.location.pathname
 
   // Hide header for public portfolio routes and preview routes
-  const hideHeader = currentPath.startsWith('/site/') || currentPath.startsWith('/preview/')
+  // List of known app routes - header should be shown on these
+  const appRoutes = ['/', '/dashboard', '/builder', '/auth', '/preview', '/About', '/Contact']
+  const isAppRoute = appRoutes.some(route => 
+    currentPath === route || currentPath.startsWith(route + '/')
+  )
+  const hideHeader = !isAppRoute || currentPath.startsWith('/preview/')
 
   useEffect(() => {
     if (!initialized) {
