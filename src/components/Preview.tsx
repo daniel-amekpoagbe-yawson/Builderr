@@ -14,7 +14,7 @@ const portfolioExamples = [
     theme: 'Modern',
     preview: 'bg-gradient-to-br from-gray-100 to-gray-200',
     imageUrl: '/showcase/image-01.png',
-    liveLink: '#'
+    liveLink: 'https://www.builderr.site/daniel-amekpoagbe'
   },
   {
     id: 2,
