@@ -111,31 +111,31 @@ function DashboardPage() {
       <div className="min-h-screen bg-white">
         {/* Header */}
         <div className="border-b border-gray-200 bg-white sticky top-0 z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex justify-between items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-black flex items-center justify-center shrink-0">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">{ProjectName}</h1>
-                  <p className="text-sm text-gray-500">{user?.email}</p>
+                <div className="min-w-0">
+                  <h1 className="text-lg sm:text-xl font-bold text-gray-900">{ProjectName}</h1>
+                  <p className="text-xs sm:text-sm text-gray-500 truncate">{user?.email}</p>
                 </div>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 <button
                   onClick={() => setShowTemplateSelector(true)}
-                  className="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl hover:bg-gray-900 transition-all"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-black text-white px-2 sm:px-5 py-2.5 rounded-xl hover:bg-gray-900 transition-all text-xs sm:text-base"
                 >
-                  <Plus className="w-5 h-5" />
-                  New Portfolio
+                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>New Portfolio</span>
                 </button>
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center gap-2 bg-white text-gray-900 px-4 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white text-gray-900 px-2 sm:px-4 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-50 transition-colors text-xs sm:text-base"
                 >
-                  <LogOut className="w-5 h-5" />
-                  <span className="hidden sm:inline">Sign Out</span>
+                  <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Sign Out</span>
                 </button>
               </div>
             </div>
@@ -143,37 +143,37 @@ function DashboardPage() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">My Portfolios</h2>
-            <p className="text-gray-600 mt-1">Create and manage your professional portfolios</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">My Portfolios</h2>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">Create and manage your professional portfolios</p>
           </div>
 
           {loading ? (
        <Spinner/>
           ) : portfolios.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-12 text-center">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-12 text-center">
               <div className="max-w-md mx-auto">
-                <div className="w-20 h-20 bg-black rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-10 h-10 text-white" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-black rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                  <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
                   Create Your First Portfolio
                 </h2>
-                <p className="text-gray-600 mb-8">
+                <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
                   Choose from professionally designed templates for developers, designers, photographers, or start from scratch.
                 </p>
                 <button
                   onClick={() => setShowTemplateSelector(true)}
-                  className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 rounded-xl hover:bg-gray-900 transition-all text-lg font-medium"
+                  className="inline-flex items-center gap-2 bg-black text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl hover:bg-gray-900 transition-all text-base sm:text-lg font-medium"
                 >
-                  <Plus className="w-6 h-6" />
+                  <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                   Choose a Template
                 </button>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {portfolios.map((portfolio) => (
                 <div
                   key={portfolio.id}
@@ -217,12 +217,12 @@ function DashboardPage() {
                     <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">
                       {portfolio.title}
                     </h3>
-                    <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500 mb-4">
                       <span>{portfolio.sections.length} section{portfolio.sections.length !== 1 ? 's' : ''}</span>
                       {portfolio.updatedAt && (
                         <>
                           <span className="w-1 h-1 bg-gray-300 rounded-full" />
-                          <span>Updated {new Date(portfolio.updatedAt).toLocaleDateString()}</span>
+                          <span className="hidden xs:inline">Updated </span><span>{new Date(portfolio.updatedAt).toLocaleDateString()}</span>
                         </>
                       )}
                     </div>
@@ -270,12 +270,12 @@ function DashboardPage() {
               {/* Add New Card */}
               <button
                 onClick={() => setShowTemplateSelector(true)}
-                className="group bg-white rounded-2xl border-2 border-dashed border-gray-300 hover:border-black hover:bg-gray-50 transition-all duration-300 p-6 min-h-[280px] flex flex-col items-center justify-center"
+                className="group bg-white rounded-2xl border-2 border-dashed border-gray-300 hover:border-black hover:bg-gray-50 transition-all duration-300 p-6 min-h-[200px] sm:min-h-[280px] flex flex-col items-center justify-center"
               >
-                <div className="w-14 h-14 rounded-2xl bg-gray-100 group-hover:bg-black flex items-center justify-center mb-4 transition-colors">
-                  <Plus className="w-7 h-7 text-gray-400 group-hover:text-white transition-colors" />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gray-100 group-hover:bg-black flex items-center justify-center mb-3 sm:mb-4 transition-colors">
+                  <Plus className="w-6 h-6 sm:w-7 sm:h-7 text-gray-400 group-hover:text-white transition-colors" />
                 </div>
-                <span className="text-gray-600 group-hover:text-black font-medium transition-colors">
+                <span className="text-sm sm:text-base text-gray-600 group-hover:text-black font-medium transition-colors">
                   Create New Portfolio
                 </span>
               </button>
