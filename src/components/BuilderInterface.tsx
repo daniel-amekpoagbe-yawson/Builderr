@@ -78,6 +78,10 @@ export function BuilderInterface() {
     )
   }
 
+  // State to control the visibility of the left sidebar (Section Selector)
+  // When true, the sidebar is hidden to give more space to the preview area
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Top Toolbar */}
@@ -96,21 +100,50 @@ export function BuilderInterface() {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Left Sidebar - Section Selector */}
-        <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
-          <SectionSidebar
-            sections={currentPortfolio.sections}
-            selectedSectionId={selectedSectionId}
-            onSelectSection={(id) => {
-              setSelectedSectionId(id)
-              setShowThemeSettings(false)
-            }}
-            onAddSection={(type: SectionType) => {
-              usePortfolioStore.getState().addSection(type)
-              toast.success('Section added!')
-            }}
-          />
+        {/* We use dynamic classes to control width and transitions for a smooth collapse effect */}
+        <div 
+          className={`
+            ${isSidebarCollapsed ? 'w-0 border-none' : 'w-64 border-r'} 
+            bg-white border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out relative
+          `}
+        >
+          {/* Prevent content from wrapping when collapsing by using min-w-max or hiding overflow */}
+          <div className={`${isSidebarCollapsed ? 'hidden' : 'block'}`}>
+             <SectionSidebar
+              sections={currentPortfolio.sections}
+              selectedSectionId={selectedSectionId}
+              onSelectSection={(id) => {
+                setSelectedSectionId(id)
+                setShowThemeSettings(false)
+              }}
+              onAddSection={(type: SectionType) => {
+                usePortfolioStore.getState().addSection(type)
+                toast.success('Section added!')
+              }}
+            />
+          </div>
+        </div>
+
+        {/* 
+          Collapsible Toggle Button 
+          This button floats absolutely to the left of the preview area.
+          It allows the user to toggle the sidebar visibility.
+        */}
+        <div className={`absolute top-1/2 -translate-y-1/2 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'left-0' : 'left-64'}`}>
+           <button
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="bg-white border border-gray-200 p-1.5 rounded-r-lg shadow-md hover:bg-gray-50 text-gray-600 focus:outline-none flex items-center justify-center transform hover:scale-105 transition-all"
+            title={isSidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
+          >
+            {/* Rotate icon based on state */}
+            {isSidebarCollapsed ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            )}
+          </button>
         </div>
 
         {/* Center - Preview Area */}
