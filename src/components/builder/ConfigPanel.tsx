@@ -65,18 +65,19 @@ export function ConfigPanel({ section, portfolio, onUpdate, onDelete }: ConfigPa
 function getVariantsForSection(type: Section['type']): string[] {
   switch (type) {
     case 'hero':
-      return ['A', 'B', 'C']
+      return ['A', 'B', 'C', 'D']
     case 'projects':
-      return ['A', 'B']
-    case 'skills':
-      return ['A', 'B']
-    case 'about':
-      return ['A', 'B']
-    case 'gallery':
       return ['A', 'B', 'C']
+    case 'skills':
+      return ['A', 'B', 'C']
+    case 'about':
+      return ['A', 'B', 'C']
+    case 'gallery':
+      return ['A', 'B', 'C', 'D']
     case 'experience':
+      return ['A', 'B']
     case 'contact':
-      return ['A']
+      return ['A', 'B']
     default:
       return ['A']
   }

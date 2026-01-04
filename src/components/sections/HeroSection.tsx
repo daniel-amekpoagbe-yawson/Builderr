@@ -14,6 +14,8 @@ export function HeroSection({ data, variant, theme }: HeroSectionProps) {
       return <HeroVariantB data={data} theme={theme} />
     case 'C':
       return <HeroVariantC data={data} theme={theme} />
+    case 'D':
+      return <HeroVariantD data={data} theme={theme} />
     default:
       return <HeroVariantA data={data} theme={theme} />
   }
@@ -319,6 +321,106 @@ function HeroVariantC({
                   className="w-10 h-10 rounded-lg rotate-45"
                   style={{ backgroundColor: theme.primaryColor }}
                 ></div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function HeroVariantD({
+  data,
+  theme,
+}: {
+  data: HeroData
+  theme: Portfolio['theme']
+}) {
+  const isDark = theme.mode === 'dark'
+  const primaryColor = theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
+
+  return (
+    <section
+      className={`relative py-20 px-4 overflow-hidden ${isDark ? 'bg-gray-950' : 'bg-stone-50'}`}
+    >
+      {/* Retro Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div
+          className={`
+            grid lg:grid-cols-2 gap-8 lg:gap-12 items-center
+            p-8 md:p-12
+            ${bgColor}
+            border-[3px] ${borderColor}
+          `}
+          style={{
+            boxShadow: `12px 12px 0px 0px ${primaryColor}`,
+          }}
+        >
+          {/* Content */}
+          <div className="space-y-8 text-left order-2 lg:order-1">
+            <div className="space-y-4">
+              <div
+                className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+              >
+                {data.title}
+              </div>
+              <h1
+                className={`text-5xl md:text-7xl font-black ${textColor} tracking-tighter leading-[0.9]`}
+              >
+                {data.name.toUpperCase()}
+              </h1>
+            </div>
+
+            <p
+              className={`text-lg md:text-xl ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium border-l-4 pl-6 py-1 leading-relaxed`}
+              style={{ borderColor: primaryColor }}
+            >
+              {data.description}
+            </p>
+
+            {data.ctaText && (
+              <a
+                href={data.ctaLink || '#'}
+                className={`
+                    inline-block px-8 py-4
+                    text-white font-bold text-lg uppercase tracking-wider
+                    border-2 ${isDark ? 'border-white' : 'border-black'}
+                    transition-all duration-200
+                    hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
+                    active:translate-y-0 active:shadow-none
+                `}
+                style={{ backgroundColor: primaryColor }}
+              >
+                {data.ctaText}
+              </a>
+            )}
+          </div>
+
+          {/* Image */}
+          {data.imageUrl && (
+            <div className="relative order-1 lg:order-2 mb-8 lg:mb-0">
+              <div className="relative group">
+                <div
+                  className={`absolute inset-0 border-2 ${borderColor} translate-x-3 translate-y-3 transition-transform group-hover:translate-x-4 group-hover:translate-y-4`}
+                  style={{ backgroundColor: primaryColor }}
+                />
+                <img
+                  src={data.imageUrl}
+                  alt={data.name}
+                  className={`relative z-10 w-full aspect-square object-cover border-2 ${borderColor} grayscale group-hover:grayscale-0 transition-all duration-500`}
+                />
               </div>
             </div>
           )}

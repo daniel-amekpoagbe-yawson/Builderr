@@ -22,6 +22,9 @@ export function AboutSection({ data, variant, theme }: AboutSectionProps) {
       return <AboutVariantA data={data} theme={theme} />
     case 'B':
       return <AboutVariantB data={data} theme={theme} />
+    case 'C':
+      return <AboutVariantC data={data} theme={theme} />
+
     default:
       return <AboutVariantA data={data} theme={theme} />
   }
@@ -265,6 +268,185 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
                 )}
               </div>
             )}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['theme'] }) {
+  const isDark = theme.mode === 'dark'
+  const primaryColor = theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
+  const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
+
+  const socialLinks = data.social || {}
+  const hasSocialLinks = Object.values(socialLinks).some((link) => link)
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform) {
+      case 'facebook':
+        return <Facebook className="w-5 h-5" />
+      case 'dribbble':
+        return <Dribbble className="w-5 h-5" />
+      case 'instagram':
+        return <Instagram className="w-5 h-5" />
+      case 'linkedin':
+        return <Linkedin className="w-5 h-5" />
+      case 'behance':
+        return <BehanceIcon className="w-5 h-5" />
+      case 'twitter':
+        return <Twitter className="w-5 h-5" />
+      case 'github':
+        return <Github className="w-5 h-5" />
+      default:
+        return null
+    }
+  }
+
+  return (
+    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
+      {/* Retro Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div
+          className={`${bgColor} border-[3px] ${borderColor} p-8 md:p-12`}
+          style={{ boxShadow: `12px 12px 0px 0px ${primaryColor}` }}
+        >
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Image Side */}
+            <div className="order-2 md:order-1">
+              {data.imageUrl && (
+                <div className="relative group">
+                  <div
+                    className={`absolute inset-0 border-2 ${borderColor} translate-x-3 translate-y-3 transition-transform group-hover:translate-x-4 group-hover:translate-y-4`}
+                    style={{ backgroundColor: primaryColor }}
+                  />
+                  <img
+                    src={data.imageUrl}
+                    alt="About"
+                    className={`relative w-full aspect-[4/5] object-cover border-2 ${borderColor} grayscale group-hover:grayscale-0 transition-all duration-500`}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Content Side */}
+            <div className="order-1 md:order-2 space-y-8">
+              <div className="space-y-4">
+                <div
+                  className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+                >
+                  About Me
+                </div>
+                <h2 className={`text-4xl md:text-5xl font-black ${textColor} tracking-tight`}>
+                  {data.title || 'Who I Am'}
+                </h2>
+              </div>
+
+              <div className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed font-medium space-y-4`}>
+                 {data.bio && (
+                  <>
+                    <p>{data.bio.split('\n\n')[0]}</p>
+                    {data.bio.split('\n\n').length > 1 && (
+                      <p>{data.bio.split('\n\n').slice(1).join('\n\n')}</p>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {data.highlights && data.highlights.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {data.highlights.map((highlight, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-center gap-3 p-3 border ${borderColor} ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}
+                    >
+                      <div className="w-2 h-2" style={{ backgroundColor: primaryColor }} />
+                      <span className={`font-medium ${textColor} text-sm`}>{highlight}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-4 pt-4 border-t-2 border-dashed" style={{ borderColor: isDark ? '#374151' : '#e5e7eb' }}>
+                {hasSocialLinks && (
+                  <div className="flex gap-3">
+                    {Object.entries(socialLinks).map(([platform, url]) => {
+                      if (!url) return null
+                      return (
+                        <a
+                          key={platform}
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`w-12 h-12 flex items-center justify-center border-2 ${borderColor} hover:-translate-y-1 transition-transform`}
+                          style={{
+                             backgroundColor: isDark ? 'transparent' : 'white',
+                             color: textColor === 'text-white' ? 'white' : 'black',
+                             boxShadow: `4px 4px 0px 0px ${primaryColor}`
+                          }}
+                        >
+                          {getSocialIcon(platform)}
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+              
+              {/* CTA Buttons */}
+              {(data.ctaButtons?.primary || data.ctaButtons?.secondary) && (
+                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    {data.ctaButtons.primary && (
+                      <a
+                        href={data.ctaButtons.primary.link || '#'}
+                         className={`
+                            px-8 py-3 font-bold text-center uppercase tracking-wider text-sm
+                            border-2 ${borderColor}
+                            hover:-translate-y-1 transition-all
+                        `}
+                        style={{
+                           backgroundColor: primaryColor,
+                           color: 'white',
+                           boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}`
+                        }}
+                      >
+                        {data.ctaButtons.primary.text}
+                      </a>
+                    )}
+                    {data.ctaButtons.secondary && (
+                       <a
+                        href={data.ctaButtons.secondary.link || '#'}
+                        className={`
+                            px-8 py-3 font-bold text-center uppercase tracking-wider text-sm
+                            border-2 ${borderColor}
+                            hover:-translate-y-1 transition-all
+                            flex items-center justify-center gap-2
+                        `}
+                        style={{
+                           backgroundColor: isDark ? '#1f2937' : 'white',
+                           color: textColor === 'text-white' ? 'white' : 'black',
+                           boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}`
+                        }}
+                      >
+                        <Download className="w-4 h-4" />
+                        {data.ctaButtons.secondary.text}
+                      </a>
+                    )}
+                  </div>
+                )}
+            </div>
           </div>
         </div>
       </div>

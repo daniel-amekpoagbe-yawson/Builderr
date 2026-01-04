@@ -18,6 +18,10 @@ export function BuilderInterface() {
   const [previewMode, setPreviewMode] = useState(false)
   const [showPublishDialog, setShowPublishDialog] = useState(false)
   const [showThemeSettings, setShowThemeSettings] = useState(false)
+  
+  // State to control the visibility of the left sidebar (Section Selector)
+  // When true, the sidebar is hidden to give more space to the preview area
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   if (!currentPortfolio) return null
 
@@ -78,9 +82,7 @@ export function BuilderInterface() {
     )
   }
 
-  // State to control the visibility of the left sidebar (Section Selector)
-  // When true, the sidebar is hidden to give more space to the preview area
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">

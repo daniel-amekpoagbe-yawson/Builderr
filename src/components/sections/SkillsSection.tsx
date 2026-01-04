@@ -13,6 +13,8 @@ export function SkillsSection({ data, variant, theme }: SkillsSectionProps) {
       return <SkillsVariantA data={data} theme={theme} />
     case 'B':
       return <SkillsVariantB data={data} theme={theme} />
+    case 'C':
+      return <SkillsVariantC data={data} theme={theme} />
     default:
       return <SkillsVariantA data={data} theme={theme} />
   }
@@ -218,6 +220,74 @@ function SkillsVariantB({ data, theme }: { data: SkillsData; theme: Portfolio['t
             <p className="text-lg">No skills added yet</p>
           </div>
         )}
+      </div>
+    </section>
+  )
+}
+
+function SkillsVariantC({ data, theme }: { data: SkillsData; theme: Portfolio['theme'] }) {
+  const isDark = theme.mode === 'dark'
+  const primaryColor = theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
+  const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
+
+  return (
+    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
+      {/* Retro Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+      
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-16 space-y-4">
+           <div
+            className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+          >
+            Capabilities
+          </div>
+          <h2 className={`text-4xl md:text-5xl font-black ${textColor} tracking-tight`}>
+            TECHNICAL ARSENAL
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+           {(data.categories || []).map((category, index) => {
+             const IconComponent = categoryIcons[category.name] || categoryIcons.default
+             return (
+               <div
+                 key={index}
+                 className={`${bgColor} border-2 ${borderColor} p-6 relative group hover:-translate-y-1 transition-transform duration-300`}
+                 style={{
+                   boxShadow: `8px 8px 0px 0px ${isDark ? '#374151' : '#000'}`,
+                 }}
+               >
+                 <div className={`flex items-start justify-between mb-6`}>
+                    <div className={`p-3 border-2 ${borderColor} ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                       <IconComponent className="w-6 h-6" style={{ color: primaryColor }} />
+                    </div>
+                    <span className={`font-mono text-sm font-bold ${textColor} opacity-60`}>0{index + 1}</span>
+                 </div>
+
+                 <h3 className={`text-xl font-bold ${textColor} mb-6 uppercase tracking-tight`}>{category.name}</h3>
+
+                 <div className="space-y-3">
+                   {(category.skills || []).map((skill, skillIndex) => (
+                     <div key={skillIndex} className="flex items-center gap-3">
+                        <div className={`w-1.5 h-1.5 border ${borderColor} bg-current`} style={{ color: primaryColor }} />
+                        <span className={`font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{skill}</span>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+             )
+           })}
+        </div>
       </div>
     </section>
   )
