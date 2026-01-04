@@ -342,7 +342,6 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
   const borderColor = isDark ? 'border-gray-700' : 'border-black'
   const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
   const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
-  const inputBg = isDark ? 'bg-gray-800' : 'bg-gray-50'
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
