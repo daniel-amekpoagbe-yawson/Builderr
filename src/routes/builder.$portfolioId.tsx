@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { AuthGuard } from '@/app/auth-guard'
 import { usePortfolioStore } from '@/store/portfolio.store'
 import { BuilderInterface } from '@/components/BuilderInterface'
+import SpinnerMini from '@/components/SpinnerMini'
 
 export const Route = createFileRoute('/builder/$portfolioId')({
   component: BuilderPage,
@@ -23,12 +24,7 @@ function BuilderPage() {
   if (loading) {
     return (
       <AuthGuard>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading portfolio...</p>
-          </div>
-        </div>
+       <SpinnerMini/>
       </AuthGuard>
     )
   }

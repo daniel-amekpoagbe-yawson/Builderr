@@ -99,8 +99,8 @@ export function TemplateSelector({ isOpen, onClose, onSelect }: TemplateSelector
                     key={template.id}
                     onClick={() => handleTemplateSelect(template)}
                     className={cn(
-                      'group relative text-left rounded-2xl border-2 transition-all duration-300 overflow-hidden',
-                      'hover:shadow-xl hover:scale-[1.02] hover:border-black',
+                      'group relative text-left rounded-2xl border transition-all duration-300 overflow-hidden',
+                      'hover:shadow-xl hover:scale-[1.02] hover:border-black/60',
                       isSelected
                         ? 'border-black shadow-lg'
                         : 'border-gray-200 dark:border-gray-700',
@@ -309,26 +309,27 @@ export function TemplateSelector({ isOpen, onClose, onSelect }: TemplateSelector
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+        <div className="flex items-center justify-between px-6 py-2 border-t  border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
           {step === 'configure' ? (
             <>
               <button
                 onClick={handleBack}
-                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                className="px-4 py-2 text-gray-900 bg-gray-300 dark:bg-gray-800 rounded-xl dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors"
               >
-                ← Back to Templates
+              &larr;
+Back to Templates
               </button>
               <button
                 onClick={handleCreate}
                 disabled={!portfolioTitle.trim()}
                 className={cn(
-                  'px-6 py-2.5 rounded-xl font-medium transition-all',
+                  'px-6 py-2.5 rounded-xl font-medium text-sm transition-all',
                   'bg-black text-white',
                   'hover:bg-gray-900 hover:shadow-lg',
                   'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none',
                 )}
               >
-                Create Portfolio
+                Create Portfolio &rarr;
               </button>
             </>
           ) : (

@@ -48,11 +48,11 @@ function CallbackPage() {
   }, [navigate, initialize])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 to-white px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
         {status === 'loading' && (
           <>
-            <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4" />
+            <div className="w-16 h-16 border-4 border-indigo-200 border-t-gray-900 rounded-full animate-spin mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Verifying Email</h1>
             <p className="text-gray-600">{message}</p>
           </>

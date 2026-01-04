@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut, Sparkles, Code2, Palette, Camera } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { ProjectName } from '@/constant'
+import Spinner from '@/components/Spinner'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -149,12 +150,7 @@ function DashboardPage() {
           </div>
 
           {loading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full animate-spin" />
-                <p className="text-gray-500">Loading portfolios...</p>
-              </div>
-            </div>
+       <Spinner/>
           ) : portfolios.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-12 text-center">
               <div className="max-w-md mx-auto">

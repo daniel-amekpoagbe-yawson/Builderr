@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Home, LayoutDashboard, LogIn, LogOut, Menu, X } from 'lucide-react'
+import { Contact, Home, LayoutDashboard, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 
 import { ProjectName } from '@/constant'
@@ -93,7 +93,16 @@ export default function Header() {
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2"
           >
             <Home size={20} />
-            <span className="font-medium">Home</span>
+            <span className="font-medium text-sm">Home</span>
+          </Link>
+
+           <Link
+            to="/Contact"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2"
+          >
+            <Contact size={20} />
+            <span className="font-medium text-sm">Contact us</span>
           </Link>
 
           {user ? (
@@ -104,7 +113,7 @@ export default function Header() {
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2"
               >
                 <LayoutDashboard size={20} />
-                <span className="font-medium">Dashboard</span>
+                <span className="font-medium text-sm">Dashboard</span>
               </Link>
               <div className="mt-auto pt-6 border-t border-stone-700">
                 <button
@@ -112,7 +121,7 @@ export default function Header() {
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2 w-full text-left"
                 >
                   <LogOut size={20} />
-                  <span className="font-medium">Sign Out</span>
+                  <span className="font-medium text-sm">Sign Out</span>
                 </button>
               </div>
             </>
@@ -124,7 +133,7 @@ export default function Header() {
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2 w-full text-left"
               >
                 <LogIn size={20} />
-                <span className="font-medium">Sign In</span>
+                <span className="font-medium text-sm">Sign In</span>
               </Link>
 
               <Link
