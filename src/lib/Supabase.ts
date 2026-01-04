@@ -32,7 +32,13 @@ const cookieStorage = {
     const d = new Date()
     d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000)
     const expires = `expires=${d.toUTCString()}`
-    document.cookie = `${key}=${value};${expires};path=/;SameSite=Lax;Secure`
+    
+    // Only use Secure flag in production (HTTPS)
+    const isProduction = window.location.protocol === 'https:'
+    const secure = isProduction ? ';Secure' : ''
+    
+    // Use Strict for better security (change to Lax if you need external link support)
+    document.cookie = `${key}=${value};${expires};path=/;SameSite=Lax${secure}`
   },
   removeItem: (key: string): void => {
     document.cookie = `${key}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`
