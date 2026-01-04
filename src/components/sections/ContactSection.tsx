@@ -377,7 +377,7 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
   ].filter((link) => link.url)
 
   return (
-    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
+    <section className={`relative py-10 px-4 overflow-hidden ${containerBg}`}>
       {/* Retro Grid Background */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -388,21 +388,21 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
       />
       
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-8 space-y-4">
            <div
-            className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+            className={`inline-block px-3 py-1 border ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
           >
             Connect
           </div>
           <h2 className={`text-4xl md:text-5xl font-black ${textColor} tracking-tight`}>
-            DROP A LINE
+            Contact Me
           </h2>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Info */}
-            <div className={`${bgColor} border-2 ${borderColor} p-8 relative`} style={{ boxShadow: `8px 8px 0px 0px ${primaryColor}` }}>
-               <h3 className={`text-2xl font-black ${textColor} mb-8 uppercase tracking-wide`}>Info Station</h3>
+            <div className={`${bgColor} border ${borderColor} p-8 relative`} style={{ boxShadow: `4px 4px 0px 0px ${primaryColor}` }}>
+               <h3 className={`text-2xl font-black ${textColor} mb-8 uppercase tracking-wide`}>Contact Information</h3>
                
                <div className="space-y-8">
                   {(data.imageUrl || data.bio) && (
@@ -416,13 +416,13 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
 
                   <div className="space-y-4">
                      {data.email && (
-                        <div className={`flex items-center gap-4 p-4 border-2 ${borderColor} ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
+                        <div className={`flex items-center gap-4 p-4 border ${borderColor} ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
                            <Mail className="w-5 h-5" style={{ color: primaryColor }} />
                            <span className={`font-mono ${textColor}`}>{data.email}</span>
                         </div>
                      )}
                      {data.phone && (
-                        <div className={`flex items-center gap-4 p-4 border-2 ${borderColor} ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
+                        <div className={`flex items-center gap-4 p-4 border ${borderColor} ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
                            <Phone className="w-5 h-5" style={{ color: primaryColor }} />
                            <span className={`font-mono ${textColor}`}>{data.phone}</span>
                         </div>
@@ -430,7 +430,7 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
                   </div>
 
                   {socialLinks.length > 0 && (
-                     <div className="flex gap-4 pt-4 border-t-2 border-dashed" style={{ borderColor: isDark ? '#374151' : '#e5e7eb' }}>
+                     <div className="flex gap-4 pt-4 border-t border-dashed" style={{ borderColor: isDark ? '#374151' : '#e5e7eb' }}>
                         {socialLinks.map(({ key, icon: Icon, url }) => (
                            <a
                               key={key}
@@ -453,57 +453,57 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
             </div>
 
             {/* Form */}
-             <div className={`${bgColor} border-2 ${borderColor} p-8 relative`} style={{ boxShadow: `8px 8px 0px 0px ${isDark ? '#fff' : '#000'}` }}>
-               <h3 className={`text-2xl font-black ${textColor} mb-8 uppercase tracking-wide`}>Transmit Data</h3>
+             <div className={`${bgColor} border ${borderColor} p-8 relative`} style={{ boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}` }}>
+               <h3 className={`text-2xl font-black ${textColor} mb-8 uppercase tracking-wide`}>Send Message</h3>
                
                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                     <label htmlFor="name" className={`block font-bold text-sm uppercase mb-2 ${textColor}`}>Identifier</label>
+                     <label htmlFor="name" className={`block font-bold text-sm uppercase mb-2 ${textColor}`}>Name</label>
                      <input
                         id="name"
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
-                        className={`w-full p-3 bg-transparent border-2 ${borderColor} outline-none focus:ring-4 ring-opacity-20 ${textColor}`}
+                        className={`w-full p-3 bg-transparent border ${borderColor} outline-none focus:ring-1 ring-opacity-20 ${textColor}`}
                         style={{ '--tw-ring-color': primaryColor } as React.CSSProperties}
-                        placeholder="NAME_input"
+                        placeholder="Enter your name"
                      />
                   </div>
                   <div>
-                     <label htmlFor="email" className={`block font-bold text-sm uppercase mb-2 ${textColor}`}>Frequency (Email)</label>
+                     <label htmlFor="email" className={`block font-bold text-sm uppercase mb-2 ${textColor}`}>Email</label>
                      <input
                         id="email"
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
-                        className={`w-full p-3 bg-transparent border-2 ${borderColor} outline-none focus:ring-4 ring-opacity-20 ${textColor}`}
+                        className={`w-full p-3 bg-transparent border ${borderColor} outline-none focus:ring-1 ring-opacity-20 ${textColor}`}
                         style={{ '--tw-ring-color': primaryColor } as React.CSSProperties}
-                        placeholder="EMAIL_input"
+                        placeholder="Enter your email"
                      />
                   </div>
                    <div>
-                     <label htmlFor="message" className={`block font-bold text-sm uppercase mb-2 ${textColor}`}>Transmission</label>
+                     <label htmlFor="message" className={`block font-bold text-sm uppercase mb-2 ${textColor}`}>Message</label>
                      <textarea
                         id="message"
                          value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         required
                         rows={5}
-                        className={`w-full p-3 bg-transparent border-2 ${borderColor} outline-none focus:ring-4 ring-opacity-20 ${textColor} resize-none`}
+                        className={`w-full p-3 bg-transparent border ${borderColor} outline-none focus:ring-1 ring-opacity-20 ${textColor} resize-none`}
                         style={{ '--tw-ring-color': primaryColor } as React.CSSProperties}
-                        placeholder="MESSAGE_input"
+                        placeholder="Enter your message"
                      />
                   </div>
                   
                   <button
                      type="submit"
                      disabled={isSubmitting || submitted}
-                     className={`w-full py-4 font-black uppercase tracking-widest text-white border-2 ${borderColor} hover:-translate-y-1 transition-all active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed`}
+                     className={`w-full py-4 font-black uppercase tracking-widest text-white border ${borderColor} hover:-translate-y-1 transition-all active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed`}
                      style={{ 
                         backgroundColor: submitted ? '#10B981' : primaryColor,
-                        boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}`
+                        boxShadow: `2px 2px 0px 0px ${isDark ? '#fff' : '#000'}`
                      }}
                   >
                      {submitted ? 'Transmission Received' : isSubmitting ? 'Transmitting...' : 'Initiate Transmission'}

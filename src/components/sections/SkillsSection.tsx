@@ -60,7 +60,7 @@ function SkillsVariantA({ data, theme }: { data: SkillsData; theme: Portfolio['t
                 {/* Category Header */}
                 <div className="flex items-center gap-3 mb-5">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       backgroundColor: `${theme.primaryColor}15`,
                       color: theme.primaryColor,
@@ -234,7 +234,7 @@ function SkillsVariantC({ data, theme }: { data: SkillsData; theme: Portfolio['t
   const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
 
   return (
-    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
+    <section className={`relative py-16 px-4 overflow-hidden ${containerBg}`}>
       {/* Retro Grid Background */}
       <div
         className="absolute inset-0 opacity-[0.03]"

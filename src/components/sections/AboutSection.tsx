@@ -1,14 +1,7 @@
 import type { AboutData, Portfolio } from '@/interfaces/Portfolio'
 import { Facebook, Dribbble, Instagram, Linkedin, Twitter, Github, Download } from 'lucide-react'
 
-// Custom Behance icon component
-function BehanceIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14h-8.027c.13 3.211 3.483 3.885 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.859h-6.465v-2.891h6.465v2.891zm-1.179-4.109c-.737 0-1.221-.33-1.221-.885 0-.716.543-.977 1.221-.977.697 0 1.221.261 1.221.977 0 .555-.484.885-1.221.885zm-1.179-4.109h6.465v-2.891h-6.465v2.891z" />
-    </svg>
-  )
-}
+
 
 interface AboutSectionProps {
   data: AboutData
@@ -88,10 +81,6 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
         return <Dribbble className="w-5 h-5" />
       case 'instagram':
         return <Instagram className="w-5 h-5" />
-      case 'linkedin':
-        return <Linkedin className="w-5 h-5" />
-      case 'behance':
-        return <BehanceIcon className="w-5 h-5" />
       case 'twitter':
         return <Twitter className="w-5 h-5" />
       case 'github':
@@ -169,18 +158,7 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
                         {getSocialIcon('linkedin')}
                       </a>
                     )}
-                    {socialLinks.behance && (
-                      <a
-                        href={socialLinks.behance}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-11 h-11 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
-                        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-                        aria-label="Behance"
-                      >
-                        {getSocialIcon('behance')}
-                      </a>
-                    )}
+                 
                     {socialLinks.twitter && (
                       <a
                         href={socialLinks.twitter}
@@ -296,8 +274,6 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
         return <Instagram className="w-5 h-5" />
       case 'linkedin':
         return <Linkedin className="w-5 h-5" />
-      case 'behance':
-        return <BehanceIcon className="w-5 h-5" />
       case 'twitter':
         return <Twitter className="w-5 h-5" />
       case 'github':
@@ -320,8 +296,8 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div
-          className={`${bgColor} border-[3px] ${borderColor} p-8 md:p-12`}
-          style={{ boxShadow: `12px 12px 0px 0px ${primaryColor}` }}
+          className={`${bgColor} border-[1.5px] ${borderColor} p-8 md:p-12`}
+          style={{ boxShadow: `6px 6px 0px 0px ${primaryColor}` }}
         >
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image Side */}
@@ -329,13 +305,13 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
               {data.imageUrl && (
                 <div className="relative group">
                   <div
-                    className={`absolute inset-0 border-2 ${borderColor} translate-x-3 translate-y-3 transition-transform group-hover:translate-x-4 group-hover:translate-y-4`}
+                    className={`absolute inset-0 border ${borderColor} translate-x-2 translate-y-2 transition-transform group-hover:translate-x-3 group-hover:translate-y-3`}
                     style={{ backgroundColor: primaryColor }}
                   />
                   <img
                     src={data.imageUrl}
                     alt="About"
-                    className={`relative w-full aspect-[4/5] object-cover border-2 ${borderColor} grayscale group-hover:grayscale-0 transition-all duration-500`}
+                    className={`relative w-full aspect-4/5 object-cover border ${borderColor} grayscale group-hover:grayscale-0 transition-all duration-500`}
                   />
                 </div>
               )}
@@ -345,7 +321,7 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
             <div className="order-1 md:order-2 space-y-8">
               <div className="space-y-4">
                 <div
-                  className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+                  className={`inline-block px-3 py-1 border ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
                 >
                   About Me
                 </div>
@@ -390,11 +366,11 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`w-12 h-12 flex items-center justify-center border-2 ${borderColor} hover:-translate-y-1 transition-transform`}
+                          className={`w-12 h-12 flex items-center justify-center border ${borderColor} hover:-translate-y-1 transition-transform`}
                           style={{
                              backgroundColor: isDark ? 'transparent' : 'white',
                              color: textColor === 'text-white' ? 'white' : 'black',
-                             boxShadow: `4px 4px 0px 0px ${primaryColor}`
+                             boxShadow: `3px 3px 0px 0px ${primaryColor}`
                           }}
                         >
                           {getSocialIcon(platform)}
@@ -412,14 +388,14 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
                       <a
                         href={data.ctaButtons.primary.link || '#'}
                          className={`
-                            px-8 py-3 font-bold text-center uppercase tracking-wider text-sm
+                            px-4 py-3 font-bold text-center uppercase tracking-wider text-xs
                             border-2 ${borderColor}
-                            hover:-translate-y-1 transition-all
+                            hover:-translate-y-0.5 transition-all
                         `}
                         style={{
                            backgroundColor: primaryColor,
                            color: 'white',
-                           boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}`
+                           boxShadow: `2px 2px 0px 0px ${isDark ? '#fff' : '#000'}`
                         }}
                       >
                         {data.ctaButtons.primary.text}
@@ -429,15 +405,15 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
                        <a
                         href={data.ctaButtons.secondary.link || '#'}
                         className={`
-                            px-8 py-3 font-bold text-center uppercase tracking-wider text-sm
+                            px-4 py-3 font-bold text-center uppercase tracking-wider text-xs
                             border-2 ${borderColor}
-                            hover:-translate-y-1 transition-all
+                            hover:-translate-y-0.5 transition-all
                             flex items-center justify-center gap-2
                         `}
                         style={{
                            backgroundColor: isDark ? '#1f2937' : 'white',
                            color: textColor === 'text-white' ? 'white' : 'black',
-                           boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}`
+                           boxShadow: `2px 2px 0px 0px ${isDark ? '#fff' : '#000'}`
                         }}
                       >
                         <Download className="w-4 h-4" />

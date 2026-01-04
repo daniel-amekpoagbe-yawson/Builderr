@@ -345,14 +345,14 @@ function HeroVariantD({
 
   return (
     <section
-      className={`relative py-20 px-4 overflow-hidden ${isDark ? 'bg-gray-950' : 'bg-stone-50'}`}
+      className={`relative pb-8 pt-4 px-4 overflow-hidden ${isDark ? 'bg-gray-950' : 'bg-stone-50'}`}
     >
       {/* Retro Grid Background */}
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-          backgroundSize: '32px 32px',
+          backgroundSize: '28px 28px',
         }}
       />
 
@@ -362,7 +362,7 @@ function HeroVariantD({
             grid lg:grid-cols-2 gap-8 lg:gap-12 items-center
             p-8 md:p-12
             ${bgColor}
-            border-[3px] ${borderColor}
+            border-2 ${borderColor}
           `}
           style={{
             boxShadow: `12px 12px 0px 0px ${primaryColor}`,
@@ -377,14 +377,14 @@ function HeroVariantD({
                 {data.title}
               </div>
               <h1
-                className={`text-5xl md:text-7xl font-black ${textColor} tracking-tighter leading-[0.9]`}
+                className={`text-4xl md:text-6xl font-black ${textColor} tracking-tighter leading-[0.9]`}
               >
                 {data.name.toUpperCase()}
               </h1>
             </div>
 
             <p
-              className={`text-lg md:text-xl ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium border-l-4 pl-6 py-1 leading-relaxed`}
+              className={`text-lg md:text-xl ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium border-l-2 pl-6 py-1 leading-relaxed`}
               style={{ borderColor: primaryColor }}
             >
               {data.description}
@@ -394,11 +394,11 @@ function HeroVariantD({
               <a
                 href={data.ctaLink || '#'}
                 className={`
-                    inline-block px-8 py-4
+                    inline-block px-4 py-3
                     text-white font-bold text-lg uppercase tracking-wider
                     border-2 ${isDark ? 'border-white' : 'border-black'}
                     transition-all duration-200
-                    hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
+                    hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
                     active:translate-y-0 active:shadow-none
                 `}
                 style={{ backgroundColor: primaryColor }}
@@ -410,10 +410,10 @@ function HeroVariantD({
 
           {/* Image */}
           {data.imageUrl && (
-            <div className="relative order-1 lg:order-2 mb-8 lg:mb-0">
+            <div className="relative order-1 lg:order-2 mb-6 lg:mb-0">
               <div className="relative group">
                 <div
-                  className={`absolute inset-0 border-2 ${borderColor} translate-x-3 translate-y-3 transition-transform group-hover:translate-x-4 group-hover:translate-y-4`}
+                  className={`absolute inset-0 border-2 ${borderColor} translate-x-2 translate-y-2 transition-transform group-hover:translate-x-3 group-hover:translate-y-3`}
                   style={{ backgroundColor: primaryColor }}
                 />
                 <img
