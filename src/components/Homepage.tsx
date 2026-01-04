@@ -242,7 +242,7 @@ export default function App() {
               },
               {
                 icon: Download,
-                title: 'Export HTML',
+                title: 'Export HTML-(coming soon)',
                 description:
                   'Own your code. Download your portfolio as a standalone HTML file anytime.',
               },
