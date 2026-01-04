@@ -6,10 +6,13 @@ import { Toaster } from 'sonner'
 
 import Header from '@/components/Header'
 import { useAuthStore } from '@/store/auth.store'
+import { NotFound } from '@/components/NotFound'
 
 export const Route = createRootRoute({
   component: RootComponent,
+  notFoundComponent: NotFound,
 })
+
 
 function RootComponent() {
   const { initialize, initialized } = useAuthStore()
