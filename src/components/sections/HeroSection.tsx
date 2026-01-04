@@ -377,7 +377,7 @@ function HeroVariantD({
                 {data.title}
               </div>
               <h1
-                className={`text-4xl md:text-6xl font-black ${textColor} tracking-tighter leading-[0.9]`}
+                className={`text-xl md:text-4xl font-black ${textColor} tracking-tighter leading-[0.9]`}
               >
                 {data.name.toUpperCase()}
               </h1>
