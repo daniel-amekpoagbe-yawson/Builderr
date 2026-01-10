@@ -1,5 +1,6 @@
+import { toast } from 'sonner'
+import { ArrowLeft, Eye, Globe, Palette, Save } from 'lucide-react'
 import type { Portfolio } from '@/interfaces/Portfolio'
-import { ArrowLeft, Eye, Globe, Save, Palette } from 'lucide-react'
 
 interface BuilderToolbarProps {
   portfolio: Portfolio
@@ -66,7 +67,14 @@ export function BuilderToolbar({
           Export HTML
         </button> */}
         <button
-          onClick={onPublish}
+          onClick={() => {
+            toast(`Are you sure you want to ${isPublished ? 'unpublish' : 'publish'} this portfolio?`, {
+              action: {
+                label: isPublished ? 'Unpublish' : 'Publish',
+                onClick: onPublish,
+              },
+            })
+          }}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
             isPublished
               ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'

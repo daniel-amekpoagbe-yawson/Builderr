@@ -91,7 +91,7 @@ export function PreviewArea({ portfolio, selectedSectionId, onSelectSection, isP
 
   return (
     <div
-      className={`min-h-full ${portfolio.theme.mode === 'dark' ? 'bg-gray-900' : 'bg-white'}`}
+      className={`min-h-full ${portfolio.theme.mode === 'dark' ? 'bg-black/80' : 'bg-gray-50'}`}
       style={{
         fontFamily,
         '--primary-color': portfolio.theme.primaryColor,
