@@ -8,7 +8,7 @@ import { ConfigPanel } from './builder/ConfigPanel'
 import { BuilderToolbar } from './builder/BuilderToolbar'
 import { ThemeConfig } from './builder/ThemeConfig'
 import { toast } from 'sonner'
-import { X } from 'lucide-react'
+import { X, Copy } from 'lucide-react'
 
 export function BuilderInterface() {
   const navigate = useNavigate()
@@ -133,7 +133,7 @@ export function BuilderInterface() {
           This button floats absolutely to the left of the preview area.
           It allows the user to toggle the sidebar visibility.
         */}
-        <div className={`absolute top-1/2 -translate-y-1/2 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'left-0' : 'left-64'}`}>
+        <div className={`absolute top-1/2 -translate-y-1/2 z-50 transition-all duration-300 ${isSidebarCollapsed ? 'left-0' : 'left-64'}`}>
            <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             className="bg-white border border-gray-200 p-1.5 rounded-r-lg shadow-md hover:bg-gray-50 text-gray-600 focus:outline-none flex items-center justify-center transform hover:scale-105 transition-all"
@@ -227,10 +227,20 @@ export function BuilderInterface() {
             <p className="text-gray-600 mb-4">
               Your portfolio is now live at:
             </p>
-            <div className="bg-gray-50 p-3 rounded mb-4">
+            <div className="bg-gray-50 p-3 rounded mb-4 flex items-center justify-between group">
               <code className="text-sm text-indigo-600 break-all">
                 {window.location.origin}/{currentPortfolio.slug}
               </code>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/${currentPortfolio.slug}`)
+                  toast.success('Link copied to clipboard!')
+                }}
+                className="p-1.5 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600 transition-colors"
+                title="Copy Link"
+              >
+                <Copy size={16} />
+              </button>
             </div>
             <div className="flex gap-3">
               <a

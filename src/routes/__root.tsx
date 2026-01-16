@@ -7,6 +7,7 @@ import { Toaster } from 'sonner'
 import Header from '@/components/Header'
 import { useAuthStore } from '@/store/auth.store'
 import { NotFound } from '@/components/NotFound'
+import BuyMeACoffee from '@/components/BuyMeACoffee'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -26,6 +27,7 @@ function RootComponent() {
     currentPath === route || currentPath.startsWith(route + '/')
   )
   const hideHeader = !isAppRoute || currentPath.startsWith('/preview/')
+  const showSupport = isAppRoute && !currentPath.startsWith('/builder')
 
   useEffect(() => {
     if (!initialized) {
@@ -37,6 +39,7 @@ function RootComponent() {
     <>
       {!hideHeader && <Header />}
       <Outlet />
+      {showSupport && <BuyMeACoffee />}
       <Toaster position="top-right" richColors />
       <TanStackDevtools
         config={{

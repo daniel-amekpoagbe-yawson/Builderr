@@ -5,7 +5,26 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { ImageUpload } from '@/components/ui/image-upload'
-import { Plus, Trash2, Grid, LayoutGrid, Image } from 'lucide-react'
+import { Plus, Trash2, Grid, LayoutGrid, Image, AlertCircle } from 'lucide-react'
+
+const validateUrl = (url: string) => {
+  if (!url || url.startsWith('#')) return true
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+
+function CharacterCount({ current, max }: { current: number; max: number }) {
+  const isOver = current > max
+  return (
+    <span className={`text-[10px] tabular-nums ${isOver ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+      {current}/{max}
+    </span>
+  )
+}
 
 interface SectionConfigFormProps {
   section: Section
@@ -44,7 +63,10 @@ function HeroConfigForm({ data, onUpdate }: { data: HeroData; onUpdate: (updates
   return (
     <div className="space-y-4">
       <div>
-        <Label>Name</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>Name</Label>
+          <CharacterCount current={(data.name || '').length} max={50} />
+        </div>
         <Input
           type="text"
           value={data.name || ''}
@@ -53,7 +75,10 @@ function HeroConfigForm({ data, onUpdate }: { data: HeroData; onUpdate: (updates
         />
       </div>
       <div>
-        <Label>Title</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>Title</Label>
+          <CharacterCount current={(data.title || '').length} max={100} />
+        </div>
         <Input
           type="text"
           value={data.title || ''}
@@ -62,7 +87,10 @@ function HeroConfigForm({ data, onUpdate }: { data: HeroData; onUpdate: (updates
         />
       </div>
       <div>
-        <Label>Description</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>Description</Label>
+          <CharacterCount current={(data.description || '').length} max={500} />
+        </div>
         <Textarea
           value={data.description || ''}
           onChange={(e) => onUpdate({ description: e.target.value })}
@@ -71,7 +99,10 @@ function HeroConfigForm({ data, onUpdate }: { data: HeroData; onUpdate: (updates
         />
       </div>
       <div>
-        <Label>CTA Text</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>CTA Text</Label>
+          <CharacterCount current={(data.ctaText || '').length} max={30} />
+        </div>
         <Input
           type="text"
           value={data.ctaText || ''}
@@ -80,12 +111,20 @@ function HeroConfigForm({ data, onUpdate }: { data: HeroData; onUpdate: (updates
         />
       </div>
       <div>
-        <Label>CTA Link</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>CTA Link</Label>
+          {!validateUrl(data.ctaLink || '') && (
+            <span className="text-[10px] text-red-500 flex items-center gap-1">
+              <AlertCircle size={10} /> Invalid URL
+            </span>
+          )}
+        </div>
         <Input
           type="text"
           value={data.ctaLink || ''}
           onChange={(e) => onUpdate({ ctaLink: e.target.value })}
           placeholder="# or URL"
+          className={!validateUrl(data.ctaLink || '') ? 'border-red-500 focus:ring-red-500' : ''}
         />
       </div>
       <div>
@@ -140,12 +179,18 @@ function ProjectsConfigForm({ data, onUpdate }: { data: ProjectsData; onUpdate: 
       <div className="space-y-3">
         {(data.projects || []).map((project) => (
           <div key={project.id} className="border border-gray-200 rounded-lg p-3 space-y-3">
+            <div className="flex justify-between items-center mb-1">
+              <CharacterCount current={(project.title || '').length} max={100} />
+            </div>
             <Input
               value={project.title}
               onChange={(e) => updateProject(project.id, { title: e.target.value })}
               placeholder="Project title"
               className="text-sm"
             />
+            <div className="flex justify-between items-center mb-1">
+              <CharacterCount current={(project.description || '').length} max={300} />
+            </div>
             <Textarea
               value={project.description}
               onChange={(e) => updateProject(project.id, { description: e.target.value })}
@@ -163,20 +208,26 @@ function ProjectsConfigForm({ data, onUpdate }: { data: ProjectsData; onUpdate: 
               />
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Input
-                type="url"
-                value={project.liveUrl || ''}
-                onChange={(e) => updateProject(project.id, { liveUrl: e.target.value })}
-                placeholder="Live URL"
-                className="text-sm"
-              />
-              <Input
-                type="url"
-                value={project.githubUrl || ''}
-                onChange={(e) => updateProject(project.id, { githubUrl: e.target.value })}
-                placeholder="GitHub URL"
-                className="text-sm"
-              />
+              <div className="space-y-1">
+                <Input
+                  type="url"
+                  value={project.liveUrl || ''}
+                  onChange={(e) => updateProject(project.id, { liveUrl: e.target.value })}
+                  placeholder="Live URL"
+                  className={`text-sm ${!validateUrl(project.liveUrl || '') ? 'border-red-500 focus:ring-red-500' : ''}`}
+                />
+                {!validateUrl(project.liveUrl || '') && <span className="text-[10px] text-red-500 flex items-center gap-1"><AlertCircle size={10} /> Invalid URL</span>}
+              </div>
+              <div className="space-y-1">
+                <Input
+                  type="url"
+                  value={project.githubUrl || ''}
+                  onChange={(e) => updateProject(project.id, { githubUrl: e.target.value })}
+                  placeholder="GitHub URL"
+                  className={`text-sm ${!validateUrl(project.githubUrl || '') ? 'border-red-500 focus:ring-red-500' : ''}`}
+                />
+                {!validateUrl(project.githubUrl || '') && <span className="text-[10px] text-red-500 flex items-center gap-1"><AlertCircle size={10} /> Invalid URL</span>}
+              </div>
             </div>
             <div>
               <Label className="text-xs mb-1">Technologies (comma-separated)</Label>
@@ -365,7 +416,10 @@ function AboutConfigForm({ data, onUpdate }: { data: AboutData; onUpdate: (updat
         </p>
       </div>
       <div>
-        <Label>Bio</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>Bio</Label>
+          <CharacterCount current={(data.bio || '').length} max={1000} />
+        </div>
         <Textarea
           value={data.bio || ''}
           onChange={(e) => onUpdate({ bio: e.target.value })}
@@ -565,11 +619,19 @@ function ExperienceConfigForm({ data, onUpdate }: { data: ExperienceData; onUpda
             <CardContent className="p-4 space-y-3">
               <div className="flex justify-between items-start">
                 <div className="flex-1 space-y-3">
+                  <div className="flex justify-between items-center mb-1">
+                    <Label>Position/Title</Label>
+                    <CharacterCount current={(exp.position || '').length} max={100} />
+                  </div>
                   <Input
                     value={exp.position}
                     onChange={(e) => updateExperience(exp.id, { position: e.target.value })}
                     placeholder="Position/Title"
                   />
+                  <div className="flex justify-between items-center mb-1">
+                    <Label>Company name</Label>
+                    <CharacterCount current={(exp.company || '').length} max={100} />
+                  </div>
                   <Input
                     value={exp.company}
                     onChange={(e) => updateExperience(exp.id, { company: e.target.value })}
@@ -603,6 +665,10 @@ function ExperienceConfigForm({ data, onUpdate }: { data: ExperienceData; onUpda
                       Currently working here
                     </Label>
                   </div>
+                  <div className="flex justify-between items-center mb-1">
+                    <Label>Description</Label>
+                    <CharacterCount current={(exp.description || '').length} max={500} />
+                  </div>
                   <Textarea
                     value={exp.description}
                     onChange={(e) => updateExperience(exp.id, { description: e.target.value })}
@@ -634,12 +700,18 @@ function ContactConfigForm({ data, onUpdate }: { data: ContactData; onUpdate: (u
   return (
     <div className="space-y-4">
       <div>
-        <Label>Email</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>Email</Label>
+          {!validateUrl(`mailto:${data.email}`) && data.email && !data.email.includes('@') && (
+            <span className="text-[10px] text-red-500 flex items-center gap-1"><AlertCircle size={10} /> Invalid Email</span>
+          )}
+        </div>
         <Input
           type="email"
           value={data.email || ''}
           onChange={(e) => onUpdate({ email: e.target.value })}
           placeholder="your@email.com"
+          className={data.email && !data.email.includes('@') ? 'border-red-500' : ''}
         />
       </div>
       <div>
@@ -664,7 +736,10 @@ function ContactConfigForm({ data, onUpdate }: { data: ContactData; onUpdate: (u
         />
       </div>
       <div>
-        <Label>Bio (optional)</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>Bio (optional)</Label>
+          <CharacterCount current={(data.bio || '').length} max={300} />
+        </div>
         <Textarea
           value={data.bio || ''}
           onChange={(e) => onUpdate({ bio: e.target.value })}
@@ -676,30 +751,48 @@ function ContactConfigForm({ data, onUpdate }: { data: ContactData; onUpdate: (u
         </p>
       </div>
       <div>
-        <Label>GitHub</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>GitHub</Label>
+          {!validateUrl(data.social?.github || '') && data.social?.github && (
+            <span className="text-[10px] text-red-500 flex items-center gap-1"><AlertCircle size={10} /> Invalid URL</span>
+          )}
+        </div>
         <Input
           type="url"
           value={data.social?.github || ''}
           onChange={(e) => onUpdate({ social: { ...data.social, github: e.target.value } })}
           placeholder="https://github.com/username"
+          className={!validateUrl(data.social?.github || '') && data.social?.github ? 'border-red-500' : ''}
         />
       </div>
       <div>
-        <Label>LinkedIn</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>LinkedIn</Label>
+          {!validateUrl(data.social?.linkedin || '') && data.social?.linkedin && (
+            <span className="text-[10px] text-red-500 flex items-center gap-1"><AlertCircle size={10} /> Invalid URL</span>
+          )}
+        </div>
         <Input
           type="url"
           value={data.social?.linkedin || ''}
           onChange={(e) => onUpdate({ social: { ...data.social, linkedin: e.target.value } })}
           placeholder="https://linkedin.com/in/username"
+          className={!validateUrl(data.social?.linkedin || '') && data.social?.linkedin ? 'border-red-500' : ''}
         />
       </div>
       <div>
-        <Label>Twitter/X (optional)</Label>
+        <div className="flex justify-between items-center mb-1">
+          <Label>Twitter/X (optional)</Label>
+          {!validateUrl(data.social?.twitter || '') && data.social?.twitter && (
+            <span className="text-[10px] text-red-500 flex items-center gap-1"><AlertCircle size={10} /> Invalid URL</span>
+          )}
+        </div>
         <Input
           type="url"
           value={data.social?.twitter || ''}
           onChange={(e) => onUpdate({ social: { ...data.social, twitter: e.target.value } })}
           placeholder="https://twitter.com/username"
+          className={!validateUrl(data.social?.twitter || '') && data.social?.twitter ? 'border-red-500' : ''}
         />
       </div>
     </div>
@@ -739,7 +832,10 @@ function GalleryConfigForm({ data, onUpdate }: { data: GalleryData; onUpdate: (u
       {/* Gallery Title & Description */}
       <div className="space-y-4">
         <div>
-          <Label>Gallery Title</Label>
+          <div className="flex justify-between items-center mb-1">
+            <Label>Gallery Title</Label>
+            <CharacterCount current={(data.title || '').length} max={100} />
+          </div>
           <Input
             value={data.title || ''}
             onChange={(e) => onUpdate({ title: e.target.value })}
@@ -747,7 +843,10 @@ function GalleryConfigForm({ data, onUpdate }: { data: GalleryData; onUpdate: (u
           />
         </div>
         <div>
-          <Label>Description</Label>
+          <div className="flex justify-between items-center mb-1">
+            <Label>Description</Label>
+            <CharacterCount current={(data.description || '').length} max={300} />
+          </div>
           <Textarea
             value={data.description || ''}
             onChange={(e) => onUpdate({ description: e.target.value })}

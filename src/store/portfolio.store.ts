@@ -17,6 +17,7 @@ interface PortfolioStore {
   createPortfolioFromTemplate: (template: PortfolioTemplate, title: string) => Promise<Portfolio>
   updateSection: (sectionId: string, updates: Partial<Section>) => void
   addSection: (type: SectionType) => void
+  duplicateSection: (sectionId: string) => void
   removeSection: (sectionId: string) => void
   reorderSections: (oldIndex: number, newIndex: number) => void
   updateTheme: (theme: Partial<Portfolio['theme']>) => void
@@ -180,6 +181,29 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
       currentPortfolio: {
         ...state.currentPortfolio,
         sections: updatedSections,
+      },
+    })
+
+    get().scheduleAutoSave()
+  },
+
+  duplicateSection: (sectionId: string) => {
+    const state = get()
+    if (!state.currentPortfolio) return
+
+    const sectionToDuplicate = state.currentPortfolio.sections.find((s) => s.id === sectionId)
+    if (!sectionToDuplicate) return
+
+    const newSection = {
+      ...sectionToDuplicate,
+      id: crypto.randomUUID(),
+      order: state.currentPortfolio.sections.length,
+    }
+
+    set({
+      currentPortfolio: {
+        ...state.currentPortfolio,
+        sections: [...state.currentPortfolio.sections, newSection],
       },
     })
 
