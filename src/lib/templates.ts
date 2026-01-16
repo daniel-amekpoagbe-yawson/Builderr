@@ -244,24 +244,24 @@ const designerTemplate: PortfolioTemplate = {
   id: 'designer',
   name: 'Creative Designer',
   description:
-    'Visual-first portfolio with elegant typography and creative layouts',
+    'Minimalist and clean portfolio with a focus on typography and whitespace',
   category: 'designer',
   icon: 'Palette',
-  preview: 'linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fbcfe8 100%)',
+  preview: 'linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%)',
   theme: {
     mode: 'light',
-    primaryColor: '#ec4899', // Pink
-    secondaryColor: '#8b5cf6', // Violet
-    accentColor: '#f97316', // Orange
-    fontFamily: 'dm-sans',
-    headingFont: 'playfair',
+    primaryColor: '#111827', // Gray 900
+    secondaryColor: '#6b7280', // Gray 500
+    accentColor: '#2563eb', // Blue 600
+    fontFamily: 'inter',
+    headingFont: 'space-grotesk',
     navbarVariant: 'A',
   },
   features: [
-    'Dribbble/Behance showcase',
-    'Visual-heavy layouts',
-    'Elegant typography',
-    'Creative animations',
+    'Clean typography',
+    'Minimalist layout',
+    'Case study focus',
+    'Modern aesthetics',
   ],
   sections: [
     {
@@ -270,11 +270,11 @@ const designerTemplate: PortfolioTemplate = {
       variant: 'B',
       order: 0,
       data: {
-        name: 'Sarah Creative',
-        title: 'UI/UX Designer',
+        name: 'Sarah Design',
+        title: 'Product Designer',
         description:
-          'I craft beautiful, intuitive digital experiences that users love. Specializing in brand identity, web design, and mobile app interfaces.',
-        ctaText: 'See My Designs',
+          'Specializing in building digital products that are simple, beautiful, and easy to use. Currently crafting experiences at Tech Co.',
+        ctaText: 'View Work',
         ctaLink: '#projects',
         imageUrl: '',
       },
@@ -285,63 +285,78 @@ const designerTemplate: PortfolioTemplate = {
       variant: 'B',
       order: 1,
       data: {
-        title: 'I am a Creative Designer passionate about visual storytelling',
-        bio: "With over 6 years of experience in design, I've had the privilege of working with brands ranging from ambitious startups to Fortune 500 companies. My approach combines strategic thinking with creative execution to deliver designs that not only look beautiful but drive results.",
+        title: 'Designing with purpose and clarity.',
+        bio: "I'm a multidisciplinary designer with a focus on User Interface and User Experience. I believe that good design is obvious, but great design is transparent. My work is grounded in research and driven by a desire to solve complex problems with simple, elegant solutions.",
         highlights: [
-          'Award-winning designer',
-          'Brand identity specialist',
-          'Mobile-first approach',
-          'Worked with clients worldwide',
+          'Product Strategy',
+          'Design Systems',
+          'User Research',
+          'Prototyping',
         ],
         imageUrl: '',
         social: {
           dribbble: 'https://dribbble.com',
           behance: 'https://behance.net',
-          instagram: 'https://instagram.com',
           linkedin: 'https://linkedin.com',
+          twitter: 'https://twitter.com',
         },
         ctaButtons: {
           primary: {
-            text: 'View Portfolio',
-            link: '#projects',
-          },
-          secondary: {
-            text: 'Download Resume',
+            text: 'View Resume',
             link: '#',
           },
         },
       },
     },
     {
-      type: 'skills',
+      type: 'experience',
       enabled: true,
       variant: 'A',
       order: 2,
       data: {
+        experiences: [
+          {
+            id: crypto.randomUUID(),
+            company: 'Studio Alpha',
+            position: 'Senior Product Designer',
+            startDate: '2022',
+            description:
+              'Leading the design system initiative and mentoring junior designers. improved design-to-dev handoff process.',
+            current: true,
+          },
+          {
+            id: crypto.randomUUID(),
+            company: 'Creative Agency',
+            position: 'UI/UX Designer',
+            startDate: '2020',
+            endDate: '2022',
+            description:
+              'Worked with various clients to deliver high-fidelity prototypes and marketing websites.',
+            current: false,
+          },
+        ],
+      },
+    },
+    {
+      type: 'skills',
+      enabled: true,
+      variant: 'A',
+      order: 3,
+      data: {
         categories: [
           {
-            name: 'Design',
+            name: 'Expertise',
             skills: [
-              'UI Design',
-              'UX Design',
-              'Brand Identity',
-              'Typography',
-              'Illustration',
+              'UI/UX',
+              'Product Design',
+              'Interaction',
+              'Design Systems',
+              'Prototyping',
             ],
           },
           {
             name: 'Tools',
-            skills: [
-              'Figma',
-              'Adobe XD',
-              'Photoshop',
-              'Illustrator',
-              'After Effects',
-            ],
-          },
-          {
-            name: 'Development',
-            skills: ['HTML/CSS', 'Framer', 'Webflow', 'Prototyping'],
+            skills: ['Figma', 'Principle', 'Adobe CC', 'Webflow', 'Notion'],
           },
         ],
       },
@@ -350,44 +365,35 @@ const designerTemplate: PortfolioTemplate = {
       type: 'projects',
       enabled: true,
       variant: 'B',
-      order: 3,
+      order: 4,
       data: {
         projects: [
           {
             id: crypto.randomUUID(),
-            title: 'Luxe Fashion Brand',
+            title: 'Finance App',
             description:
-              'Complete brand identity and e-commerce experience for a luxury fashion startup. Increased conversion by 45%.',
+              'A complete redesign of a banking application to improve user engagement and accessibility.',
             imageUrl: '',
-            technologies: ['Brand Identity', 'Web Design', 'E-commerce'],
+            technologies: ['Case Study', 'Fintech', 'Mobile'],
             liveUrl: 'https://dribbble.com',
           },
           {
             id: crypto.randomUUID(),
-            title: 'FinTech Mobile App',
+            title: 'E-commerce Platform',
             description:
-              'Award-winning mobile banking app design with focus on accessibility and user delight.',
+              'Scalable design system for a global fashion retailer, focused on conversion optimization.',
             imageUrl: '',
-            technologies: ['Mobile Design', 'UX Research', 'Prototyping'],
+            technologies: ['Design System', 'Web', 'Retail'],
             liveUrl: 'https://behance.net',
           },
           {
             id: crypto.randomUUID(),
-            title: 'SaaS Dashboard',
+            title: 'Travel Guide',
             description:
-              'Data visualization dashboard for enterprise analytics platform. Clean, intuitive interface for complex data.',
+              'Concept app for travelers to find and book local experiences with a minimalist interface.',
             imageUrl: '',
-            technologies: ['Dashboard Design', 'Data Viz', 'Design System'],
+            technologies: ['Concept', 'Mobile', 'Travel'],
             liveUrl: 'https://dribbble.com',
-          },
-          {
-            id: crypto.randomUUID(),
-            title: 'Wellness Brand',
-            description:
-              'Holistic brand identity including logo, packaging, and digital presence for a wellness startup.',
-            imageUrl: '',
-            technologies: ['Brand Identity', 'Packaging', 'Social Media'],
-            liveUrl: 'https://behance.net',
           },
         ],
       },
@@ -396,14 +402,13 @@ const designerTemplate: PortfolioTemplate = {
       type: 'contact',
       enabled: true,
       variant: 'A',
-      order: 4,
+      order: 5,
       data: {
-        email: 'hello@sarahcreative.com',
+        email: 'hello@sarahdesign.com',
         social: {
           dribbble: 'https://dribbble.com',
-          behance: 'https://behance.net',
-          instagram: 'https://instagram.com',
           linkedin: 'https://linkedin.com',
+          twitter: 'https://twitter.com',
         },
       },
     },
