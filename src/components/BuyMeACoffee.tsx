@@ -68,7 +68,7 @@ export default function BuyMeACoffee() {
         </div>
         <div className="flex flex-col items-start leading-tight">
           <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-zinc-300 transition-colors">Support</span>
-          <span className="font-bold text-xs tracking-tight">Buy us a Coffee</span>
+          <span className="font-bold text-xs tracking-tight">Buy me a Coffee</span>
         </div>
       </button>
 

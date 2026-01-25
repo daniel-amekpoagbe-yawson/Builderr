@@ -4,7 +4,7 @@ export interface PortfolioTemplate {
   id: string
   name: string
   description: string
-  category: 'developer' | 'designer' | 'photographer' | 'blank'
+  category: 'developer' | 'designer' | 'photographer' | 'professional' | 'blank'
   icon: string // Lucide icon name
   preview: string // Preview image or gradient
   theme: Portfolio['theme']
@@ -605,11 +605,179 @@ const blankTemplate: PortfolioTemplate = {
   sections: [],
 }
 
+// ============================================
+// MODERN PROFESSIONAL TEMPLATE
+// ============================================
+const modernProfessionalTemplate: PortfolioTemplate = {
+  id: 'modern-professional',
+  name: 'Modern Professional',
+  description:
+    'A clean, high-end template for consultants, freelancers, and professionals',
+  category: 'professional',
+  icon: 'Briefcase',
+  preview: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+  theme: {
+    mode: 'light',
+    primaryColor: '#6366f1', // Indigo 500
+    secondaryColor: '#475569', // Slate 600
+    accentColor: '#8b5cf6', // Violet 500
+    fontFamily: 'dm-sans',
+    headingFont: 'inter',
+    navbarVariant: 'A',
+  },
+  features: [
+    'Floating modern navbar',
+    'Clean, professional layout',
+    'Focus on experience and skills',
+    'Fully responsive design',
+  ],
+  sections: [
+    {
+      type: 'hero',
+      enabled: true,
+      variant: 'B',
+      order: 0,
+      data: {
+        name: 'Jordan Professional',
+        title: 'Strategy Consultant & Specialist',
+        description:
+          'Helping businesses scale through strategic planning and modern solutions. I bridge the gap between complex problems and elegant, actionable results.',
+        ctaText: 'Let\'s Connect',
+        ctaLink: '#contact',
+        imageUrl: '',
+      },
+    },
+    {
+      type: 'about',
+      enabled: true,
+      variant: 'B',
+      order: 1,
+      data: {
+        title: 'Driving impact through strategic thinking.',
+        bio: "With over 8 years of experience in business transformation and professional services, I bring a unique perspective to every project. My approach is data-driven, client-focused, and ALWAYS results-oriented. I've helped dozens of startups and established firms redefine their market position and achieve sustainable growth.",
+        highlights: [
+          'Strategy Development',
+          'Market Analysis',
+          'Operational Efficiency',
+          'Client Management',
+        ],
+        imageUrl: '',
+        social: {
+          linkedin: 'https://linkedin.com',
+          twitter: 'https://twitter.com',
+        },
+        ctaButtons: {
+          primary: {
+            text: 'View Portfolio',
+            link: '#projects',
+          },
+        },
+      },
+    },
+    {
+      type: 'skills',
+      enabled: true,
+      variant: 'A',
+      order: 2,
+      data: {
+        categories: [
+          {
+            name: 'Core Expertise',
+            skills: [
+              'Business Strategy',
+              'Project Management',
+              'Leadership',
+              'Data Analysis',
+              'Public Speaking',
+            ],
+          },
+          {
+            name: 'Tools & Software',
+            skills: ['Asana', 'Tableau', 'Notion', 'Slack', 'PowerBI'],
+          },
+        ],
+      },
+    },
+    {
+      type: 'experience',
+      enabled: true,
+      variant: 'A',
+      order: 3,
+      data: {
+        experiences: [
+          {
+            id: crypto.randomUUID(),
+            company: 'Peak Consulting Group',
+            position: 'Lead Consultant',
+            startDate: '2021-06',
+            description:
+              'Leading cross-functional teams to deliver high-impact strategic initiatives for Fortune 500 clients. Managed $2M+ annual budget.',
+            current: true,
+          },
+          {
+            id: crypto.randomUUID(),
+            company: 'Global Solutions Inc.',
+            position: 'Senior Analyst',
+            startDate: '2018-03',
+            endDate: '2021-05',
+            description:
+              'Analyzed market trends and competitor strategies to provide actionable insights for C-suite executives.',
+            current: false,
+          },
+        ],
+      },
+    },
+    {
+      type: 'projects',
+      enabled: true,
+      variant: 'A',
+      order: 4,
+      data: {
+        projects: [
+          {
+            id: crypto.randomUUID(),
+            title: 'Digital Transformation',
+            description:
+              'Led a complete digital overhaul for a regional logistics firm, resulting in a 30% increase in operational efficiency.',
+            imageUrl: '',
+            technologies: ['Consulting', 'Workflow', 'Efficiency'],
+            liveUrl: 'https://example.com',
+          },
+          {
+            id: crypto.randomUUID(),
+            title: 'Market Entry Strategy',
+            description:
+              'Developed a comprehensive market entry plan for a fintech startup expanding into Southeast Asia.',
+            imageUrl: '',
+            technologies: ['Strategy', 'Research', 'Fintech'],
+            liveUrl: 'https://example.com',
+          },
+        ],
+      },
+    },
+    {
+      type: 'contact',
+      enabled: true,
+      variant: 'A',
+      order: 5,
+      data: {
+        email: 'jordan@professional.com',
+        social: {
+          linkedin: 'https://linkedin.com',
+          twitter: 'https://twitter.com',
+          github: 'https://github.com',
+        },
+      },
+    },
+  ],
+}
+
 // Export all templates
 export const portfolioTemplates: PortfolioTemplate[] = [
   developerTemplate,
   designerTemplate,
   photographerTemplate,
+  modernProfessionalTemplate,
   blankTemplate,
 ]
 
