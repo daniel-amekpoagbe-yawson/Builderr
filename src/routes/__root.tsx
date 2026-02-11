@@ -1,13 +1,13 @@
 import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+// import { TanStackDevtools } from '@tanstack/react-devtools'
 import { useEffect } from 'react'
 import { Toaster } from 'sonner'
 
 import Header from '@/components/Header'
 import { useAuthStore } from '@/store/auth.store'
 import { NotFound } from '@/components/NotFound'
-import BuyMeACoffee from '@/components/BuyMeACoffee'
+// import BuyMeACoffee from '@/components/BuyMeACoffee'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -27,7 +27,10 @@ function RootComponent() {
     currentPath === route || currentPath.startsWith(route + '/')
   )
   const hideHeader = !isAppRoute || currentPath.startsWith('/preview/')
-  const showSupport = isAppRoute && !currentPath.startsWith('/builder')
+  
+  // Show floating support button ONLY on public portfolio pages or preview pages
+  // App routes (Dashboard, Builder, etc.) have the Header which includes the support button.
+  // const showFloating = !isAppRoute || currentPath.startsWith('/preview/');
 
   useEffect(() => {
     if (!initialized) {
@@ -39,19 +42,7 @@ function RootComponent() {
     <>
       {!hideHeader && <Header />}
       <Outlet />
-      {showSupport && <BuyMeACoffee />}
       <Toaster position="top-right" richColors />
-      <TanStackDevtools
-        config={{
-          position: 'bottom-right',
-        }}
-        plugins={[
-          {
-            name: 'Tanstack Router',
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-        ]}
-      />
     </>
   )
 }

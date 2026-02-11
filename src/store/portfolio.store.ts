@@ -380,6 +380,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     }
     body {
       font-family: ${portfolio.theme.fontFamily === 'roboto' ? 'Roboto, sans-serif' : 'Inter, sans-serif'};
+      font-size: ${portfolio.theme.baseFontSize || '16px'}; /* Apply user-selected font size */
       margin: 0;
       padding: 0;
     }

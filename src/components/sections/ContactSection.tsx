@@ -23,9 +23,208 @@ export function ContactSection({ data, variant, theme }: ContactSectionProps) {
       return <ContactVariantA data={data} theme={theme} />
     case 'B':
       return <ContactVariantB data={data} theme={theme} />
+// ...
+
+    case 'C':
+      return <ContactVariantC data={data} theme={theme} />
     default:
       return <ContactVariantA data={data} theme={theme} />
   }
+}
+
+// ... existing variants ...
+
+function ContactVariantC({ data, theme }: { data: ContactData; theme: Portfolio['theme'] }) {
+  const isDark = theme.mode === 'dark'
+  const primaryColor = theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
+  const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
+
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    setSubmitted(true)
+    setIsSubmitting(false)
+    setTimeout(() => {
+        setSubmitted(false)
+        setFormData({ name: '', email: '', message: '' })
+    }, 3000)
+  }
+
+  const socialLinks = [
+    { key: 'github', icon: Github, url: data.social?.github },
+    { key: 'linkedin', icon: Linkedin, url: data.social?.linkedin },
+    { key: 'twitter', icon: Twitter, url: data.social?.twitter },
+  ].filter((link) => link.url)
+
+  return (
+    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
+      {/* Retro Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+      
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-16 space-y-4">
+           <div
+            className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+          >
+            Communication
+          </div>
+          <h2 className={`text-4xl md:text-5xl font-black ${textColor} tracking-tight`}>
+            INITIATE CONTACT
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+            {/* Left: Info Card */}
+            <div 
+               className={`${bgColor} border-2 ${borderColor} p-8 relative`}
+               style={{ boxShadow: `8px 8px 0px 0px ${primaryColor}` }}
+            >
+               <h3 className={`text-2xl font-bold ${textColor} mb-8 uppercase flex items-center gap-3`}>
+                  <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                  Status: Online
+               </h3>
+
+               <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium mb-8 leading-relaxed`}>
+                  Ready to collaborate on new projects. My transmission lines are open for inquiries and opportunities.
+               </p>
+
+               <div className="space-y-6">
+                  {data.email && (
+                     <div className="flex items-center gap-4">
+                        <div className={`p-3 border-2 ${borderColor} bg-gray-100 dark:bg-gray-800`}>
+                           <Mail className="w-6 h-6" style={{ color: primaryColor }} />
+                        </div>
+                        <div>
+                           <span className={`block text-xs font-bold uppercase ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email Protocol</span>
+                           <a href={`mailto:${data.email}`} className={`text-lg font-bold ${textColor} hover:underline decoration-2`} style={{ textDecorationColor: primaryColor }}>
+                              {data.email}
+                           </a>
+                        </div>
+                     </div>
+                  )}
+                  {data.phone && (
+                     <div className="flex items-center gap-4">
+                        <div className={`p-3 border-2 ${borderColor} bg-gray-100 dark:bg-gray-800`}>
+                           <Phone className="w-6 h-6" style={{ color: primaryColor }} />
+                        </div>
+                        <div>
+                           <span className={`block text-xs font-bold uppercase ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Voice Line</span>
+                           <a href={`tel:${data.phone}`} className={`text-lg font-bold ${textColor} hover:underline decoration-2`} style={{ textDecorationColor: primaryColor }}>
+                              {data.phone}
+                           </a>
+                        </div>
+                     </div>
+                  )}
+               </div>
+
+               {socialLinks.length > 0 && (
+                  <div className="mt-10 pt-8 border-t-2 border-dashed" style={{ borderColor: isDark ? '#374151' : '#e5e5e5' }}>
+                     <div className="flex gap-4">
+                        {socialLinks.map(({ key, icon: Icon, url }) => (
+                           <a
+                              key={key}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`w-12 h-12 flex items-center justify-center border-2 ${borderColor} hover:-translate-y-1 transition-transform bg-white dark:bg-gray-800`}
+                              style={{ 
+                                 boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}`,
+                                 color: primaryColor
+                              }}
+                           >
+                              <Icon className="w-5 h-5" />
+                           </a>
+                        ))}
+                     </div>
+                  </div>
+               )}
+            </div>
+
+            {/* Right: Form */}
+            <div 
+               className={`${bgColor} border-2 ${borderColor} p-8 relative`}
+               style={{ boxShadow: `8px 8px 0px 0px ${isDark ? '#fff' : '#000'}` }}
+            >
+               <div className={`absolute top-0 right-0 p-2 bg-black text-white text-xs font-bold uppercase`}>
+                  Msg_Secure
+               </div>
+
+               <form onSubmit={handleSubmit} className="space-y-6 pt-4">
+                  <div className="space-y-2">
+                     <label className={`text-xs font-bold uppercase tracking-widest ${textColor}`}>Identity [Name]</label>
+                     <input 
+                        type="text" 
+                        required
+                        value={formData.name}
+                        onChange={e => setFormData({...formData, name: e.target.value})}
+                        className={`w-full bg-transparent border-2 ${borderColor} p-3 font-medium outline-none focus:bg-gray-50 dark:focus:bg-gray-800 transition-colors ${textColor}`}
+                        placeholder="ENTER_NAME"
+                     />
+                  </div>
+
+                  <div className="space-y-2">
+                     <label className={`text-xs font-bold uppercase tracking-widest ${textColor}`}>Return Path [Email]</label>
+                     <input 
+                        type="email" 
+                        required
+                        value={formData.email}
+                        onChange={e => setFormData({...formData, email: e.target.value})}
+                        className={`w-full bg-transparent border-2 ${borderColor} p-3 font-medium outline-none focus:bg-gray-50 dark:focus:bg-gray-800 transition-colors ${textColor}`}
+                        placeholder="ENTER_EMAIL"
+                     />
+                  </div>
+
+                  <div className="space-y-2">
+                     <label className={`text-xs font-bold uppercase tracking-widest ${textColor}`}>Payload [Message]</label>
+                     <textarea 
+                        required
+                        rows={4}
+                        value={formData.message}
+                        onChange={e => setFormData({...formData, message: e.target.value})}
+                        className={`w-full bg-transparent border-2 ${borderColor} p-3 font-medium outline-none focus:bg-gray-50 dark:focus:bg-gray-800 transition-colors resize-none ${textColor}`}
+                        placeholder="ENTER_DATA..."
+                     />
+                  </div>
+
+                  <button 
+                     type="submit"
+                     disabled={isSubmitting || submitted}
+                     className={`
+                        w-full py-4 border-2 ${borderColor}
+                        font-black uppercase tracking-widest text-sm
+                        hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        transition-colors
+                        ${textColor}
+                     `}
+                     style={{
+                        backgroundColor: submitted ? '#10B981' : primaryColor,
+                        color: 'white',
+                        borderColor: 'transparent'
+                     }}
+                  >
+                     {submitted ? 'TRANSMISSION_COMPLETE' : isSubmitting ? 'SENDING...' : 'TRANSMIT_DATA'}
+                  </button>
+               </form>
+            </div>
+        </div>
+      </div>
+    </section>
+  )
 }
 
 function ContactVariantA({ data, theme }: { data: ContactData; theme: Portfolio['theme'] }) {

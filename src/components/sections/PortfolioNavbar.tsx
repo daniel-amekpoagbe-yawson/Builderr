@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import type { Portfolio } from '@/interfaces/Portfolio'
 import { Button } from '@/components/ui/button'
@@ -203,16 +203,9 @@ function DefaultNavbar({ portfolio }: PortfolioNavbarProps) {
 
 function FloatingNavbar({ portfolio }: PortfolioNavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const isDark = portfolio.theme.mode === 'dark'
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const bgColor = isDark ? 'bg-gray-950' : 'bg-stone-50'
+  const borderColor = isDark ? 'border-gray-800' : 'border-gray-200'
 
   // Get section IDs for smooth scrolling
   const sectionIds = portfolio.sections
@@ -230,18 +223,10 @@ function FloatingNavbar({ portfolio }: PortfolioNavbarProps) {
 
   return (
     <nav
-      className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
-        scrolled ? 'w-[95%] max-w-5xl' : 'w-[90%] max-w-4xl'
-      }`}
+      className={`fixed top-0 left-0 z-50 w-full border-b transition-colors duration-300 ${bgColor} ${borderColor}`}
     >
-      <div
-        className={`rounded-full px-4 sm:px-6 lg:px-8 backdrop-blur-md border transition-all duration-300 ${
-          isDark
-            ? 'bg-gray-900/80 border-gray-700/50'
-            : 'bg-white/80 border-gray-200/50'
-        } ${scrolled ? 'shadow-xl' : 'shadow-lg'}`}
-      >
-        <div className="flex justify-between items-center h-14 sm:h-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <a
               href="#"
@@ -260,10 +245,10 @@ function FloatingNavbar({ portfolio }: PortfolioNavbarProps) {
                 key={sectionType}
                 variant="ghost"
                 onClick={() => scrollToSection(sectionType)}
-                className={`capitalize rounded-full px-4 py-2 transition-all hover:scale-105 ${
+                className={`capitalize transition-all hover:bg-opacity-80 font-medium ${
                   isDark
-                    ? 'text-white hover:bg-white/10'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'text-gray-300 hover:text-white hover:bg-white/10'
+                    : 'text-gray-600 hover:text-black hover:bg-gray-100'
                 }`}
               >
                 {sectionType}
@@ -277,7 +262,7 @@ function FloatingNavbar({ portfolio }: PortfolioNavbarProps) {
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
-              className={`rounded-full ${
+              className={`${
                 isDark ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -289,23 +274,17 @@ function FloatingNavbar({ portfolio }: PortfolioNavbarProps) {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div
-          className={`mt-2 rounded-2xl backdrop-blur-md border overflow-hidden transition-all ${
-            isDark
-              ? 'bg-gray-900/90 border-gray-700/50'
-              : 'bg-white/90 border-gray-200/50'
-          }`}
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1">
+        <div className={`border-t ${borderColor} ${bgColor}`}>
+          <div className="px-4 pt-2 pb-4 space-y-1">
             {sectionIds.map((sectionType) => (
               <Button
                 key={sectionType}
                 variant="ghost"
                 onClick={() => scrollToSection(sectionType)}
-                className={`w-full justify-start capitalize rounded-lg ${
+                className={`w-full justify-start capitalize ${
                   isDark
-                    ? 'text-white hover:bg-white/10'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'text-gray-300 hover:text-white hover:bg-white/10'
+                    : 'text-gray-600 hover:text-black hover:bg-gray-100'
                 }`}
               >
                 {sectionType}

@@ -1,12 +1,14 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Contact, Home, LayoutDashboard, LogIn, LogOut, Menu, X } from 'lucide-react'
+import { Contact, Home, LayoutDashboard, LogIn, LogOut, Menu, X, Coffee } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
+import BuyMeACoffee from './BuyMeACoffee'
 
 import { ProjectName } from '@/constant'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isSupportOpen, setIsSupportOpen] = useState(false)
   const navigate = useNavigate()
   const { user, signOut } = useAuthStore()
 
@@ -38,6 +40,13 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-4">
           {user ? (
             <>
+              <button
+                onClick={() => setIsSupportOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 text-white hover:text-stone-300 transition-colors"
+              >
+                <Coffee size={18} className="text-white" />
+                <span>Support</span>
+              </button>
               <Link
                 to="/dashboard"
                 className="px-4 py-2 text-white hover:text-stone-300 transition-colors"
@@ -53,6 +62,13 @@ export default function Header() {
             </>
           ) : (
             <>
+              <button
+                onClick={() => setIsSupportOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 text-white hover:text-stone-300 transition-colors mr-2"
+              >
+                <Coffee size={18} className="text-white" />
+                <span>Support</span>
+              </button>
               <Link
                 to="/auth/Login"
                 className="px-4 py-2 text-white hover:text-gray-300 transition-colors"
@@ -69,6 +85,11 @@ export default function Header() {
           )}
         </div>
       </header>
+
+      <BuyMeACoffee 
+        externalOpen={isSupportOpen} 
+        onToggle={(val) => setIsSupportOpen(val)} 
+      />
 
       <aside
         className={`fixed top-0 left-0 h-full w-80 bg-stone-800 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
@@ -96,7 +117,7 @@ export default function Header() {
             <span className="font-medium text-sm">Home</span>
           </Link>
 
-           <Link
+          <Link
             to="/Contact"
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2"
@@ -104,6 +125,17 @@ export default function Header() {
             <Contact size={20} />
             <span className="font-medium text-sm">Contact us</span>
           </Link>
+
+          <button
+            onClick={() => {
+              setIsOpen(false)
+              setIsSupportOpen(true)
+            }}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50/10 transition-colors mb-2 w-full text-left"
+          >
+            <Coffee size={20} className="text-white" />
+            <span className="font-medium text-sm">Support Us</span>
+          </button>
 
           {user ? (
             <>

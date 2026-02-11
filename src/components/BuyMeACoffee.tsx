@@ -7,8 +7,19 @@ declare global {
   }
 }
 
-export default function BuyMeACoffee() {
-  const [isOpen, setIsOpen] = useState(false)
+interface BuyMeACoffeeProps {
+  externalOpen?: boolean;
+  onToggle?: (open: boolean) => void;
+}
+
+export default function BuyMeACoffee({ externalOpen, onToggle }: BuyMeACoffeeProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isOpen = externalOpen !== undefined ? externalOpen : internalOpen
+  const setIsOpen = (val: boolean) => {
+    if (onToggle) onToggle(val)
+    setInternalOpen(val)
+  }
+  
   const [email, setEmail] = useState('')
   const [amount, setAmount] = useState(10)
   const [customAmount, setCustomAmount] = useState('')
@@ -58,19 +69,21 @@ export default function BuyMeACoffee() {
 
   return (
     <>
-      {/* Sleek Professional Floating Trigger */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-2 right-2 z-100 group flex items-center gap-3 p-1.5 pr-6 bg-black text-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_15px_50px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300 active:scale-95 border border-white/10"
-      >
-        <div className="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center group-hover:bg-zinc-700 transition-colors shadow-inner">
-          <Coffee size={18} className="text-yellow-400" />
-        </div>
-        <div className="flex flex-col items-start leading-tight">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-zinc-300 transition-colors">Support</span>
-          <span className="font-bold text-xs tracking-tight">Buy me a Coffee</span>
-        </div>
-      </button>
+      {/* Sleek Professional Floating Trigger - Only show if not externally controlled */}
+      {externalOpen === undefined && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-2 right-2 z-100 group flex items-center gap-3 p-1.5 pr-6 bg-black text-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_15px_50px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300 active:scale-95 border border-white/10"
+        >
+          <div className="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center group-hover:bg-zinc-700 transition-colors shadow-inner">
+            <Coffee size={18} className="text-yellow-400" />
+          </div>
+          <div className="flex flex-col items-start leading-tight">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-zinc-300 transition-colors">Support</span>
+            <span className="font-bold text-xs tracking-tight">Buy me a Coffee</span>
+          </div>
+        </button>
+      )}
 
       {isOpen && (
         <div className="fixed inset-0 z-110 flex items-center justify-center p-4">

@@ -187,7 +187,7 @@ function ProjectsVariantC({ data, theme }: { data: ProjectsData; theme: Portfoli
   const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
 
   return (
-    <section className={`relative py-16 px-4 overflow-hidden ${containerBg}`}>
+    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
       {/* Retro Grid Background */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -198,33 +198,35 @@ function ProjectsVariantC({ data, theme }: { data: ProjectsData; theme: Portfoli
       />
       
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-10 space-y-4">
+        <div className="text-center mb-16 space-y-4">
            <div
-            className={`inline-block px-3 py-1 border ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+            className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
           >
             My Work
           </div>
-          <h2 className={`text-5xl font-black ${textColor} tracking-tighter`}>FEATURED PROJECTS</h2>
+          <h2 className={`text-4xl md:text-5xl font-black ${textColor} tracking-tight`}>
+            FEATURED PROJECTS
+          </h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
            {(data.projects || []).map((project) => (
             <div
               key={project.id}
-              className={`flex flex-col h-full border ${borderColor} ${cardBg} group hover:-translate-y-2 transition-transform duration-300`}
+              className={`flex flex-col h-full border-2 ${borderColor} ${cardBg} group hover:-translate-y-2 transition-transform duration-300`}
               style={{
-                boxShadow: `4px 4px 0px 0px ${isDark ? '#374151' : '#000'}`,
+                boxShadow: `8px 8px 0px 0px ${primaryColor}`,
               }}
             >
               {/* Image Header with browser-like bar */}
-              <div className={`border-b ${borderColor} bg-gray-100 p-2 flex items-center gap-2`}>
-                 <div className="w-3 h-3 rounded-full border border-black bg-red-400" />
-                 <div className="w-3 h-3 rounded-full border border-black bg-yellow-400" />
-                 <div className="w-3 h-3 rounded-full border border-black bg-green-400" />
+              <div className={`border-b-2 ${borderColor} bg-gray-100 dark:bg-gray-800 p-2 flex items-center gap-2`}>
+                 <div className="w-3 h-3 rounded-full border border-black/20 bg-red-400" />
+                 <div className="w-3 h-3 rounded-full border border-black/20 bg-yellow-400" />
+                 <div className="w-3 h-3 rounded-full border border-black/20 bg-green-400" />
               </div>
               
-              {project.imageUrl && (
-                <div className={`border-b ${borderColor} overflow-hidden aspect-video relative`}>
+              {project.imageUrl ? (
+                <div className={`border-b-2 ${borderColor} overflow-hidden aspect-video relative`}>
                   <img
                     src={project.imageUrl}
                     alt={project.title}
@@ -232,6 +234,10 @@ function ProjectsVariantC({ data, theme }: { data: ProjectsData; theme: Portfoli
                   />
                   <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: `${primaryColor}20`}} />
                 </div>
+              ) : (
+                 <div className={`border-b-2 ${borderColor} aspect-video flex items-center justify-center bg-gray-50 dark:bg-gray-800/50`}>
+                    <span className="font-mono text-xs opacity-50">NO_PREVIEW</span>
+                 </div>
               )}
 
               <div className="p-6 flex-1 flex flex-col">
@@ -263,10 +269,11 @@ function ProjectsVariantC({ data, theme }: { data: ProjectsData; theme: Portfoli
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex-1 text-center py-2 px-4 border-1.5 ${borderColor} text-sm font-bold uppercase hover:bg-black hover:text-white transition-colors`}
+                      className={`flex-1 text-center py-3 px-4 border-2 ${borderColor} text-sm font-bold uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors`}
                       style={{
                         backgroundColor: primaryColor,
-                        color: 'white'
+                        color: 'white',
+                        boxShadow: `2px 2px 0px 0px ${isDark ? '#fff' : '#000'}`
                       }}
                     >
                       Live Demo
@@ -277,9 +284,10 @@ function ProjectsVariantC({ data, theme }: { data: ProjectsData; theme: Portfoli
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex-1 text-center py-2 px-4 border-2 ${borderColor} text-sm font-bold uppercase hover:bg-black hover:text-white transition-colors`}
+                      className={`flex-1 text-center py-3 px-4 border-2 ${borderColor} text-sm font-bold uppercase hover:opacity-80 transition-opacity`}
                        style={{
                         color: textColor === 'text-white' ? 'white' : 'black',
+                        backgroundColor: 'transparent'
                       }}
                     >
                       GitHub

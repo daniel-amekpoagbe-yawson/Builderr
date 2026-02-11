@@ -196,134 +196,95 @@ function HeroVariantC({
   data: HeroData
   theme: Portfolio['theme']
 }) {
-  const textClass = 'text-white'
+  const isDark = theme.mode === 'dark'
+  const primaryColor = theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
+  const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
 
   return (
     <section
-      className="py-20 md:py-32 px-4 sm:px-6 lg:px-8 relative min-h-[600px] md:min-h-[700px] flex items-center bg-cover bg-center bg-no-repeat overflow-hidden"
-      style={{
-        backgroundImage: data.imageUrl
-          ? `linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.7) 100%), url(${data.imageUrl})`
-          : `linear-gradient(135deg, ${theme.primaryColor} 0%, ${theme.primaryColor}dd 50%, ${theme.primaryColor} 100%)`,
-      }}
+      className={`relative pt-12 pb-12 px-4 overflow-hidden min-h-[70vh] flex flex-col justify-center ${containerBg}`}
     >
-      {/* Animated background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-            backgroundSize: '40px 40px',
-          }}
-        ></div>
-      </div>
+      {/* Retro Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
 
-      {/* Gradient overlays for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black/40 via-transparent to-black/40"></div>
-
-      <div className="max-w-7xl mx-auto relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          {/* Left Content */}
-          <div className="text-center lg:text-left space-y-6 lg:space-y-8">
-            <div className="space-y-4">
-              <h1
-                className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold ${textClass} leading-tight`}
-              >
-                <span className="block">
-                  {data.name.split(' ')[0]}
-                  <span style={{ color: theme.primaryColor }} className="ml-2">
-                    !
-                  </span>
-                </span>
-                {data.name.split(' ').slice(1).length > 0 && (
-                  <span className="block mt-2">
-                    {data.name.split(' ').slice(1).join(' ')}
-                  </span>
-                )}
-              </h1>
-              <h2
-                className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold ${textClass} opacity-95 mt-4`}
-              >
-                {data.title}
-              </h2>
-            </div>
-
-            <p
-              className={`text-base sm:text-lg md:text-xl ${textClass} leading-relaxed max-w-2xl mx-auto lg:mx-0 opacity-90`}
+      <div className="max-w-6xl mx-auto relative z-10 w-full">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Content */}
+          <div className="space-y-8 order-2 lg:order-1">
+            <div
+              className={`${bgColor} border-2 ${borderColor} p-8 md:p-12 relative`}
+              style={{
+                boxShadow: `8px 8px 0px 0px ${primaryColor}`,
+              }}
             >
-              {data.description}
-            </p>
+              <div className="space-y-6">
+                <div>
+                   <span className={`inline-block px-3 py-1 mb-4 text-xs font-bold uppercase tracking-widest border ${borderColor} ${textColor}`}>
+                      Hello_World
+                   </span>
+                   <h1 className={`text-4xl md:text-6xl font-black ${textColor} leading-none tracking-tighter`}>
+                    {data.name.toUpperCase()}
+                  </h1>
+                </div>
+                
+                <h2 className={`text-xl md:text-2xl font-bold ${textColor} flex items-center gap-2`}>
+                   <span className="w-8 h-1" style={{ backgroundColor: primaryColor }}></span>
+                   {data.title}
+                </h2>
 
-            {data.ctaText && (
-              <div className="pt-4">
-                <a
-                  href={data.ctaLink || '#'}
-                  className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold text-white transition-all hover:scale-105 hover:shadow-2xl backdrop-blur-sm bg-white/10 border border-white/20"
-                  style={{
-                    backgroundColor: `${theme.primaryColor}dd`,
-                    boxShadow: `0 8px 32px ${theme.primaryColor}40`,
-                  }}
-                >
-                  {data.ctaText}
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </a>
+                <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium leading-relaxed max-w-lg`}>
+                  {data.description}
+                </p>
+
+                {data.ctaText && (
+                  <div className="pt-4">
+                    <a
+                      href={data.ctaLink || '#'}
+                      className={`
+                        inline-block px-8 py-4
+                        text-white font-bold text-lg uppercase tracking-wider
+                        border-2 ${borderColor}
+                        transition-all duration-200
+                        hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+                      `}
+                      style={{ backgroundColor: primaryColor }}
+                    >
+                      {data.ctaText}
+                    </a>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
-          {/* Right Image/Visual Element */}
-          {data.imageUrl && (
-            <div className="relative lg:order-last">
-              <div className="relative z-10">
-                {/* Main image container with floating effect */}
-                <div className="relative transform hover:scale-105 transition-transform duration-500">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-3xl blur-xl opacity-50 animate-pulse"></div>
-                  <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 backdrop-blur-sm">
-                    <img
-                      src={data.imageUrl}
+          {/* Image/Visual */}
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+            {data.imageUrl ? (
+              <div className="relative w-full max-w-md">
+                 <div className={`absolute inset-0 border-2 ${borderColor} translate-x-4 translate-y-4`} style={{ backgroundColor: isDark ? '#333' : '#e5e5e5' }} />
+                 <div className={`relative border-2 ${borderColor} bg-gray-200 aspect-square overflow-hidden grayscale hover:grayscale-0 transition-all duration-500`}>
+                    <img 
+                      src={data.imageUrl} 
                       alt={data.name}
-                      className="w-full h-auto object-cover aspect-square lg:aspect-4/5"
+                      className="w-full h-full object-cover"
                     />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
-                  </div>
-                </div>
+                 </div>
               </div>
-
-              {/* Floating decorative icons/elements */}
-              <div
-                className="absolute -top-6 -right-6 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hidden lg:flex animate-bounce"
-                style={{ animationDuration: '3s' }}
-              >
-                <div
-                  className="w-8 h-8 rounded-full"
-                  style={{ backgroundColor: theme.primaryColor }}
-                ></div>
-              </div>
-              <div
-                className="absolute -bottom-6 -left-6 w-20 h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hidden lg:flex animate-bounce"
-                style={{ animationDuration: '4s', animationDelay: '0.5s' }}
-              >
-                <div
-                  className="w-10 h-10 rounded-lg rotate-45"
-                  style={{ backgroundColor: theme.primaryColor }}
-                ></div>
-              </div>
-            </div>
-          )}
+            ) : (
+               <div className={`w-full max-w-md aspect-square border-2 ${borderColor} flex items-center justify-center bg-gray-100 dark:bg-gray-800`}>
+                  <span className={`font-mono text-sm ${textColor}`}>NO_SIGNAL</span>
+               </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
