@@ -1,7 +1,9 @@
 import type { Section, Portfolio } from '@/interfaces/Portfolio'
-import { Trash2, Eye, EyeOff } from 'lucide-react'
+import { Trash2, Eye, EyeOff, Copy } from 'lucide-react'
 import { VariantSelector } from './VariantSelector'
 import { SectionConfigForm } from './SectionConfigForm'
+import { usePortfolioStore } from '@/store/portfolio.store'
+import { toast } from 'sonner'
 
 interface ConfigPanelProps {
   section: Section
@@ -18,13 +20,25 @@ export function ConfigPanel({ section, portfolio, onUpdate, onDelete }: ConfigPa
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-gray-900 capitalize">{section.type} Section</h3>
-          <button
-            onClick={onDelete}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-            title="Delete section"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => {
+                usePortfolioStore.getState().duplicateSection(section.id)
+                toast.success('Section duplicated!')
+              }}
+              className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+              title="Duplicate section"
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onDelete}
+              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              title="Delete section"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">

@@ -31,16 +31,16 @@ const portfolioExamples = [
   },
   {
     id: 3,
-    title: 'UI/UX Designer Portfolio',
-    creator: 'Sam Taylor',
-    role: 'Product Designer',
-    category: 'Designer',
+    title: 'Strategy Consultant',
+    creator: 'Janet Wilson',
+    role: 'Strategy Consultant & Specialist',
+    category: 'Consultant',
     description: 'Beautiful design portfolio with gallery and case studies',
     sections: 4,
     theme: 'Minimal',
     preview: 'bg-gradient-to-br from-gray-50 to-white',
-    imageUrl: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800',
-    liveLink: '#'
+    imageUrl:  '/showcase/design.png',
+    liveLink: 'https://www.builderr.site/landing-page'
   },
   {
     id: 4,

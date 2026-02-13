@@ -12,9 +12,99 @@ export function ExperienceSection({ data, variant, theme }: ExperienceSectionPro
       return <ExperienceVariantA data={data} theme={theme} />
     case 'B':
       return <ExperienceVariantB data={data} theme={theme} />
+// ... (existing code)
+
+    case 'C':
+      return <ExperienceVariantC data={data} theme={theme} />
     default:
       return <ExperienceVariantA data={data} theme={theme} />
   }
+}
+
+// ... (ExperienceVariantA and ExperienceVariantB)
+
+function ExperienceVariantC({ data, theme }: { data: ExperienceData; theme: Portfolio['theme'] }) {
+  const isDark = theme.mode === 'dark'
+  const primaryColor = theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
+  const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
+
+  return (
+    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
+      {/* Retro Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+      
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="text-center mb-16 space-y-4">
+           <div
+            className={`inline-block px-3 py-1 border-2 ${borderColor} text-sm font-bold tracking-widest uppercase bg-transparent ${textColor}`}
+          >
+            Career Path
+          </div>
+          <h2 className={`text-4xl md:text-5xl font-black ${textColor} tracking-tight`}>
+           WORK LOG
+          </h2>
+        </div>
+
+        <div className="relative border-l-2 border-black/10 dark:border-white/10 ml-4 md:ml-0 md:pl-0 space-y-12">
+            {(data.experiences || []).map((exp, index) => (
+               <div key={exp.id} className="relative pl-8 md:pl-0">
+                  {/* Desktop Layout: Alternating */}
+                  <div className={`md:flex items-center justify-between gap-12 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+                     
+                     {/* Date Badge (Desktop) */}
+                     <div className={`hidden md:block w-5/12 ${index % 2 === 1 ? 'text-left' : 'text-right'}`}>
+                        <span className={`inline-block px-4 py-2 border-2 ${borderColor} font-bold text-sm bg-white dark:bg-gray-800 ${textColor}`} style={{ boxShadow: `4px 4px 0px 0px ${primaryColor}` }}>
+                           {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
+                        </span>
+                     </div>
+                     
+                     {/* Center Connector */}
+                     <div className="absolute left-[-5px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black z-10" />
+
+                     {/* Content Card */}
+                     <div className="w-full md:w-5/12">
+                        <div 
+                           className={`p-6 border-2 ${borderColor} ${bgColor} relative group hover:-translate-y-1 transition-transform`}
+                           style={{ boxShadow: `8px 8px 0px 0px ${isDark ? '#333' : '#000'}` }}
+                        >
+                           {/* Mobile Date */}
+                           <div className="md:hidden mb-4">
+                              <span className={`inline-block px-3 py-1 border ${borderColor} text-xs font-bold bg-gray-100 dark:bg-gray-800`}>
+                                 {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
+                              </span>
+                           </div>
+
+                           <h3 className={`text-xl font-bold ${textColor} uppercase mb-1`}>{exp.position}</h3>
+                           <div className="flex items-center gap-2 mb-4">
+                              <span className="text-sm font-bold" style={{ color: primaryColor }}>@ {exp.company}</span>
+                              {exp.current && (
+                                 <span className="px-2 py-0.5 text-[10px] uppercase font-bold border border-current rounded-full" style={{ color: primaryColor }}>
+                                    Current
+                                 </span>
+                              )}
+                           </div>
+                           
+                           <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium leading-relaxed`}>
+                              {exp.description}
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            ))}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 function ExperienceVariantA({ data, theme }: { data: ExperienceData; theme: Portfolio['theme'] }) {

@@ -97,6 +97,7 @@ export function PreviewArea({ portfolio, selectedSectionId, onSelectSection, isP
         '--primary-color': portfolio.theme.primaryColor,
         '--secondary-color': portfolio.theme.secondaryColor || portfolio.theme.primaryColor,
         '--accent-color': portfolio.theme.accentColor || portfolio.theme.primaryColor,
+        fontSize: portfolio.theme.baseFontSize || '16px', // Apply base font size
       } as React.CSSProperties}
     >
       {sortedSections.length === 0 ? (

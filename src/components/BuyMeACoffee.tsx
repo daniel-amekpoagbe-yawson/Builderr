@@ -1,246 +1,221 @@
-// // components/BuyMeACoffee.tsx
-// import { useState } from 'react'
-// import { usePaystackPayment } from 'react-paystack'
-// import { Coffee, X, Heart } from 'lucide-react'
+import { useState } from 'react'
+import { Coffee, Heart, Sparkles, X } from 'lucide-react'
 
-// interface PaystackConfig {
-//   reference: string
-//   email: string
-//   amount: number
-//   publicKey: string
-// }
+declare global {
+  interface Window {
+    PaystackPop: any;
+  }
+}
 
-// export default function BuyMeACoffee() {
-//   const [isOpen, setIsOpen] = useState(false)
-//   const [email, setEmail] = useState('')
-//   const [amount, setAmount] = useState(500) // Default GHS 5 (500 pesewas)
-//   const [customAmount, setCustomAmount] = useState('')
-//   const [showThankYou, setShowThankYou] = useState(false)
+interface BuyMeACoffeeProps {
+  externalOpen?: boolean;
+  onToggle?: (open: boolean) => void;
+}
 
-//   const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || ''
+export default function BuyMeACoffee({ externalOpen, onToggle }: BuyMeACoffeeProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isOpen = externalOpen !== undefined ? externalOpen : internalOpen
+  const setIsOpen = (val: boolean) => {
+    if (onToggle) onToggle(val)
+    setInternalOpen(val)
+  }
+  
+  const [email, setEmail] = useState('')
+  const [amount, setAmount] = useState(10)
+  const [customAmount, setCustomAmount] = useState('')
+  const [showThankYou, setShowThankYou] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
 
-//   const config: PaystackConfig = {
-//     reference: `buildrr_${new Date().getTime()}`,
-//     email: email,
-//     amount: amount * 100, // Paystack expects amount in pesewas (GHS * 100)
-//     publicKey: publicKey,
-//   }
+  const publicKey = import.meta.env.VITE_PAYSTACK_LIVE_KEY || ''
 
-//   const onSuccess = () => {
-//     setShowThankYou(true)
-//     setTimeout(() => {
-//       setIsOpen(false)
-//       setShowThankYou(false)
-//       setEmail('')
-//       setAmount(500)
-//       setCustomAmount('')
-//     }, 3000)
-//   }
+  const handlePaystackPayment = () => {
+    const finalEmail = email.trim() || 'anonymous@buildrr.com'
+    const finalAmount = amount > 0 ? amount : 10
 
-//   const onClose = () => {
-//     // Payment closed without completing
-//   }
+    setIsProcessing(true);
 
-//   const initializePayment = usePaystackPayment(config)
+    const paystack = new window.PaystackPop();
+    paystack.newTransaction({
+      key: publicKey,
+      email: finalEmail,
+      amount: finalAmount * 100, 
+      currency: 'GHS',
+      onSuccess: () => {
+        setIsProcessing(false);
+        handleSuccess();
+      },
+      onCancel: () => {
+        setIsProcessing(false);
+      },
+    });
+  }
 
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault()
-    
-//     if (!email || amount <= 0) {
-//       alert('Please enter your email and amount')
-//       return
-//     }
+  const handleSuccess = () => {
+    setShowThankYou(true)
+    setTimeout(() => {
+      setIsOpen(false)
+      setShowThankYou(false)
+      setEmail('')
+      setAmount(10)
+      setCustomAmount('')
+    }, 4000)
+  }
 
-//     initializePayment({ onSuccess, onClose })
-//   }
+  const predefinedAmounts = [
+    { label: 'Small', amount: 10 },
+    { label: 'Medium', amount: 30 },
+    { label: 'Large', amount: 50 },
+  ]
 
-//   const predefinedAmounts = [
-//     { label: '1 Coffee', amount: 500, emoji: '☕' },
-//     { label: '3 Coffees', amount: 1500, emoji: '☕☕☕' },
-//     { label: '5 Coffees', amount: 2500, emoji: '☕☕☕☕☕' },
-//   ]
+  return (
+    <>
+      {/* Sleek Professional Floating Trigger - Only show if not externally controlled */}
+      {externalOpen === undefined && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-2 right-2 z-100 group flex items-center gap-3 p-1.5 pr-6 bg-black text-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_15px_50px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300 active:scale-95 border border-white/10"
+        >
+          <div className="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center group-hover:bg-zinc-700 transition-colors shadow-inner">
+            <Coffee size={18} className="text-yellow-400" />
+          </div>
+          <div className="flex flex-col items-start leading-tight">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-zinc-300 transition-colors">Support</span>
+            <span className="font-bold text-xs tracking-tight">Buy me a Coffee</span>
+          </div>
+        </button>
+      )}
 
-//   return (
-//     <>
-//       {/* Floating Button */}
-//       <button
-//         onClick={() => setIsOpen(true)}
-//         className="fixed bottom-8 right-8 z-50 group flex items-center gap-3 px-6 py-4 bg-black text-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:scale-105 transition-all duration-300 font-bold"
-//       >
-//         <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-colors">
-//           <Coffee className="group-hover:rotate-12 transition-transform text-white" size={18} />
-//         </div>
-//         <span className="hidden sm:inline tracking-tight">Support Buildrr</span>
-//       </button>
+      {isOpen && (
+        <div className="fixed inset-0 z-110 flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-zinc-950/40 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => !isProcessing && setIsOpen(false)}
+          />
+          
+          <div className="bg-white rounded-[2rem] shadow-[0_30px_100px_rgba(0,0,0,0.25)] max-w-md w-full overflow-hidden relative z-10 border border-zinc-100 animate-in zoom-in-95 slide-in-from-bottom-5 duration-300 flex flex-col max-h-[90vh]">
+            {/* Header / Close */}
+            <div className="flex items-center justify-between px-8 py-6 border-b border-zinc-50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center border border-zinc-100 shadow-sm">
+                   <Coffee size={20} className="text-zinc-400" />
+                </div>
+                <h2 className="text-lg font-bold text-zinc-900 tracking-tight">Support Builderr</h2>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                disabled={isProcessing}
+                className="p-2 text-zinc-400 hover:text-black hover:bg-zinc-100 rounded-full transition-all disabled:opacity-0"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
-//       {/* Modal */}
-//       {isOpen && (
-//         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-//           <div 
-//             className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
-//             onClick={() => setIsOpen(false)}
-//           />
-//           <div className="bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.15)] max-w-lg w-full overflow-hidden animate-scale-in relative z-10 flex flex-col max-h-[90vh]">
-//             {/* Header */}
-//             <div className="px-8 pt-8 pb-4 flex items-center justify-between">
-//               <div className="flex items-center gap-4">
-//                 <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-100">
-//                   <Coffee size={24} className="text-gray-900" />
-//                 </div>
-//                 <div>
-//                   <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Support Buildrr</h2>
-//                   <p className="text-gray-500 text-sm font-medium">Enjoying the builder? Buy us a coffee! ☕</p>
-//                 </div>
-//               </div>
-//               <button
-//                 onClick={() => setIsOpen(false)}
-//                 className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 hover:bg-gray-50 rounded-full transition-all"
-//               >
-//                 <X size={20} />
-//               </button>
-//             </div>
+            <div className="flex-1 overflow-y-auto custom-scrollbar">
+              <div className="px-8 py-8">
+                {showThankYou ? (
+                  <div className="py-12 text-center animate-in fade-in zoom-in duration-500">
+                    <div className="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-green-100">
+                      <Heart size={32} fill="currentColor" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-zinc-900 mb-2 tracking-tight">You're Amazing!</h3>
+                    <p className="text-zinc-500 max-w-[240px] mx-auto text-sm leading-relaxed">Your kindness fuels our creativity and helps us keep building.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* Amount Grid */}
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] pl-1">Select Tier</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {predefinedAmounts.map((item) => (
+                          <button
+                            key={item.amount}
+                            type="button"
+                            onClick={() => {
+                              setAmount(item.amount)
+                              setCustomAmount('')
+                            }}
+                            className={`py-4 rounded-2xl border transition-all duration-200 flex flex-col items-center gap-1 ${
+                              amount === item.amount && !customAmount
+                                ? 'border-black bg-black text-white shadow-lg shadow-black/20'
+                                : 'border-zinc-100 bg-zinc-50/50 hover:border-zinc-200 hover:bg-zinc-100/50 text-zinc-600'
+                            }`}
+                          >
+                            <span className="text-[9px] font-bold uppercase tracking-widest opacity-60 leading-none">{item.label}</span>
+                            <span className="text-lg font-black tabular-nums">₵{item.amount}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-//             <div className="flex-1 overflow-y-auto px-8 pb-8 custom-scrollbar">
-//               {showThankYou ? (
-//                 /* Thank You Message */
-//                 <div className="py-12 text-center animate-fade-in">
-//                   <div className="w-24 h-24 bg-green-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
-//                     <Heart className="text-green-500" size={48} fill="currentColor" />
-//                   </div>
-//                   <h3 className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">
-//                     You're the best! 🎉
-//                   </h3>
-//                   <p className="text-gray-600 text-lg leading-relaxed">
-//                     Your contribution directly helps us keep Buildrr running and improving. We really appreciate your support!
-//                   </p>
-//                 </div>
-//               ) : (
-//                 /* Payment Form */
-//                 <form onSubmit={handleSubmit} className="space-y-8 mt-4">
-//                   {/* Predefined Amounts */}
-//                   <div>
-//                     <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">
-//                       Select Amount
-//                     </label>
-//                     <div className="grid grid-cols-3 gap-4">
-//                       {predefinedAmounts.map((item) => (
-//                         <button
-//                           key={item.amount}
-//                           type="button"
-//                           onClick={() => {
-//                             setAmount(item.amount)
-//                             setCustomAmount('')
-//                           }}
-//                           className={`group relative p-5 rounded-[2rem] border-2 transition-all duration-300 ${
-//                             amount === item.amount && !customAmount
-//                               ? 'border-black bg-gray-50 scale-102 shadow-md'
-//                               : 'border-gray-100 hover:border-gray-300 bg-white hover:bg-gray-50'
-//                           }`}
-//                         >
-//                           <div className="text-3xl mb-2 transition-transform group-hover:scale-110">{item.emoji}</div>
-//                           <div className="text-sm font-bold text-gray-900 mb-1">
-//                             {item.label}
-//                           </div>
-//                           <div className="text-xs font-bold text-gray-500">
-//                             GHS {(item.amount / 100).toFixed(2)}
-//                           </div>
-//                           {amount === item.amount && !customAmount && (
-//                             <div className="absolute top-2 right-2 w-2 h-2 bg-black rounded-full" />
-//                           )}
-//                         </button>
-//                       ))}
-//                     </div>
-//                   </div>
+                    {/* Inputs Section */}
+                    <div className="space-y-4 pt-2">
+                      <div className="relative group">
+                        <span className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-zinc-400 text-sm">₵</span>
+                        <input
+                          type="number"
+                          value={customAmount}
+                          onChange={(e) => {
+                            setCustomAmount(e.target.value)
+                            setAmount(parseFloat(e.target.value) || 0)
+                          }}
+                          placeholder="Other amount..."
+                          className="w-full pl-9 pr-6 py-4 bg-zinc-50/50 border border-zinc-100 focus:border-black focus:bg-white rounded-2xl outline-none transition-all font-bold text-zinc-900 placeholder:font-medium placeholder:text-zinc-300"
+                        />
+                      </div>
+                      
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email address (optional)"
+                        className="w-full px-6 py-4 bg-zinc-50/50 border border-zinc-100 focus:border-black focus:bg-white rounded-2xl outline-none transition-all font-medium text-zinc-800"
+                      />
+                    </div>
 
-//                   {/* Custom Amount */}
-//                   <div className="space-y-4">
-//                     <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest">
-//                       Custom Support
-//                     </label>
-//                     <div className="relative group">
-//                       <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">
-//                         GHS
-//                       </span>
-//                       <input
-//                         type="number"
-//                         value={customAmount}
-//                         onChange={(e) => {
-//                           setCustomAmount(e.target.value)
-//                           setAmount(parseFloat(e.target.value) * 100 || 0)
-//                         }}
-//                         placeholder="10.00"
-//                         step="0.01"
-//                         min="1"
-//                         className="w-full pl-16 pr-6 py-4 bg-gray-50 border-2 border-transparent focus:border-black focus:bg-white rounded-2xl outline-none transition-all font-bold text-lg text-gray-900"
-//                       />
-//                     </div>
-//                   </div>
+                    {/* Action Button */}
+                    <div className="pt-2">
+                      <button
+                        onClick={handlePaystackPayment}
+                        disabled={amount <= 0 || isProcessing}
+                        className="w-full py-5 bg-black text-white rounded-3xl font-bold text-lg shadow-xl hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-20 flex items-center justify-center gap-3 overflow-hidden relative"
+                      >
+                        {isProcessing ? (
+                          <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <>
+                            <Sparkles size={18} className="text-yellow-400" />
+                            <span className="tabular-nums uppercase tracking-widest text-sm">Support with ₵{amount}</span>
+                          </>
+                        )}
+                      </button>
+                      
+                      <p className="mt-6 text-[10px] text-zinc-400 text-center leading-relaxed font-bold uppercase tracking-widest opacity-60">
+                        Thank you for helping us keep Buildrr free.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-//                   {/* Email */}
-//                   <div className="space-y-4">
-//                     <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest">
-//                       Your Contact Info
-//                     </label>
-//                     <input
-//                       type="email"
-//                       value={email}
-//                       onChange={(e) => setEmail(e.target.value)}
-//                       placeholder="alex@example.com"
-//                       required
-//                       className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-black focus:bg-white rounded-2xl outline-none transition-all font-bold text-gray-900"
-//                     />
-//                   </div>
-
-//                   {/* Submit Button */}
-//                   <div className="pt-2">
-//                     <button
-//                       type="submit"
-//                       disabled={!email || amount <= 0}
-//                       className="w-full py-5 bg-black text-white rounded-[2rem] font-bold text-lg hover:bg-gray-800 transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-xl active:scale-[0.98]"
-//                     >
-//                       Suppport with GHS {(amount / 100).toFixed(2)}
-//                     </button>
-//                     <p className="text-[10px] text-center font-bold text-gray-400 uppercase tracking-widest mt-6">
-//                       Payments SECURED BY PAYSTACK
-//                     </p>
-//                   </div>
-//                 </form>
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       <style jsx>{`
-//         @keyframes scale-in {
-//           from { opacity: 0; transform: scale(0.95) translateY(10px); }
-//           to { opacity: 1; transform: scale(1) translateY(0); }
-//         }
-//         @keyframes fade-in {
-//           from { opacity: 0; }
-//           to { opacity: 1; }
-//         }
-//         .animate-scale-in {
-//           animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-//         }
-//         .animate-fade-in {
-//           animation: fade-in 0.2s ease-out;
-//         }
-//         .custom-scrollbar::-webkit-scrollbar {
-//           width: 6px;
-//         }
-//         .custom-scrollbar::-webkit-scrollbar-track {
-//           background: transparent;
-//         }
-//         .custom-scrollbar::-webkit-scrollbar-thumb {
-//           background: #f1f1f1;
-//           border-radius: 10px;
-//         }
-//         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-//           background: #e1e1e1;
-//         }
-//       `}</style>
-//     </>
-
-//   )
-// }
+      <style dangerouslySetInnerHTML={{ __html: `
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(0,0,0,0.05);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(0,0,0,0.1);
+        }
+      `}} />
+    </>
+  )
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { portfolioTemplates, type PortfolioTemplate } from '@/lib/templates'
-import { Code2, Palette, Camera, Plus, Check, X, Sparkles } from 'lucide-react'
+import { Code2, Palette, Camera, Plus, Check, X, Sparkles, Briefcase } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface TemplateSelectorProps {
@@ -14,6 +14,7 @@ const iconMap: Record<string, React.ElementType> = {
   Palette,
   Camera,
   Plus,
+  Briefcase,
 }
 
 export function TemplateSelector({ isOpen, onClose, onSelect }: TemplateSelectorProps) {

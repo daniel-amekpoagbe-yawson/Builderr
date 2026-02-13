@@ -20,6 +20,7 @@ export interface Portfolio {
     fontFamily: FontFamily
     headingFont?: FontFamily
     navbarVariant?: 'default' | 'A' | 'B'
+    baseFontSize?: string // User-selected base font size (e.g., '16px', '18px')
   }
   sections: Array<Section>
   slug?: string

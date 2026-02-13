@@ -66,9 +66,11 @@ function AboutVariantA({ data, theme }: { data: AboutData; theme: Portfolio['the
 
 function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['theme'] }) {
   const isDark = theme.mode === 'dark'
-  const bgClass = isDark ? 'bg-gray-900' : 'bg-white'
-  const textClass = isDark ? 'text-white' : 'text-gray-900'
-  const subtextClass = isDark ? 'text-gray-300' : 'text-gray-600'
+  const primaryColor = theme.primaryColor
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const borderColor = isDark ? 'border-gray-700' : 'border-black'
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-white'
+  const containerBg = isDark ? 'bg-gray-950' : 'bg-stone-50'
 
   const socialLinks = data.social || {}
   const hasSocialLinks = Object.values(socialLinks).some((link) => link)
@@ -81,6 +83,8 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
         return <Dribbble className="w-5 h-5" />
       case 'instagram':
         return <Instagram className="w-5 h-5" />
+      case 'linkedin':
+        return <Linkedin className="w-5 h-5" />
       case 'twitter':
         return <Twitter className="w-5 h-5" />
       case 'github':
@@ -91,162 +95,120 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
   }
 
   return (
-    <section className={`${bgClass} py-16 md:py-24 px-4 sm:px-6 lg:px-8`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left Section - Image and Social Icons */}
-          <div className="flex flex-col items-center lg:items-start">
-            {data.imageUrl && (
-              <div className="relative w-full max-w-sm">
-                {/* Image Container */}
-                <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                  <img
-                    src={data.imageUrl}
-                    alt="About"
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-                
-                {/* Social Media Icons - Positioned to overlap bottom of image */}
-                {hasSocialLinks && (
-                  <div className="flex items-center gap-3 mt-4 lg:mt-6 justify-center lg:justify-start">
-                    {socialLinks.facebook && (
-                      <a
-                        href={socialLinks.facebook}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-11 h-11 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
-                        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-                        aria-label="Facebook"
-                      >
-                        {getSocialIcon('facebook')}
-                      </a>
-                    )}
-                    {socialLinks.dribbble && (
-                      <a
-                        href={socialLinks.dribbble}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-11 h-11 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
-                        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-                        aria-label="Dribbble"
-                      >
-                        {getSocialIcon('dribbble')}
-                      </a>
-                    )}
-                    {socialLinks.instagram && (
-                      <a
-                        href={socialLinks.instagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-11 h-11 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
-                        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-                        aria-label="Instagram"
-                      >
-                        {getSocialIcon('instagram')}
-                      </a>
-                    )}
-                    {socialLinks.linkedin && (
-                      <a
-                        href={socialLinks.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-11 h-11 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
-                        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-                        aria-label="LinkedIn"
-                      >
-                        {getSocialIcon('linkedin')}
-                      </a>
-                    )}
-                 
-                    {socialLinks.twitter && (
-                      <a
-                        href={socialLinks.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-11 h-11 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
-                        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-                        aria-label="Twitter"
-                      >
-                        {getSocialIcon('twitter')}
-                      </a>
-                    )}
-                    {socialLinks.github && (
-                      <a
-                        href={socialLinks.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-11 h-11 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
-                        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-                        aria-label="GitHub"
-                      >
-                        {getSocialIcon('github')}
-                      </a>
-                    )}
+    <section className={`relative py-20 px-4 overflow-hidden ${containerBg}`}>
+       {/* Retro Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="grid lg:grid-cols-12 gap-12 items-start">
+           
+           {/* Left Column: Image/Card */}
+           <div className="lg:col-span-5 order-1">
+              <div 
+                 className={`${bgColor} border-2 ${borderColor} p-4 pb-12 relative`}
+                 style={{ boxShadow: `8px 8px 0px 0px ${primaryColor}` }}
+              >
+                  {/* Browser Dots */}
+                  <div className="flex gap-2 mb-4 border-b pb-2" style={{ borderColor: isDark ? '#374151' : '#e5e5e5' }}>
+                     <div className="w-3 h-3 rounded-full bg-red-400 border border-black/20" />
+                     <div className="w-3 h-3 rounded-full bg-yellow-400 border border-black/20" />
+                     <div className="w-3 h-3 rounded-full bg-green-400 border border-black/20" />
                   </div>
-                )}
-              </div>
-            )}
-          </div>
 
-          {/* Right Section - Content and Buttons */}
-          <div className="space-y-5 lg:space-y-6 mt-8 lg:mt-0">
-            {/* Section Title and Subtitle */}
-            <div className="space-y-2">
-              <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${textClass}`}>
-                About
-              </h2>
-              {data.title && (
-                <h3 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold ${textClass} leading-tight`}>
-                  {data.title}
-                </h3>
-              )}
-            </div>
-
-            {/* Bio/Description - Multiple paragraphs */}
-            <div className="space-y-4">
-              {data.bio && (
-                <>
-                  <p className={`text-base sm:text-lg ${subtextClass} leading-relaxed`}>
-                    {data.bio.split('\n\n')[0] || data.bio}
-                  </p>
-                  {data.bio.split('\n\n').length > 1 && (
-                    <p className={`text-base sm:text-lg ${subtextClass} leading-relaxed`}>
-                      {data.bio.split('\n\n').slice(1).join('\n\n')}
-                    </p>
+                  {data.imageUrl ? (
+                     <div className="aspect-4/5 bg-gray-100 dark:bg-gray-800 relative overflow-hidden border border-gray-900/10">
+                        <img 
+                           src={data.imageUrl} 
+                           alt="About Me" 
+                           className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                        />
+                     </div>
+                  ) : (
+                     <div className="aspect-4/5 bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300">
+                        <span className="text-sm font-mono opacity-50">IMG_SOURCE_NOT_FOUND</span>
+                     </div>
                   )}
-                </>
-              )}
-            </div>
 
-            {/* CTA Buttons */}
-            {(data.ctaButtons?.primary || data.ctaButtons?.secondary) && (
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                {data.ctaButtons.primary && (
-                  <a
-                    href={data.ctaButtons.primary.link || '#'}
-                    className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-white transition-all hover:opacity-90 shadow-md"
-                    style={{ backgroundColor: theme.primaryColor }}
+                  {/* Absolute Badge */}
+                  <div 
+                     className="absolute bottom-6 -right-6 px-6 py-2 border-2 border-black font-bold uppercase tracking-widest text-sm bg-white text-black transform -rotate-2"
+                     style={{ 
+                        boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)'
+                     }}
                   >
-                    {data.ctaButtons.primary.text}
-                  </a>
-                )}
-                {data.ctaButtons.secondary && (
-                  <a
-                    href={data.ctaButtons.secondary.link || '#'}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg font-semibold border-2 transition-all hover:opacity-90 bg-white"
-                    style={{
-                      borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e7eb',
-                      color: isDark ? 'white' : '#374151',
-                    }}
-                  >
-                    <Download className="w-4 h-4" />
-                    {data.ctaButtons.secondary.text}
-                  </a>
-                )}
+                     Est. 2024
+                  </div>
               </div>
-            )}
-          </div>
+           </div>
+
+           {/* Right Column: Text */}
+           <div className="lg:col-span-7 order-2 space-y-8 lg:pl-8">
+              <div>
+                 <h2 className={`text-5xl font-black ${textColor} mb-2 tracking-tighter`}>
+                    ABOUT ME
+                 </h2>
+                 <div className="h-2 w-24" style={{ backgroundColor: primaryColor }} />
+              </div>
+
+              <div className={`space-y-4 text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium leading-relaxed`}>
+                 {data.bio?.split('\n').map((paragraph, i) => (
+                    <p key={i}>{paragraph}</p>
+                 ))}
+              </div>
+
+               {data.highlights && (
+                  <div className="grid sm:grid-cols-2 gap-4 pt-4">
+                     {data.highlights.map((item, i) => (
+                        <div key={i} className={`flex items-center gap-3 p-3 border-l-4 ${isDark ? 'bg-gray-900' : 'bg-white'}`} style={{ borderColor: primaryColor }}>
+                           <span className={`font-bold ${textColor}`}>{item}</span>
+                        </div>
+                     ))}
+                  </div>
+               )}
+            
+              <div className="pt-8 flex flex-wrap gap-4 items-center">
+                 {hasSocialLinks && (
+                    <div className="flex gap-2">
+                       {Object.entries(socialLinks).map(([platform, url]) => (
+                          url && (
+                             <a 
+                                key={platform}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`w-10 h-10 border-2 ${borderColor} flex items-center justify-center hover:-translate-y-1 transition-transform ${textColor}`}
+                                style={{ boxShadow: `4px 4px 0px 0px ${isDark ? '#fff' : '#000'}` }}
+                             >
+                                {getSocialIcon(platform)}
+                             </a>
+                          )
+                       ))}
+                    </div>
+                 )}
+
+                 {data.ctaButtons?.primary && (
+                    <a
+                      href={data.ctaButtons.primary.link || '#'}
+                      className={`
+                         ml-auto px-8 py-3 
+                         font-bold uppercase tracking-widest text-sm
+                         border-2 ${borderColor} bg-transparent ${textColor}
+                         hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black
+                         transition-colors
+                      `}
+                    >
+                       {data.ctaButtons.primary.text}
+                    </a>
+                 )}
+              </div>
+           </div>
+
         </div>
       </div>
     </section>
