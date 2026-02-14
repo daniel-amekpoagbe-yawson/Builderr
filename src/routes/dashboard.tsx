@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { Camera , Code2, Copy, Edit,  ExternalLink, LogOut, Palette, Plus, Sparkles,Trash2, } from 'lucide-react'
+import type { PortfolioTemplate } from '@/lib/templates'
 import { AuthGuard } from '@/app/auth-guard'
 import { usePortfolioStore } from '@/store/portfolio.store'
 import { useAuthStore } from '@/store/auth.store'
 import { TemplateSelector } from '@/components/TemplateSelector'
-import type { PortfolioTemplate } from '@/lib/templates'
-import { toast } from 'sonner'
-import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut, Sparkles, Code2, Palette, Camera } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { ProjectName } from '@/constant'
 import Spinner from '@/components/Spinner'
@@ -20,9 +20,9 @@ function TemplateBadge({ templateId }: { templateId?: string }) {
   if (!templateId || templateId === 'blank') return null
 
   const templateConfig: Record<string, { icon: React.ElementType; label: string; className: string }> = {
-    developer: { icon: Code2, label: 'Developer', className: 'bg-blue-100 text-blue-700' },
-    designer: { icon: Palette, label: 'Designer', className: 'bg-pink-100 text-pink-700' },
-    photographer: { icon: Camera, label: 'Photographer', className: 'bg-zinc-100 text-zinc-700' },
+    developer: { icon: Code2, label: 'Developer', className: 'bg-gray-100 text-blue-700' },
+    designer: { icon: Palette, label: 'Designer', className: 'bg-gray-200 text-pink-700' },
+    photographer: { icon: Camera, label: 'Photographer', className: 'bg-stone-200 text-zinc-700' },
   }
 
   const config = templateConfig[templateId]
@@ -118,7 +118,7 @@ function DashboardPage() {
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
                 <div className="min-w-0">
-                  <h1 className="text-lg sm:text-xl font-bold text-gray-900">{ProjectName}</h1>
+                  <h1 className="text-base sm:text-lg font-bold text-gray-900">{ProjectName}</h1>
                   <p className="text-xs sm:text-sm text-gray-500 truncate">{user?.email}</p>
                 </div>
               </div>
@@ -145,8 +145,8 @@ function DashboardPage() {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">My Portfolios</h2>
-            <p className="text-sm sm:text-base text-gray-600 mt-1">Create and manage your professional portfolios</p>
+            <h2 className="text-base sm:text-lg font-bold text-gray-900">My Portfolios</h2>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">Create and manage your professional portfolios</p>
           </div>
 
           {loading ? (
@@ -234,8 +234,8 @@ function DashboardPage() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-black hover:text-gray-700 text-sm font-medium mb-4 group/link"
                       >
-                        <ExternalLink className="w-4 h-4" />
                         <span className="group-hover/link:underline">View Live Site</span>
+                        <ExternalLink className="w-4 h-4" />
                       </a>
                     )}
 

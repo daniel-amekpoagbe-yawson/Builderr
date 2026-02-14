@@ -1,13 +1,10 @@
 import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
-// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-// import { TanStackDevtools } from '@tanstack/react-devtools'
 import { useEffect } from 'react'
 import { Toaster } from 'sonner'
 
 import Header from '@/components/Header'
 import { useAuthStore } from '@/store/auth.store'
 import { NotFound } from '@/components/NotFound'
-// import BuyMeACoffee from '@/components/BuyMeACoffee'
 
 export const Route = createRootRoute({
   component: RootComponent,

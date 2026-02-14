@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
+import {ArrowLeft,Monitor, Sparkles } from 'lucide-react'
 import { AuthGuard } from '@/app/auth-guard'
 import { usePortfolioStore } from '@/store/portfolio.store'
 import { BuilderInterface } from '@/components/BuilderInterface'
 import SpinnerMini from '@/components/SpinnerMini'
-import { Monitor, ArrowLeft, Sparkles } from 'lucide-react'
 
 export const Route = createFileRoute('/builder/$portfolioId')({
   component: BuilderPage,

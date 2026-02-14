@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { usePortfolioStore } from '@/store/portfolio.store'
-import type { SectionType } from '@/interfaces/Portfolio'
+import { Copy,X } from 'lucide-react'
+import { toast } from 'sonner'
 import { SectionSidebar } from './builder/SectionSidebar'
 import { PreviewArea } from './builder/PreviewArea'
 import { ConfigPanel } from './builder/ConfigPanel'
 import { BuilderToolbar } from './builder/BuilderToolbar'
 import { ThemeConfig } from './builder/ThemeConfig'
-import { toast } from 'sonner'
-import { X, Copy } from 'lucide-react'
+import type { SectionType } from '@/interfaces/Portfolio'
+import { usePortfolioStore } from '@/store/portfolio.store'
+
 
 export function BuilderInterface() {
   const navigate = useNavigate()

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { portfolioService } from '@/services/portfolio.service'
 import type { Portfolio } from '@/interfaces/Portfolio'
+import { portfolioService } from '@/services/portfolio.service'
 import { PreviewArea } from '@/components/builder/PreviewArea'
 import SpinnerMini from '@/components/SpinnerMini'
 
