@@ -222,6 +222,4 @@ Want to help? Read our [CONTRIBUTING.md](./CONTRIBUTING.md) (coming soon!) and j
 
 ---
 
-## 📝 License
 
-[MIT](
