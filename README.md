@@ -1,205 +1,227 @@
-# Buildrr - Section-Based Portfolio Builder
+# Buildrr – Section-Based Portfolio Builder 🚀
 
-A professional, production-ready portfolio builder web application that allows users to create, customize, and deploy portfolios using pre-designed section layouts with multiple visual variants.
+**Buildrr** is a modern, professional, and production-ready portfolio builder web application that empowers anyone to quickly create, customize, and deploy beautiful online portfolios. Build curated portfolios using pre-designed sections with multiple visual variants—no coding required.
 
-## Features
+---
 
-- 🎨 **Multiple Section Variants** - Choose from professionally designed variants for each section type
-- 🎯 **Drag & Drop Reordering** - Easily reorder sections with intuitive drag-and-drop
-- 🎨 **Theme Customization** - Light/dark mode, custom colors, and font selection
-- 🚀 **Instant Publishing** - Get a public URL instantly when you publish
-- 📥 **HTML Export** - Download your portfolio as a standalone HTML file
-- 💾 **Auto-Save** - Changes are automatically saved every 3 seconds
-- 🔐 **Secure Authentication** - Built with Supabase Auth
-- 📱 **Responsive Design** - Works beautifully on all devices
-- 📷 **Image Upload** - Drag & drop image uploads with compression and preview
+## ✨ Key Features
 
-## Tech Stack
+- **Multiple Section Variants** — Choose from a library of professionally designed layouts for each section type.
+- **Intuitive Drag & Drop** — Reorder sections and organize your portfolio effortlessly.
+- **Theme Customization** — Light & dark modes, plus flexible color and font choices.
+- **Instant Publishing** — Get a live public URL for your portfolio with one click.
+- **HTML Export** — Download your portfolio as a standalone HTML file for self-hosting or offline use.
+- **Auto-Save** — Your changes are saved automatically every 3 seconds—never lose your progress.
+- **Secure Authentication** — Powered by Supabase Auth for safe, passwordless login.
+- **Responsive Design** — Looks amazing on all screens: desktop, tablet, and mobile.
+- **Image Uploads** — Drag & drop image uploads, with built-in compression and preview.
 
-- **Frontend**: React 18+ with TypeScript
-- **Routing**: TanStack Router
-- **State Management**: Zustand
-- **Styling**: Tailwind CSS
-- **Authentication**: Supabase Auth
-- **Database**: Supabase (PostgreSQL)
-- **Build Tool**: Vite
+---
 
-## Getting Started
+## 🛠️ Tech Stack
+
+- **Frontend:** React 18+ + TypeScript
+- **Routing:** TanStack Router
+- **State Management:** Zustand
+- **Styling:** Tailwind CSS
+- **Auth & Database:** Supabase (PostgreSQL) + Supabase Auth
+- **Build Tool:** Vite
+- **Package Manager:** [Bun](https://bun.sh) 🍞
+
+---
+
+## 🚦 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- A Supabase account and project
+- Node.js v18+ and [Bun](https://bun.sh)
+- A [Supabase](https://supabase.com) account & project
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd Buildrr
-```
+1. **Clone the repository**
+    ```bash
+    git clone <repository-url>
+    cd Builderr
+    ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+2. **Install dependencies**
+    ```bash
+    bun install
+    ```
 
-3. Set up environment variables:
-```bash
-# Create .env file in the root directory
-touch .env
-```
+3. **Configure environment variables**
 
-Edit `.env` and add your Supabase credentials:
-```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+    Create a `.env` file in the project root:
+    ```bash
+    touch .env
+    ```
 
-**Where to find your Supabase credentials:**
-1. Go to [Supabase Dashboard](https://app.supabase.com)
-2. Select your project (or create a new one)
-3. Go to Settings → API
-4. Copy the "Project URL" and "anon/public" key
+    Add your Supabase credentials:
+    ```env
+    VITE_SUPABASE_URL=your_supabase_project_url
+    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+    ```
 
-4. Set up the Supabase database:
+    - **Where to find these?**
+        1. Open your [Supabase Dashboard](https://app.supabase.com)
+        2. Select or create a project
+        3. Go to **Settings → API**
+        4. Copy the "Project URL" and "anon/public" key
 
-Run this SQL in your Supabase SQL editor:
+4. **Set up the database**
 
-```sql
--- Portfolios table
-CREATE TABLE portfolios (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  config JSONB NOT NULL,
-  slug TEXT UNIQUE,
-  is_published BOOLEAN DEFAULT false,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+    In your [Supabase SQL Editor](https://app.supabase.com/project/_/sql):
+    ```sql
+    -- Portfolios table
+    CREATE TABLE portfolios (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+      title TEXT NOT NULL,
+      config JSONB NOT NULL,
+      slug TEXT UNIQUE,
+      is_published BOOLEAN DEFAULT false,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
 
--- Enable RLS (Row Level Security)
-ALTER TABLE portfolios ENABLE ROW LEVEL SECURITY;
+    -- Enable Row Level Security
+    ALTER TABLE portfolios ENABLE ROW LEVEL SECURITY;
 
--- Users can only access their own portfolios
-CREATE POLICY "Users can view own portfolios" ON portfolios
-  FOR SELECT USING (auth.uid() = user_id);
-  
-CREATE POLICY "Users can insert own portfolios" ON portfolios
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-  
-CREATE POLICY "Users can update own portfolios" ON portfolios
-  FOR UPDATE USING (auth.uid() = user_id);
-  
-CREATE POLICY "Users can delete own portfolios" ON portfolios
-  FOR DELETE USING (auth.uid() = user_id);
+    -- Policies: users manage their own portfolios
+    CREATE POLICY "Users can view own portfolios" ON portfolios
+      FOR SELECT USING (auth.uid() = user_id);
 
--- Public portfolios can be viewed by anyone
-CREATE POLICY "Published portfolios are publicly viewable" ON portfolios
-  FOR SELECT USING (is_published = true);
-```
+    CREATE POLICY "Users can insert own portfolios" ON portfolios
+      FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-5. Set up Supabase Storage for image uploads:
+    CREATE POLICY "Users can update own portfolios" ON portfolios
+      FOR UPDATE USING (auth.uid() = user_id);
 
-See [SUPABASE_STORAGE_SETUP.md](./SUPABASE_STORAGE_SETUP.md) for detailed instructions, or run this quick setup:
+    CREATE POLICY "Users can delete own portfolios" ON portfolios
+      FOR DELETE USING (auth.uid() = user_id);
 
-```sql
--- Create the storage bucket
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES (
-  'portfolio-images',
-  'portfolio-images',
-  true,
-  5242880,
-  ARRAY['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-);
+    -- Public access for published portfolios
+    CREATE POLICY "Published portfolios are publicly viewable" ON portfolios
+      FOR SELECT USING (is_published = true);
+    ```
 
--- Allow authenticated users to upload to their folder
-CREATE POLICY "Users can upload images"
-ON storage.objects FOR INSERT TO authenticated
-WITH CHECK (bucket_id = 'portfolio-images' AND (storage.foldername(name))[1] = auth.uid()::text);
+5. **Set up Supabase Storage** (for images)
 
--- Allow public viewing of images
-CREATE POLICY "Public image access"
-ON storage.objects FOR SELECT TO public
-USING (bucket_id = 'portfolio-images');
-```
+    For detailed image storage instructions, see [`SUPABASE_STORAGE_SETUP.md`](./SUPABASE_STORAGE_SETUP.md), or run this in Supabase SQL:
+    ```sql
+    -- Create storage bucket
+    INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+    VALUES (
+      'portfolio-images',
+      'portfolio-images',
+      true,
+      5242880,
+      ARRAY['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    );
 
-6. Start the development server:
-```bash
-npm run dev
-```
+    -- Allow authenticated users to upload
+    CREATE POLICY "Users can upload images"
+    ON storage.objects FOR INSERT TO authenticated
+    WITH CHECK (bucket_id = 'portfolio-images' AND (storage.foldername(name))[1] = auth.uid()::text);
 
-The app will be available at `http://localhost:3000`
+    -- Allow public image access
+    CREATE POLICY "Public image access"
+    ON storage.objects FOR SELECT TO public
+    USING (bucket_id = 'portfolio-images');
+    ```
 
-## Project Structure
+6. **Start the development server**
+    ```bash
+    bun run dev
+    ```
+
+    Visit [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 📁 Project Structure
 
 ```
 src/
-├── components/          # React components
-│   ├── builder/        # Builder interface components
-│   └── sections/       # Portfolio section components
-├── routes/             # TanStack Router routes
-├── store/              # Zustand stores
-├── services/           # API service layer
-├── interfaces/         # TypeScript type definitions
-└── libs/               # Utility libraries
+├── components/        # Reusable React components
+│   ├── builder/      # Builder interface UI
+│   └── sections/     # Portfolio section modules
+├── routes/           # TanStack router routes
+├── store/            # Zustand state management
+├── services/         # API/data access layer
+├── interfaces/       # TypeScript types/interfaces
+└── libs/             # Utilities/helpers
 ```
 
-## Available Scripts
+---
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
-- `npm run check` - Format and lint
+## 📜 Scripts
 
-## Section Types
+- `bun run dev` – Start development server
+- `bun run build` – Build for production
+- `bun run preview` – Preview production build locally
+- `bun run lint` – Lint code with ESLint
+- `bun run format` – Format code with Prettier
+- `bun run check` – Format & lint
 
-### Hero Section
-- **Variant A**: Centered layout with large heading
-- **Variant B**: Split layout with image
-- **Variant C**: Full-width background with overlay
+---
 
-### Projects Section
-- **Variant A**: Grid layout (2-3 columns)
-- **Variant B**: Alternating left-right layout
+## 🧩 Section Types & Variants
 
-### Skills Section
-- **Variant A**: Category-based tags/pills
-- **Variant B**: Progress bars with skill levels
+**Hero:**  
+- Variant A — Centered, bold heading  
+- Variant B — Split layout with image  
+- Variant C — Full-width, background overlay
 
-### About Section
-- Two-column layout with image and bio
+**Projects:**  
+- Variant A — Grid (2–3 columns)  
+- Variant B — Alternating layouts
 
-### Experience Section
-- Timeline layout with company, role, dates
+**Skills:**  
+- Variant A — Tags/Pills  
+- Variant B — Progress bars
 
-### Contact Section
-- Contact form + social links
+**About:**  
+- Two-column layout with bio & image
 
-## Usage
+**Experience:**  
+- Timeline with company, role, dates
 
-1. **Sign Up/Login**: Create an account or sign in
-2. **Create Portfolio**: Click "Create New Portfolio" from the dashboard
-3. **Add Sections**: Use the left sidebar to add sections to your portfolio
-4. **Configure**: Select a section to configure its content and variant
-5. **Customize Theme**: Adjust colors, fonts, and theme mode
-6. **Preview**: Click "Preview" to see your portfolio in full-screen
-7. **Publish**: Click "Publish" to get a public URL
-8. **Export**: Download as HTML for offline use
+**Contact:**  
+- Contact form & social links
 
-## Environment Variables
+---
 
-- `VITE_SUPABASE_URL` - Your Supabase project URL
-- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+## 🚀 Usage Guide
 
-## License
+1. **Sign up/Login:** Create an account or sign in with Supabase Auth.
+2. **Create portfolio:** Start your project from the dashboard.
+3. **Add sections:** Use the sidebar to add and reorder portfolio sections.
+4. **Configure:** Select a section to edit its content and switch variants.
+5. **Theme:** Adjust colors, fonts, and toggle light/dark modes.
+6. **Preview:** Review your portfolio fullscreen.
+7. **Publish:** Get a public URL instantly.
+8. **Export:** Download your site as HTML for offline or external hosting.
 
-MIT
+---
 
-## Support
+## 🌍 Open Source & Community
 
-For issues and questions, please open an issue on GitHub.
+Buildrr is now **public and open for collaboration**!  
+Contributions are welcome—check out the [issues](https://github.com/daniel-amekpoagbe-yawson/Builderr/issues), open pull requests, or suggest new features.
+
+Want to help? Read our [CONTRIBUTING.md](./CONTRIBUTING.md) (coming soon!) and join the project.
+
+---
+
+## 🔑 Environment Variables
+
+- `VITE_SUPABASE_URL` — Your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` — Your Supabase anon key
+
+---
+
+## 📝 License
+
+[MIT](
