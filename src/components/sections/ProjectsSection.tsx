@@ -32,66 +32,73 @@ function ProjectsVariantA({ data, theme }: { data: ProjectsData; theme: Portfoli
       <div className="max-w-6xl mx-auto">
         <h2 className={`text-4xl font-bold ${textClass} mb-12 text-center`}>Projects</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(data.projects || []).map((project) => (
-            <div
-              key={project.id}
-              className={`${cardBgClass} rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow`}
-            >
-              {project.imageUrl && (
-                <img
-                  src={project.imageUrl}
-                  alt={project.title}
-                  className="w-full h-48 object-cover"
-                />
-              )}
-              <div className="p-6">
-                <h3 className={`text-xl font-semibold ${textClass} mb-2`}>{project.title}</h3>
-                <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-                  {project.description}
-                </p>
-                {project.technologies && project.technologies.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="text-xs px-2 py-1 rounded"
-                        style={{
-                          backgroundColor: `${theme.primaryColor}20`,
-                          color: theme.primaryColor,
-                        }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+          {(data.projects || []).length > 0 ? (
+            (data.projects || []).map((project) => (
+              <div
+                key={project.id}
+                className={`${cardBgClass} rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow`}
+              >
+                {project.imageUrl && (
+                  <img loading="lazy"
+                    src={project.imageUrl}
+                    alt={project.title}
+                    className="w-full h-48 object-cover"
+                  />
                 )}
-                <div className="flex gap-3">
-                  {project.liveUrl && (
-                    <a
-                      href={sanitizeUrl(project.liveUrl)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium hover:opacity-80"
-                      style={{ color: theme.primaryColor }}
-                    >
-                      Live Demo →
-                    </a>
+                <div className="p-6">
+                  <h3 className={`text-xl font-semibold ${textClass} mb-2`}>{project.title}</h3>
+                  <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
+                    {project.description}
+                  </p>
+                  {project.technologies && project.technologies.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.map((tech, index) => (
+                        <span
+                          key={index}
+                          className="text-xs px-2 py-1 rounded"
+                          style={{
+                            backgroundColor: `${theme.primaryColor}20`,
+                            color: theme.primaryColor,
+                          }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   )}
-                  {project.githubUrl && (
-                    <a
-                      href={sanitizeUrl(project.githubUrl)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium hover:opacity-80"
-                      style={{ color: theme.primaryColor }}
-                    >
-                      GitHub →
-                    </a>
-                  )}
+                  <div className="flex gap-3">
+                    {project.liveUrl && (
+                      <a
+                        href={sanitizeUrl(project.liveUrl)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium hover:opacity-80"
+                        style={{ color: theme.primaryColor }}
+                      >
+                        Live Demo →
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={sanitizeUrl(project.githubUrl)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium hover:opacity-80"
+                        style={{ color: theme.primaryColor }}
+                      >
+                        GitHub →
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className={`col-span-full py-12 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'} border-2 border-dashed rounded-xl ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <p className="text-lg font-medium mb-1">No projects added yet</p>
+              <p className="text-sm">Click the section to start adding your work</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>
@@ -109,70 +116,77 @@ function ProjectsVariantB({ data, theme }: { data: ProjectsData; theme: Portfoli
       <div className="max-w-6xl mx-auto">
         <h2 className={`text-4xl font-bold ${textClass} mb-12 text-center`}>Projects</h2>
         <div className="space-y-12">
-          {(data.projects || []).map((project, index) => (
-            <div
-              key={project.id}
-              className={`grid md:grid-cols-2 gap-8 items-center ${
-                index % 2 === 1 ? 'md:flex-row-reverse' : ''
-              }`}
-            >
-              <div className={index % 2 === 1 ? 'md:order-2' : ''}>
-                {project.imageUrl && (
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="w-full h-64 object-cover rounded-lg shadow-lg"
-                  />
-                )}
-              </div>
-              <div className={`${cardBgClass} p-6 rounded-lg ${index % 2 === 1 ? 'md:order-1' : ''}`}>
-                <h3 className={`text-2xl font-semibold ${textClass} mb-3`}>{project.title}</h3>
-                <p className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-                  {project.description}
-                </p>
-                {project.technologies && project.technologies.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech, techIndex) => (
-                      <span
-                        key={techIndex}
-                        className="text-xs px-2 py-1 rounded"
-                        style={{
-                          backgroundColor: `${theme.primaryColor}20`,
-                          color: theme.primaryColor,
-                        }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <div className="flex gap-3">
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium hover:opacity-80"
-                      style={{ color: theme.primaryColor }}
-                    >
-                      Live Demo →
-                    </a>
-                  )}
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium hover:opacity-80"
-                      style={{ color: theme.primaryColor }}
-                    >
-                      GitHub →
-                    </a>
+          {(data.projects || []).length > 0 ? (
+            (data.projects || []).map((project, index) => (
+              <div
+                key={project.id}
+                className={`grid md:grid-cols-2 gap-8 items-center ${
+                  index % 2 === 1 ? 'md:flex-row-reverse' : ''
+                }`}
+              >
+                <div className={index % 2 === 1 ? 'md:order-2' : ''}>
+                  {project.imageUrl && (
+                    <img loading="lazy"
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="w-full h-64 object-cover rounded-lg shadow-lg"
+                    />
                   )}
                 </div>
+                <div className={`${cardBgClass} p-6 rounded-lg ${index % 2 === 1 ? 'md:order-1' : ''}`}>
+                  <h3 className={`text-2xl font-semibold ${textClass} mb-3`}>{project.title}</h3>
+                  <p className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
+                    {project.description}
+                  </p>
+                  {project.technologies && project.technologies.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.map((tech, techIndex) => (
+                        <span
+                          key={techIndex}
+                          className="text-xs px-2 py-1 rounded"
+                          style={{
+                            backgroundColor: `${theme.primaryColor}20`,
+                            color: theme.primaryColor,
+                          }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex gap-3">
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium hover:opacity-80"
+                        style={{ color: theme.primaryColor }}
+                      >
+                        Live Demo →
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium hover:opacity-80"
+                        style={{ color: theme.primaryColor }}
+                      >
+                        GitHub →
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className={`py-16 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'} border-2 border-dashed rounded-2xl ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+               <p className="text-xl font-bold mb-2">Build Your Showreel</p>
+               <p className="text-base">Add your best projects to showcase your skills.</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>
@@ -211,93 +225,103 @@ function ProjectsVariantC({ data, theme }: { data: ProjectsData; theme: Portfoli
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-           {(data.projects || []).map((project) => (
-            <div
-              key={project.id}
-              className={`flex flex-col h-full border-2 ${borderColor} ${cardBg} group hover:-translate-y-2 transition-transform duration-300`}
-              style={{
-                boxShadow: `8px 8px 0px 0px ${primaryColor}`,
-              }}
-            >
-              {/* Image Header with browser-like bar */}
-              <div className={`border-b-2 ${borderColor} bg-gray-100 dark:bg-gray-800 p-2 flex items-center gap-2`}>
-                 <div className="w-3 h-3 rounded-full border border-black/20 bg-red-400" />
-                 <div className="w-3 h-3 rounded-full border border-black/20 bg-yellow-400" />
-                 <div className="w-3 h-3 rounded-full border border-black/20 bg-green-400" />
-              </div>
-              
-              {project.imageUrl ? (
-                <div className={`border-b-2 ${borderColor} overflow-hidden aspect-video relative`}>
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                  />
-                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: `${primaryColor}20`}} />
+           {(data.projects || []).length > 0 ? (
+             (data.projects || []).map((project) => (
+              <div
+                key={project.id}
+                className={`flex flex-col h-full border-2 ${borderColor} ${cardBg} group hover:-translate-y-2 transition-transform duration-300`}
+                style={{
+                  boxShadow: `8px 8px 0px 0px ${primaryColor}`,
+                }}
+              >
+                {/* Image Header with browser-like bar */}
+                <div className={`border-b-2 ${borderColor} bg-gray-100 dark:bg-gray-800 p-2 flex items-center gap-2`}>
+                   <div className="w-3 h-3 rounded-full border border-black/20 bg-red-400" />
+                   <div className="w-3 h-3 rounded-full border border-black/20 bg-yellow-400" />
+                   <div className="w-3 h-3 rounded-full border border-black/20 bg-green-400" />
                 </div>
-              ) : (
-                 <div className={`border-b-2 ${borderColor} aspect-video flex items-center justify-center bg-gray-50 dark:bg-gray-800/50`}>
-                    <span className="font-mono text-xs opacity-50">NO_PREVIEW</span>
-                 </div>
-              )}
-
-              <div className="p-6 flex-1 flex flex-col">
-                <h3 className={`text-2xl font-bold ${textColor} mb-3 uppercase tracking-tight`}>{project.title}</h3>
-                <p className={`text-base ${isDark ? 'text-gray-400' : 'text-gray-700'} mb-6 leading-relaxed flex-1 font-medium`}>
-                  {project.description}
-                </p>
-
-                {project.technologies && project.technologies.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map((tech, index) => (
-                      <span
-                        key={index}
-                        className={`text-xs px-2 py-1 border ${borderColor} font-mono font-bold uppercase`}
-                         style={{
-                          backgroundColor: 'transparent',
-                          color: textColor === 'text-white' ? 'white' : 'black',
+                
+                {project.imageUrl ? (
+                  <div className={`border-b-2 ${borderColor} overflow-hidden aspect-video relative`}>
+                    <img loading="lazy"
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    />
+                    <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: `${primaryColor}20`}} />
+                  </div>
+                ) : (
+                   <div className={`border-b-2 ${borderColor} aspect-video flex items-center justify-center bg-gray-50 dark:bg-gray-800/50`}>
+                      <span className="font-mono text-xs opacity-50">NO_PREVIEW</span>
+                   </div>
+                )}
+  
+                <div className="p-6 flex-1 flex flex-col">
+                  <h3 className={`text-2xl font-bold ${textColor} mb-3 uppercase tracking-tight`}>{project.title}</h3>
+                  <p className={`text-base ${isDark ? 'text-gray-400' : 'text-gray-700'} mb-6 leading-relaxed flex-1 font-medium`}>
+                    {project.description}
+                  </p>
+  
+                  {project.technologies && project.technologies.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {project.technologies.map((tech, index) => (
+                        <span
+                          key={index}
+                          className={`text-xs px-2 py-1 border ${borderColor} font-mono font-bold uppercase`}
+                           style={{
+                            backgroundColor: 'transparent',
+                            color: textColor === 'text-white' ? 'white' : 'black',
+                          }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+  
+                  <div className="flex gap-4 mt-auto">
+                     {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex-1 text-center py-3 px-4 border-2 ${borderColor} text-sm font-bold uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors`}
+                        style={{
+                          backgroundColor: primaryColor,
+                          color: 'white',
+                          boxShadow: `2px 2px 0px 0px ${isDark ? '#fff' : '#000'}`
                         }}
                       >
-                        {tech}
-                      </span>
-                    ))}
+                        Live Demo
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex-1 text-center py-3 px-4 border-2 ${borderColor} text-sm font-bold uppercase hover:opacity-80 transition-opacity`}
+                         style={{
+                          color: textColor === 'text-white' ? 'white' : 'black',
+                          backgroundColor: 'transparent'
+                        }}
+                      >
+                        GitHub
+                      </a>
+                    )}
                   </div>
-                )}
-
-                <div className="flex gap-4 mt-auto">
-                   {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex-1 text-center py-3 px-4 border-2 ${borderColor} text-sm font-bold uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors`}
-                      style={{
-                        backgroundColor: primaryColor,
-                        color: 'white',
-                        boxShadow: `2px 2px 0px 0px ${isDark ? '#fff' : '#000'}`
-                      }}
-                    >
-                      Live Demo
-                    </a>
-                  )}
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex-1 text-center py-3 px-4 border-2 ${borderColor} text-sm font-bold uppercase hover:opacity-80 transition-opacity`}
-                       style={{
-                        color: textColor === 'text-white' ? 'white' : 'black',
-                        backgroundColor: 'transparent'
-                      }}
-                    >
-                      GitHub
-                    </a>
-                  )}
                 </div>
               </div>
-            </div>
-           ))}
+             ))
+           ) : (
+             <div className={`col-span-full py-20 text-center ${textColor} border-4 ${borderColor} ${cardBg} relative overflow-hidden`} style={{ boxShadow: `12px 12px 0px 0px ${primaryColor}` }}>
+                <div className="relative z-10">
+                   <p className="text-3xl font-black mb-4 tracking-tighter">PROJECT_LOG: EMPTY</p>
+                   <p className="text-lg font-bold opacity-60">UPLOAD_DATA_TO_PROCEED</p>
+                </div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-current opacity-10 animate-pulse" />
+             </div>
+           )}
         </div>
       </div>
     </section>

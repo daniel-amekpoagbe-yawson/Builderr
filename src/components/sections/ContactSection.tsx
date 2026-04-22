@@ -47,10 +47,18 @@ function ContactVariantC({ data, theme }: { data: ContactData; theme: Portfolio[
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    // Create mailto link
+    const subject = encodeURIComponent(`Message from ${formData.name} via Portfolio`)
+    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)
+    const mailtoLink = `mailto:${data.email}?subject=${subject}&body=${body}`
+    
+    // Open email client
+    window.location.href = mailtoLink
+    
     setSubmitted(true)
     setIsSubmitting(false)
     setTimeout(() => {
@@ -242,11 +250,18 @@ function ContactVariantA({ data, theme }: { data: ContactData; theme: Portfolio[
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    // Create mailto link
+    const subject = encodeURIComponent(`Message from ${formData.name} via Portfolio`)
+    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)
+    const mailtoLink = `mailto:${data.email || ''}?subject=${subject}&body=${body}`
+    
+    // Open email client
+    window.location.href = mailtoLink
+    
     setSubmitted(true)
     setIsSubmitting(false)
     setTimeout(() => {
@@ -300,7 +315,7 @@ function ContactVariantA({ data, theme }: { data: ContactData; theme: Portfolio[
                 {data.imageUrl && (
                   <div className="flex justify-center mb-4">
                     <div className="relative">
-                      <img
+                      <img loading="lazy"
                         src={data.imageUrl}
                         alt="Profile"
                         className="w-32 h-32 rounded-full object-cover border-4 shadow-lg"
@@ -547,11 +562,18 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    // Create mailto link
+    const subject = encodeURIComponent(`Message from ${formData.name} via Portfolio`)
+    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)
+    const mailtoLink = `mailto:${data.email || ''}?subject=${subject}&body=${body}`
+    
+    // Open email client
+    window.location.href = mailtoLink
+    
     setSubmitted(true)
     setIsSubmitting(false)
     setTimeout(() => {
@@ -608,7 +630,7 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
                   {(data.imageUrl || data.bio) && (
                      <div className="flex gap-6 items-start">
                         {data.imageUrl && (
-                           <img src={data.imageUrl} alt="Profile" className={`w-20 h-20 border-2 ${borderColor} object-cover grayscale`} />
+                           <img loading="lazy" src={data.imageUrl} alt="Profile" className={`w-20 h-20 border-2 ${borderColor} object-cover grayscale`} />
                         )}
                          {data.bio && <p className={`${isDark ? 'text-gray-400' : 'text-gray-700'} font-medium`}>{data.bio}</p>}
                      </div>

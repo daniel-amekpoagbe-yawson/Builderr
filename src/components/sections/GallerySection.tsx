@@ -106,45 +106,50 @@ function GalleryVariantA({ data, theme }: { data: GalleryData; theme: Portfolio[
         )}
 
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-          {filteredImages.map((image, index) => (
-            <div
-              key={image.id}
-              className="break-inside-avoid group cursor-pointer"
-              onClick={() => openLightbox(index)}
-            >
-              <div className="relative overflow-hidden rounded-xl">
-                {image.url ? (
-                  <img
-                    src={image.url}
-                    alt={image.title || `Gallery image ${index + 1}`}
-                    className="w-full h-auto transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div
-                    className={cn(
-                      'w-full aspect-square flex items-center justify-center',
-                      isDark ? 'bg-gray-800' : 'bg-gray-200',
-                    )}
-                  >
-                    <span className={isDark ? 'text-gray-600' : 'text-gray-400'}>
-                      No image
-                    </span>
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-end">
-                  <div className="p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    {image.title && (
-                      <h3 className="text-white font-medium text-lg">{image.title}</h3>
-                    )}
-                    {image.category && (
-                      <span className="text-white/70 text-sm">{image.category}</span>
-                    )}
+          {filteredImages.length > 0 ? (
+            filteredImages.map((image, index) => (
+              <div
+                key={image.id}
+                className="break-inside-avoid group cursor-pointer"
+                onClick={() => openLightbox(index)}
+              >
+                <div className="relative overflow-hidden rounded-xl">
+                  {image.url ? (
+                    <img loading="lazy"
+                      src={image.url}
+                      alt={image.title || `Gallery image ${index + 1}`}
+                      className="w-full h-auto transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div
+                      className={cn(
+                        'w-full aspect-square flex items-center justify-center',
+                        isDark ? 'bg-gray-800' : 'bg-gray-200',
+                      )}
+                    >
+                      <span className={isDark ? 'text-gray-600' : 'text-gray-400'}>
+                        No image
+                      </span>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-end">
+                    <div className="p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                      {image.title && (
+                        <h3 className="text-white font-medium text-lg">{image.title}</h3>
+                      )}
+                      {image.category && (
+                        <span className="text-white/70 text-sm">{image.category}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className={`col-span-full py-20 text-center rounded-2xl border-2 border-dashed ${isDark ? 'border-gray-800 text-gray-500' : 'border-gray-200 text-gray-400'}`}>
+               <p className="text-lg">No images found. Add some to your gallery!</p>
             </div>
-          ))}
+          )}
         </div>
 
         {filteredImages.length === 0 && (
@@ -259,7 +264,7 @@ function GalleryVariantB({ data, theme }: { data: GalleryData; theme: Portfolio[
             >
               <div className="relative aspect-square overflow-hidden rounded-2xl">
                 {image.url ? (
-                  <img
+                  <img loading="lazy"
                     src={image.url}
                     alt={image.title || `Gallery image ${index + 1}`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -405,7 +410,7 @@ function GalleryVariantC({ data, theme }: { data: GalleryData; theme: Portfolio[
             >
               <div className="relative aspect-[21/9] overflow-hidden rounded-3xl">
                 {filteredImages[0].url ? (
-                  <img
+                  <img loading="lazy"
                     src={filteredImages[0].url}
                     alt={filteredImages[0].title || 'Featured image'}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -447,7 +452,7 @@ function GalleryVariantC({ data, theme }: { data: GalleryData; theme: Portfolio[
                   >
                     <div className="relative aspect-square overflow-hidden rounded-xl">
                       {image.url ? (
-                        <img
+                        <img loading="lazy"
                           src={image.url}
                           alt={image.title || `Gallery image ${index + 2}`}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -581,7 +586,7 @@ function GalleryVariantD({ data, theme }: { data: GalleryData; theme: Portfolio[
             >
                <div className={`relative aspect-square border-2 ${borderColor} overflow-hidden mb-4 grayscale group-hover:grayscale-0 transition-all duration-500`}>
                 {image.url ? (
-                  <img
+                  <img loading="lazy"
                     src={image.url}
                     alt={image.title || `Gallery image ${index + 1}`}
                     className="w-full h-full object-cover"

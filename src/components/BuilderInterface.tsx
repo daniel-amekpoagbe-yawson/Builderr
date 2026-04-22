@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { usePortfolioStore } from '@/store/portfolio.store'
 import type { SectionType } from '@/interfaces/Portfolio'
@@ -7,25 +7,96 @@ import { PreviewArea } from './builder/PreviewArea'
 import { ConfigPanel } from './builder/ConfigPanel'
 import { BuilderToolbar } from './builder/BuilderToolbar'
 import { ThemeConfig } from './builder/ThemeConfig'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { toast } from 'sonner'
 import { X, Copy } from 'lucide-react'
 
 export function BuilderInterface() {
   const navigate = useNavigate()
-  const { currentPortfolio, saving, publishPortfolio, unpublishPortfolio } =
-    usePortfolioStore()
+  const {
+    currentPortfolio,
+    saving,
+    isDirty,
+    lastSavedAt,
+    publishPortfolio,
+    unpublishPortfolio,
+    savePortfolio,
+    undo,
+    redo,
+  } = usePortfolioStore()
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null)
   const [previewMode, setPreviewMode] = useState(false)
   const [showPublishDialog, setShowPublishDialog] = useState(false)
   const [showThemeSettings, setShowThemeSettings] = useState(false)
-  
-  // State to control the visibility of the left sidebar (Section Selector)
-  // When true, the sidebar is hidden to give more space to the preview area
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [showLeaveDialog, setShowLeaveDialog] = useState(false)
+
+  // ── Keyboard Shortcuts ────────────────────────────────────────────────
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey
+
+      // Ctrl+S → Force save
+      if (isCtrlOrCmd && e.key === 's') {
+        e.preventDefault()
+        savePortfolio().then(() => {
+          toast.success('Portfolio saved!')
+        }).catch(() => {
+          toast.error('Failed to save')
+        })
+        return
+      }
+
+      // Ctrl+Z → Undo
+      if (isCtrlOrCmd && !e.shiftKey && e.key === 'z') {
+        e.preventDefault()
+        undo()
+        return
+      }
+
+      // Ctrl+Y or Ctrl+Shift+Z → Redo
+      if (isCtrlOrCmd && (e.key === 'y' || (e.shiftKey && e.key === 'z') || (e.shiftKey && e.key === 'Z'))) {
+        e.preventDefault()
+        redo()
+        return
+      }
+
+      // Esc → Deselect section
+      if (e.key === 'Escape') {
+        setSelectedSectionId(null)
+        setShowThemeSettings(false)
+        return
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [savePortfolio, undo, redo])
+
+  // ── Browser tab close / refresh warning ─────────────────────────────
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
 
   if (!currentPortfolio) return null
 
   const selectedSection = currentPortfolio.sections.find((s) => s.id === selectedSectionId)
+
+  // ── Navigate back with unsaved changes guard ──────────────────────────
+  const handleBack = useCallback(() => {
+    if (isDirty) {
+      setShowLeaveDialog(true)
+    } else {
+      navigate({ to: '/dashboard' })
+    }
+  }, [isDirty, navigate])
 
   const handlePublish = async () => {
     try {
@@ -45,20 +116,6 @@ export function BuilderInterface() {
       toast.error(error.message || 'Failed to unpublish portfolio')
     }
   }
-
-  // const handleExport = () => {
-  //   const html = exportHTML()
-  //   const blob = new Blob([html], { type: 'text/html' })
-  //   const url = URL.createObjectURL(blob)
-  //   const a = document.createElement('a')
-  //   a.href = url
-  //   a.download = `${currentPortfolio.title.replace(/\s+/g, '-')}.html`
-  //   document.body.appendChild(a)
-  //   a.click()
-  //   document.body.removeChild(a)
-  //   URL.revokeObjectURL(url)
-  //   toast.success('Portfolio exported!')
-  // }
 
   if (previewMode) {
     return (
@@ -82,36 +139,33 @@ export function BuilderInterface() {
     )
   }
 
-
-
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Top Toolbar */}
       <BuilderToolbar
         portfolio={currentPortfolio}
         saving={saving}
-        onBack={() => navigate({ to: '/dashboard' })}
+        isDirty={isDirty}
+        lastSavedAt={lastSavedAt}
+        onBack={handleBack}
         onPreview={() => setPreviewMode(true)}
         onThemeSettings={() => {
           setShowThemeSettings(true)
           setSelectedSectionId(null)
         }}
         onPublish={currentPortfolio.isPublished ? handleUnpublish : handlePublish}
-        // onExport={handleExport}
         isPublished={currentPortfolio.isPublished || false}
       />
 
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden relative">
         {/* Left Sidebar - Section Selector */}
-        {/* We use dynamic classes to control width and transitions for a smooth collapse effect */}
         <div 
           className={`
             ${isSidebarCollapsed ? 'w-0 border-none' : 'w-64 border-r'} 
             bg-white border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out relative
           `}
         >
-          {/* Prevent content from wrapping when collapsing by using min-w-max or hiding overflow */}
           <div className={`${isSidebarCollapsed ? 'hidden' : 'block'}`}>
              <SectionSidebar
               sections={currentPortfolio.sections}
@@ -128,18 +182,13 @@ export function BuilderInterface() {
           </div>
         </div>
 
-        {/* 
-          Collapsible Toggle Button 
-          This button floats absolutely to the left of the preview area.
-          It allows the user to toggle the sidebar visibility.
-        */}
+        {/* Collapsible Toggle Button */}
         <div className={`absolute top-1/2 -translate-y-1/2 z-50 transition-all duration-300 ${isSidebarCollapsed ? 'left-0' : 'left-64'}`}>
            <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             className="bg-white border border-gray-200 p-1.5 rounded-r-lg shadow-md hover:bg-gray-50 text-gray-600 focus:outline-none flex items-center justify-center transform hover:scale-105 transition-all"
             title={isSidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
           >
-            {/* Rotate icon based on state */}
             {isSidebarCollapsed ? (
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             ) : (
@@ -249,7 +298,6 @@ export function BuilderInterface() {
                 rel="noopener noreferrer"
                 className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-center transition-colors"
                 onClick={() => {
-                  // Ensure it opens in a new tab
                   window.open(`/${currentPortfolio.slug}`, '_blank', 'noopener,noreferrer')
                 }}
               >
@@ -265,7 +313,28 @@ export function BuilderInterface() {
           </div>
         </div>
       )}
+
+      {/* Unsaved Changes Warning Dialog */}
+      <ConfirmDialog
+        open={showLeaveDialog}
+        title="Unsaved Changes"
+        message="You have unsaved changes. Would you like to save before leaving?"
+        confirmText="Save & Leave"
+        cancelText="Leave Without Saving"
+        onConfirm={async () => {
+          try {
+            await savePortfolio()
+            setShowLeaveDialog(false)
+            navigate({ to: '/dashboard' })
+          } catch {
+            toast.error('Failed to save — please try again')
+          }
+        }}
+        onCancel={() => {
+          setShowLeaveDialog(false)
+          navigate({ to: '/dashboard' })
+        }}
+      />
     </div>
   )
 }
-

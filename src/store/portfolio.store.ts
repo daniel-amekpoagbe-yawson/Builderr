@@ -7,14 +7,27 @@ import type { PortfolioTemplate } from '@/lib/templates'
 // ── Limits ──────────────────────────────────────────────────────────────────
 const MAX_PORTFOLIOS = 10
 const MAX_SECTIONS_PER_PORTFOLIO = 20
+const MAX_HISTORY = 50
 
 interface PortfolioStore {
   currentPortfolio: Portfolio | null
   portfolios: Array<Portfolio>
   loading: boolean
   saving: boolean
-  isDirty: boolean // tracks unsaved changes
+  isDirty: boolean
+  lastSavedAt: number | null // timestamp for "Saved ✓" flash
   autoSaveTimer: ReturnType<typeof setTimeout> | null
+
+  // ── History (Undo/Redo) ─────────────────────────────────────────────────
+  _history: Portfolio[]
+  _historyIndex: number
+  _pushHistory: () => void
+  undo: () => void
+  redo: () => void
+  canUndo: () => boolean
+  canRedo: () => boolean
+
+  // ── Actions ─────────────────────────────────────────────────────────────
   loadPortfolio: (id: string) => Promise<void>
   loadUserPortfolios: () => Promise<void>
   createPortfolio: (title: string) => Promise<Portfolio>
@@ -29,7 +42,7 @@ interface PortfolioStore {
   savePortfolio: () => Promise<void>
   scheduleAutoSave: () => void
   cancelAutoSave: () => void
-  publishPortfolio: () => Promise<string> // returns public URL
+  publishPortfolio: () => Promise<string>
   unpublishPortfolio: () => Promise<void>
   deletePortfolio: (id: string) => Promise<void>
   duplicatePortfolio: (id: string) => Promise<Portfolio>
@@ -37,7 +50,7 @@ interface PortfolioStore {
 
 const defaultTheme: Portfolio['theme'] = {
   mode: 'light',
-  primaryColor: '#4f46e5', // indigo-600
+  primaryColor: '#4f46e5',
   fontFamily: 'inter',
   navbarVariant: 'default',
 }
@@ -48,13 +61,99 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   loading: false,
   saving: false,
   isDirty: false,
+  lastSavedAt: null,
   autoSaveTimer: null,
 
+  // ── History State ───────────────────────────────────────────────────────
+  _history: [],
+  _historyIndex: -1,
+
+  /**
+   * Snapshots the current portfolio into the history stack (called before every mutation).
+   * Truncates any "redo" entries beyond the current pointer.
+   */
+  _pushHistory: () => {
+    const state = get()
+    if (!state.currentPortfolio) return
+
+    const snapshot = JSON.parse(JSON.stringify(state.currentPortfolio))
+    const newHistory = state._history.slice(0, state._historyIndex + 1)
+    newHistory.push(snapshot)
+
+    // Keep history bounded
+    if (newHistory.length > MAX_HISTORY) {
+      newHistory.shift()
+    }
+
+    set({
+      _history: newHistory,
+      _historyIndex: newHistory.length - 1,
+    })
+  },
+
+  undo: () => {
+    const state = get()
+    if (state._historyIndex < 0 || !state.currentPortfolio) return
+
+    // If we're at the end of history, save current state first so redo works
+    if (state._historyIndex === state._history.length - 1) {
+      const current = JSON.parse(JSON.stringify(state.currentPortfolio))
+      const newHistory = [...state._history, current]
+      const restoredPortfolio = state._history[state._historyIndex]
+      set({
+        currentPortfolio: restoredPortfolio,
+        _history: newHistory,
+        _historyIndex: state._historyIndex - 1,
+        isDirty: true,
+      })
+    } else {
+      const restoredPortfolio = state._history[state._historyIndex]
+      set({
+        currentPortfolio: restoredPortfolio,
+        _historyIndex: state._historyIndex - 1,
+        isDirty: true,
+      })
+    }
+    get().scheduleAutoSave()
+  },
+
+  redo: () => {
+    const state = get()
+    if (state._historyIndex >= state._history.length - 1) return
+
+    const nextIndex = state._historyIndex + 2
+    if (nextIndex >= state._history.length) return
+
+    set({
+      currentPortfolio: state._history[nextIndex],
+      _historyIndex: state._historyIndex + 1,
+      isDirty: true,
+    })
+    get().scheduleAutoSave()
+  },
+
+  canUndo: () => {
+    const state = get()
+    return state._historyIndex >= 0
+  },
+
+  canRedo: () => {
+    const state = get()
+    return state._historyIndex < state._history.length - 2
+  },
+
+  // ── Data Loading ────────────────────────────────────────────────────────
   loadPortfolio: async (id: string) => {
     set({ loading: true })
     try {
       const portfolio = await portfolioService.getPortfolio(id)
-      set({ currentPortfolio: portfolio, loading: false, isDirty: false })
+      set({
+        currentPortfolio: portfolio,
+        loading: false,
+        isDirty: false,
+        _history: [],
+        _historyIndex: -1,
+      })
     } catch (error) {
       console.error('Failed to load portfolio:', error)
       set({ loading: false })
@@ -78,7 +177,6 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const user = useAuthStore.getState().user
     if (!user) throw new Error('User not authenticated')
 
-    // Enforce portfolio limit
     const state = get()
     if (state.portfolios.length >= MAX_PORTFOLIOS) {
       throw new Error(`You can create up to ${MAX_PORTFOLIOS} portfolios. Please delete an existing one first.`)
@@ -110,13 +208,11 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const user = useAuthStore.getState().user
     if (!user) throw new Error('User not authenticated')
 
-    // Enforce portfolio limit
     const state = get()
     if (state.portfolios.length >= MAX_PORTFOLIOS) {
       throw new Error(`You can create up to ${MAX_PORTFOLIOS} portfolios. Please delete an existing one first.`)
     }
 
-    // Create portfolio with template's theme and sections
     const newPortfolio: Portfolio = {
       id: crypto.randomUUID(),
       title,
@@ -144,9 +240,12 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     }
   },
 
+  // ── Section Mutations (with history) ────────────────────────────────────
   updateSection: (sectionId: string, updates: Partial<Section>) => {
     const state = get()
     if (!state.currentPortfolio) return
+
+    state._pushHistory()
 
     const updatedSections = state.currentPortfolio.sections.map((section) =>
       section.id === sectionId ? { ...section, ...updates } : section,
@@ -167,10 +266,11 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const state = get()
     if (!state.currentPortfolio) return
 
-    // Enforce section limit
     if (state.currentPortfolio.sections.length >= MAX_SECTIONS_PER_PORTFOLIO) {
       throw new Error(`Maximum ${MAX_SECTIONS_PER_PORTFOLIO} sections per portfolio.`)
     }
+
+    state._pushHistory()
 
     const newSection: Section = {
       id: crypto.randomUUID(),
@@ -196,6 +296,8 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const state = get()
     if (!state.currentPortfolio) return
 
+    state._pushHistory()
+
     const updatedSections = state.currentPortfolio.sections
       .filter((s) => s.id !== sectionId)
       .map((s, index) => ({ ...s, order: index }))
@@ -215,16 +317,17 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const state = get()
     if (!state.currentPortfolio) return
 
-    // Enforce section limit
     if (state.currentPortfolio.sections.length >= MAX_SECTIONS_PER_PORTFOLIO) {
       throw new Error(`Maximum ${MAX_SECTIONS_PER_PORTFOLIO} sections per portfolio.`)
     }
+
+    state._pushHistory()
 
     const sectionToDuplicate = state.currentPortfolio.sections.find((s) => s.id === sectionId)
     if (!sectionToDuplicate) return
 
     const newSection = {
-      ...sectionToDuplicate,
+      ...JSON.parse(JSON.stringify(sectionToDuplicate)),
       id: crypto.randomUUID(),
       order: state.currentPortfolio.sections.length,
     }
@@ -243,6 +346,8 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   reorderSections: (oldIndex: number, newIndex: number) => {
     const state = get()
     if (!state.currentPortfolio) return
+
+    state._pushHistory()
 
     const sections = [...state.currentPortfolio.sections]
     const [moved] = sections.splice(oldIndex, 1)
@@ -265,6 +370,8 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const state = get()
     if (!state.currentPortfolio) return
 
+    state._pushHistory()
+
     set({
       currentPortfolio: {
         ...state.currentPortfolio,
@@ -280,6 +387,8 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const state = get()
     if (!state.currentPortfolio) return
 
+    state._pushHistory()
+
     set({
       currentPortfolio: {
         ...state.currentPortfolio,
@@ -291,6 +400,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     get().scheduleAutoSave()
   },
 
+  // ── Auto-Save ───────────────────────────────────────────────────────────
   scheduleAutoSave: () => {
     const state = get()
     if (state.autoSaveTimer) {
@@ -298,11 +408,10 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     }
 
     const timer = setTimeout(() => {
-      // Only save if there are actual unsaved changes
       if (get().isDirty) {
         get().savePortfolio()
       }
-    }, 5000) // 5 second debounce (increased from 3s to reduce API load)
+    }, 5000)
 
     set({ autoSaveTimer: timer })
   },
@@ -328,6 +437,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         currentPortfolio: saved,
         saving: false,
         isDirty: false,
+        lastSavedAt: Date.now(),
         portfolios: state.portfolios.map((p) =>
           p.id === saved.id ? saved : p,
         ),
@@ -335,16 +445,15 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     } catch (error) {
       console.error('Failed to save portfolio:', error)
       set({ saving: false })
-      // Don't clear isDirty on failure — keep retrying on next schedule
       throw error
     }
   },
 
+  // ── Publish / Unpublish ─────────────────────────────────────────────────
   publishPortfolio: async () => {
     const state = get()
     if (!state.currentPortfolio) return ''
 
-    // Save any pending changes first
     if (state.isDirty) {
       await get().savePortfolio()
     }
@@ -408,7 +517,6 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   },
 
   duplicatePortfolio: async (id: string) => {
-    // Enforce portfolio limit
     const state = get()
     if (state.portfolios.length >= MAX_PORTFOLIOS) {
       throw new Error(`You can create up to ${MAX_PORTFOLIOS} portfolios. Please delete an existing one first.`)

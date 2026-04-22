@@ -6,7 +6,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { TemplateSelector } from '@/components/TemplateSelector'
 import type { PortfolioTemplate } from '@/lib/templates'
 import { toast } from 'sonner'
-import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut, Sparkles, Code2, Palette, Camera } from 'lucide-react'
+import { Plus, Edit, Trash2, Copy, ExternalLink, LogOut, Sparkles, Code2, Palette, Camera, Link2, Share2 } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { ProjectName } from '@/constant'
 import Spinner from '@/components/Spinner'
@@ -228,15 +228,47 @@ function DashboardPage() {
                     </div>
 
                     {portfolio.isPublished && portfolio.slug && (
-                      <a
-                        href={getPublicUrl(portfolio.slug) || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-black hover:text-gray-700 text-sm font-medium mb-4 group/link"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        <span className="group-hover/link:underline">View Live Site</span>
-                      </a>
+                      <div className="flex items-center gap-2 mb-4">
+                        <a
+                          href={getPublicUrl(portfolio.slug) || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-black hover:text-gray-700 text-sm font-medium group/link"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          <span className="group-hover/link:underline">View Live</span>
+                        </a>
+                        <span className="w-px h-4 bg-gray-200" />
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const url = getPublicUrl(portfolio.slug!)
+                            if (url) {
+                              navigator.clipboard.writeText(url)
+                              toast.success('Link copied!')
+                            }
+                          }}
+                          className="p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+                          title="Copy portfolio link"
+                        >
+                          <Link2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const url = getPublicUrl(portfolio.slug!)
+                            if (url) {
+                              const shareText = `Check out my portfolio: ${portfolio.title}`
+                              const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`
+                              window.open(twitterUrl, '_blank', 'width=600,height=400')
+                            }
+                          }}
+                          className="p-1 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
+                          title="Share on Twitter"
+                        >
+                          <Share2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     )}
 
                     {/* Actions */}

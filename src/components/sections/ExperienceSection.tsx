@@ -55,52 +55,58 @@ function ExperienceVariantC({ data, theme }: { data: ExperienceData; theme: Port
         </div>
 
         <div className="relative border-l-2 border-black/10 dark:border-white/10 ml-4 md:ml-0 md:pl-0 space-y-12">
-            {(data.experiences || []).map((exp, index) => (
-               <div key={exp.id} className="relative pl-8 md:pl-0">
-                  {/* Desktop Layout: Alternating */}
-                  <div className={`md:flex items-center justify-between gap-12 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
-                     
-                     {/* Date Badge (Desktop) */}
-                     <div className={`hidden md:block w-5/12 ${index % 2 === 1 ? 'text-left' : 'text-right'}`}>
-                        <span className={`inline-block px-4 py-2 border-2 ${borderColor} font-bold text-sm bg-white dark:bg-gray-800 ${textColor}`} style={{ boxShadow: `4px 4px 0px 0px ${primaryColor}` }}>
-                           {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
-                        </span>
-                     </div>
-                     
-                     {/* Center Connector */}
-                     <div className="absolute left-[-5px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black z-10" />
-
-                     {/* Content Card */}
-                     <div className="w-full md:w-5/12">
-                        <div 
-                           className={`p-6 border-2 ${borderColor} ${bgColor} relative group hover:-translate-y-1 transition-transform`}
-                           style={{ boxShadow: `8px 8px 0px 0px ${isDark ? '#333' : '#000'}` }}
-                        >
-                           {/* Mobile Date */}
-                           <div className="md:hidden mb-4">
-                              <span className={`inline-block px-3 py-1 border ${borderColor} text-xs font-bold bg-gray-100 dark:bg-gray-800`}>
-                                 {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
-                              </span>
-                           </div>
-
-                           <h3 className={`text-xl font-bold ${textColor} uppercase mb-1`}>{exp.position}</h3>
-                           <div className="flex items-center gap-2 mb-4">
-                              <span className="text-sm font-bold" style={{ color: primaryColor }}>@ {exp.company}</span>
-                              {exp.current && (
-                                 <span className="px-2 py-0.5 text-[10px] uppercase font-bold border border-current rounded-full" style={{ color: primaryColor }}>
-                                    Current
-                                 </span>
-                              )}
-                           </div>
-                           
-                           <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium leading-relaxed`}>
-                              {exp.description}
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            ))}
+            {(data.experiences || []).length > 0 ? (
+              (data.experiences || []).map((exp, index) => (
+                 <div key={exp.id} className="relative pl-8 md:pl-0">
+                    {/* Desktop Layout: Alternating */}
+                    <div className={`md:flex items-center justify-between gap-12 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+                       
+                       {/* Date Badge (Desktop) */}
+                       <div className={`hidden md:block w-5/12 ${index % 2 === 1 ? 'text-left' : 'text-right'}`}>
+                          <span className={`inline-block px-4 py-2 border-2 ${borderColor} font-bold text-sm bg-white dark:bg-gray-800 ${textColor}`} style={{ boxShadow: `4px 4px 0px 0px ${primaryColor}` }}>
+                             {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
+                          </span>
+                       </div>
+                       
+                       {/* Center Connector */}
+                       <div className="absolute left-[-5px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black z-10" />
+  
+                       {/* Content Card */}
+                       <div className="w-full md:w-5/12">
+                          <div 
+                             className={`p-6 border-2 ${borderColor} ${bgColor} relative group hover:-translate-y-1 transition-transform`}
+                             style={{ boxShadow: `8px 8px 0px 0px ${isDark ? '#333' : '#000'}` }}
+                          >
+                             {/* Mobile Date */}
+                             <div className="md:hidden mb-4">
+                                <span className={`inline-block px-3 py-1 border ${borderColor} text-xs font-bold bg-gray-100 dark:bg-gray-800`}>
+                                   {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
+                                </span>
+                             </div>
+  
+                             <h3 className={`text-xl font-bold ${textColor} uppercase mb-1`}>{exp.position}</h3>
+                             <div className="flex items-center gap-2 mb-4">
+                                <span className="text-sm font-bold" style={{ color: primaryColor }}>@ {exp.company}</span>
+                                {exp.current && (
+                                   <span className="px-2 py-0.5 text-[10px] uppercase font-bold border border-current rounded-full" style={{ color: primaryColor }}>
+                                      Current
+                                   </span>
+                                )}
+                             </div>
+                             
+                             <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} font-medium leading-relaxed`}>
+                                {exp.description}
+                             </p>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              ))
+            ) : (
+              <div className={`py-12 text-center ${textColor} border-2 border-dashed ${borderColor} opacity-50`}>
+                 <p className="font-mono text-lg uppercase tracking-widest">Awaiting_Career_Input</p>
+              </div>
+            )}
         </div>
       </div>
     </section>
@@ -124,40 +130,46 @@ function ExperienceVariantA({ data, theme }: { data: ExperienceData; theme: Port
             style={{ backgroundColor: theme.primaryColor }}
           />
           <div className="space-y-8">
-            {(data.experiences || []).map((exp) => (
-              <div key={exp.id} className="relative pl-20">
-                {/* Timeline dot */}
-                <div
-                  className="absolute left-6 top-2 w-4 h-4 rounded-full border-4"
-                  style={{
-                    backgroundColor: theme.primaryColor,
-                    borderColor: isDark ? '#1f2937' : '#ffffff',
-                  }}
-                />
-                <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'} rounded-lg p-6 shadow`}>
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className={`text-xl font-semibold ${textClass}`}>{exp.position}</h3>
-                      <p className={`text-lg font-medium ${subtextClass}`}>{exp.company}</p>
+            {(data.experiences || []).length > 0 ? (
+              (data.experiences || []).map((exp) => (
+                <div key={exp.id} className="relative pl-20">
+                  {/* Timeline dot */}
+                  <div
+                    className="absolute left-6 top-2 w-4 h-4 rounded-full border-4"
+                    style={{
+                      backgroundColor: theme.primaryColor,
+                      borderColor: isDark ? '#1f2937' : '#ffffff',
+                    }}
+                  />
+                  <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'} rounded-lg p-6 shadow`}>
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className={`text-xl font-semibold ${textClass}`}>{exp.position}</h3>
+                        <p className={`text-lg font-medium ${subtextClass}`}>{exp.company}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`text-sm font-medium ${subtextClass}`}>
+                          {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
+                        </p>
+                        {exp.current && (
+                          <span
+                            className="text-xs px-2 py-1 rounded-full text-white"
+                            style={{ backgroundColor: theme.primaryColor }}
+                          >
+                            Current
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`text-sm font-medium ${subtextClass}`}>
-                        {exp.startDate} - {exp.current ? 'Present' : exp.endDate || 'Present'}
-                      </p>
-                      {exp.current && (
-                        <span
-                          className="text-xs px-2 py-1 rounded-full text-white"
-                          style={{ backgroundColor: theme.primaryColor }}
-                        >
-                          Current
-                        </span>
-                      )}
-                    </div>
+                    <p className={`${subtextClass} leading-relaxed`}>{exp.description}</p>
                   </div>
-                  <p className={`${subtextClass} leading-relaxed`}>{exp.description}</p>
                 </div>
+              ))
+            ) : (
+              <div className={`py-12 text-center ${subtextClass} border-2 border-dashed ${isDark ? 'border-gray-800' : 'border-gray-200'} rounded-xl`}>
+                 <p className="text-lg">No experiences added yet</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

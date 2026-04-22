@@ -39,7 +39,7 @@ function HeroVariantA({
       <div className="max-w-4xl mx-auto text-center">
         {data.imageUrl && (
           <div className="mb-8">
-            <img
+            <img loading="lazy"
               src={data.imageUrl}
               alt={data.name}
               className="w-32 h-32 rounded-full mx-auto object-cover border-4"
@@ -163,7 +163,7 @@ function HeroVariantB({
             <div className="relative lg:order-last">
               <div className="relative z-10">
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <img
+                  <img loading="lazy"
                     src={data.imageUrl}
                     alt={data.name}
                     className="w-full h-auto object-cover aspect-square lg:aspect-auto"
@@ -273,7 +273,7 @@ function HeroVariantC({
               <div className="relative w-full max-w-md">
                  <div className={`absolute inset-0 border-2 ${borderColor} translate-x-4 translate-y-4`} style={{ backgroundColor: isDark ? '#333' : '#e5e5e5' }} />
                  <div className={`relative border-2 ${borderColor} bg-gray-200 aspect-square overflow-hidden grayscale hover:grayscale-0 transition-all duration-500`}>
-                    <img 
+                    <img loading="lazy" 
                       src={data.imageUrl} 
                       alt={data.name}
                       className="w-full h-full object-cover"
@@ -378,7 +378,7 @@ function HeroVariantD({
                   className={`absolute inset-0 border-2 ${borderColor} translate-x-2 translate-y-2 transition-transform group-hover:translate-x-3 group-hover:translate-y-3`}
                   style={{ backgroundColor: primaryColor }}
                 />
-                <img
+                <img loading="lazy"
                   src={data.imageUrl}
                   alt={data.name}
                   className={`relative z-10 w-full aspect-square object-cover border-2 ${borderColor} grayscale group-hover:grayscale-0 transition-all duration-500`}

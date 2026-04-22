@@ -37,7 +37,7 @@ function AboutVariantA({ data, theme }: { data: AboutData; theme: Portfolio['the
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {data.imageUrl && (
             <div>
-              <img
+              <img loading="lazy"
                 src={data.imageUrl}
                 alt="About"
                 className="w-full h-auto rounded-lg shadow-lg"
@@ -124,7 +124,7 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
 
                   {data.imageUrl ? (
                      <div className="aspect-4/5 bg-gray-100 dark:bg-gray-800 relative overflow-hidden border border-gray-900/10">
-                        <img 
+                        <img loading="lazy" 
                            src={data.imageUrl} 
                            alt="About Me" 
                            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
@@ -271,7 +271,7 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
                     className={`absolute inset-0 border ${borderColor} translate-x-2 translate-y-2 transition-transform group-hover:translate-x-3 group-hover:translate-y-3`}
                     style={{ backgroundColor: primaryColor }}
                   />
-                  <img
+                  <img loading="lazy"
                     src={data.imageUrl}
                     alt="About"
                     className={`relative w-full aspect-4/5 object-cover border ${borderColor} grayscale group-hover:grayscale-0 transition-all duration-500`}
