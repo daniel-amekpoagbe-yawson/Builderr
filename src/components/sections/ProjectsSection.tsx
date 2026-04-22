@@ -1,4 +1,5 @@
 import type { ProjectsData, Portfolio } from '@/interfaces/Portfolio'
+import { sanitizeUrl } from '@/lib/sanitize'
 
 interface ProjectsSectionProps {
   data: ProjectsData
@@ -67,7 +68,7 @@ function ProjectsVariantA({ data, theme }: { data: ProjectsData; theme: Portfoli
                 <div className="flex gap-3">
                   {project.liveUrl && (
                     <a
-                      href={project.liveUrl}
+                      href={sanitizeUrl(project.liveUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm font-medium hover:opacity-80"
@@ -78,7 +79,7 @@ function ProjectsVariantA({ data, theme }: { data: ProjectsData; theme: Portfoli
                   )}
                   {project.githubUrl && (
                     <a
-                      href={project.githubUrl}
+                      href={sanitizeUrl(project.githubUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm font-medium hover:opacity-80"

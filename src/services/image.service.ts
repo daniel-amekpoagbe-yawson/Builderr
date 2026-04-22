@@ -50,7 +50,12 @@ class ImageService {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
 
+      const objectUrl = URL.createObjectURL(file)
+
       img.onload = () => {
+        // Clean up the object URL to prevent memory leak
+        URL.revokeObjectURL(objectUrl)
+
         // Calculate new dimensions
         let { width, height } = img
 
@@ -82,8 +87,11 @@ class ImageService {
         )
       }
 
-      img.onerror = () => reject(new Error('Failed to load image'))
-      img.src = URL.createObjectURL(file)
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl)
+        reject(new Error('Failed to load image'))
+      }
+      img.src = objectUrl
     })
   }
 

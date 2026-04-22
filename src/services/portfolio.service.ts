@@ -1,6 +1,16 @@
 import { supabase } from '@/lib/Supabase'
 import type { Portfolio, DatabasePortfolio } from '@/interfaces/Portfolio'
 
+// Slugs that cannot be used for published portfolios — they collide with app routes or are reserved
+const RESERVED_SLUGS = new Set([
+  'dashboard', 'builder', 'auth', 'preview', 'about', 'contact',
+  'api', 'admin', 'login', 'register', 'settings', 'profile',
+  'signup', 'signin', 'signout', 'logout', 'account', 'help',
+  'support', 'pricing', 'terms', 'privacy', 'blog', 'docs',
+  'app', 'static', 'assets', 'public', 'favicon', 'robots',
+  'sitemap', 'manifest', 'sw', 'service-worker',
+])
+
 class PortfolioService {
   // Convert database format to app format
   private dbToApp(db: DatabasePortfolio): Portfolio {
@@ -108,6 +118,11 @@ class PortfolioService {
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '')
+
+      // Ensure slug doesn't collide with reserved app routes
+      if (!slug || RESERVED_SLUGS.has(slug)) {
+        slug = `p-${slug || 'portfolio'}`
+      }
 
       // Ensure uniqueness
       let uniqueSlug = slug

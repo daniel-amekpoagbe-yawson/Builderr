@@ -31,6 +31,18 @@ function BuilderPage() {
       console.error('Failed to load portfolio:', error)
       navigate({ to: '/dashboard' })
     })
+
+    // Cleanup: cancel auto-save timer and save any pending changes when leaving
+    return () => {
+      const store = usePortfolioStore.getState()
+      store.cancelAutoSave()
+      // Save any unsaved changes before unmounting
+      if (store.isDirty && store.currentPortfolio) {
+        store.savePortfolio().catch((err) =>
+          console.error('Failed to save on unmount:', err)
+        )
+      }
+    }
   }, [portfolioId, loadPortfolio, navigate])
 
   if (loading) {

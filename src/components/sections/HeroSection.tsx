@@ -1,4 +1,5 @@
 import type { HeroData, Portfolio } from '@/interfaces/Portfolio'
+import { sanitizeUrl } from '@/lib/sanitize'
 
 interface HeroSectionProps {
   data: HeroData
@@ -59,7 +60,7 @@ function HeroVariantA({
         </p>
         {data.ctaText && (
           <a
-            href={data.ctaLink || '#'}
+            href={sanitizeUrl(data.ctaLink)}
             className="inline-block px-8 py-3 rounded-lg font-medium text-white transition-colors hover:opacity-90"
             style={{ backgroundColor: theme.primaryColor }}
           >
@@ -134,7 +135,7 @@ function HeroVariantB({
             {data.ctaText && (
               <div className="pt-4">
                 <a
-                  href={data.ctaLink || '#'}
+                  href={sanitizeUrl(data.ctaLink)}
                   className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold text-white transition-all hover:scale-105 hover:shadow-lg"
                   style={{ backgroundColor: theme.primaryColor }}
                 >
@@ -248,7 +249,7 @@ function HeroVariantC({
                 {data.ctaText && (
                   <div className="pt-4">
                     <a
-                      href={data.ctaLink || '#'}
+                      href={sanitizeUrl(data.ctaLink)}
                       className={`
                         inline-block px-8 py-4
                         text-white font-bold text-lg uppercase tracking-wider
@@ -353,7 +354,7 @@ function HeroVariantD({
 
             {data.ctaText && (
               <a
-                href={data.ctaLink || '#'}
+                href={sanitizeUrl(data.ctaLink)}
                 className={`
                     inline-block px-4 py-3
                     text-white font-bold text-lg uppercase tracking-wider

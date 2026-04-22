@@ -1,5 +1,6 @@
 import type { Portfolio } from '@/interfaces/Portfolio'
 import { Github, Linkedin, Twitter, Mail} from 'lucide-react'
+import { sanitizeUrl } from '@/lib/sanitize'
 import { ProjectName } from '@/constant'
 
 interface PortfolioFooterProps {
@@ -49,7 +50,7 @@ export function PortfolioFooter({ portfolio }: PortfolioFooterProps) {
               {socialLinks.map(({ key, icon: Icon, url }) => (
                 <a
                   key={key}
-                  href={url}
+                  href={sanitizeUrl(url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`transition-colors ${subtextClass} hover:${textClass}`}

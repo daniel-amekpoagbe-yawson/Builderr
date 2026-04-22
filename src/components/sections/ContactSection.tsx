@@ -1,4 +1,5 @@
 import type { ContactData, Portfolio } from '@/interfaces/Portfolio'
+import { sanitizeUrl } from '@/lib/sanitize'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import {
@@ -137,7 +138,7 @@ function ContactVariantC({ data, theme }: { data: ContactData; theme: Portfolio[
                         {socialLinks.map(({ key, icon: Icon, url }) => (
                            <a
                               key={key}
-                              href={url}
+                              href={sanitizeUrl(url)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className={`w-12 h-12 flex items-center justify-center border-2 ${borderColor} hover:-translate-y-1 transition-transform bg-white dark:bg-gray-800`}
@@ -390,7 +391,7 @@ function ContactVariantA({ data, theme }: { data: ContactData; theme: Portfolio[
                     {socialLinks.map(({ key, icon: Icon, url, label }) => (
                       <a
                         key={key}
-                        href={url}
+                        href={sanitizeUrl(url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg ${
@@ -633,7 +634,7 @@ function ContactVariantB({ data, theme }: { data: ContactData; theme: Portfolio[
                         {socialLinks.map(({ key, icon: Icon, url }) => (
                            <a
                               key={key}
-                              href={url}
+                              href={sanitizeUrl(url)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className={`w-12 h-12 flex items-center justify-center border-2 ${borderColor} hover:-translate-y-1 transition-transform`}

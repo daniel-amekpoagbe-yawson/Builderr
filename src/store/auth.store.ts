@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { User, Session } from '@supabase/supabase-js'
+import type { User, Session, Subscription } from '@supabase/supabase-js'
 import { supabase } from '@/lib/Supabase'
 
 interface AuthStore {
@@ -7,21 +7,32 @@ interface AuthStore {
   session: Session | null
   loading: boolean
   initialized: boolean
+  _authSubscription: Subscription | null
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
   initialize: () => Promise<void>
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   session: null,
   loading: false,
   initialized: false,
+  _authSubscription: null,
 
   initialize: async () => {
+    // Prevent multiple initializations
+    if (get().initialized) return
+
     set({ loading: true })
     try {
+      // Clean up any existing subscription to prevent leaks
+      const existingSub = get()._authSubscription
+      if (existingSub) {
+        existingSub.unsubscribe()
+      }
+
       const { data, error } = await supabase.auth.getSession()
       if (error) throw error
 
@@ -32,13 +43,15 @@ export const useAuthStore = create<AuthStore>((set) => ({
         initialized: true,
       })
 
-      // Listen for auth changes
-      supabase.auth.onAuthStateChange((_event, session) => {
+      // Listen for auth changes and store the subscription for cleanup
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         set({
           user: session?.user ?? null,
           session: session,
         })
       })
+
+      set({ _authSubscription: subscription })
     } catch (error) {
       console.error('Auth initialization error:', error)
       set({ loading: false, initialized: true })
@@ -108,4 +121,3 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
   },
 }))
-

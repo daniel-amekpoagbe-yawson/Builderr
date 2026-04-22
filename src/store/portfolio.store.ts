@@ -3,14 +3,18 @@ import type { Portfolio, Section, SectionType } from '@/interfaces/Portfolio'
 import { portfolioService } from '@/services/portfolio.service'
 import { useAuthStore } from '@/store/auth.store'
 import type { PortfolioTemplate } from '@/lib/templates'
-import { ProjectName } from '@/constant'
+
+// ── Limits ──────────────────────────────────────────────────────────────────
+const MAX_PORTFOLIOS = 10
+const MAX_SECTIONS_PER_PORTFOLIO = 20
 
 interface PortfolioStore {
   currentPortfolio: Portfolio | null
   portfolios: Array<Portfolio>
   loading: boolean
   saving: boolean
-  autoSaveTimer: NodeJS.Timeout | null
+  isDirty: boolean // tracks unsaved changes
+  autoSaveTimer: ReturnType<typeof setTimeout> | null
   loadPortfolio: (id: string) => Promise<void>
   loadUserPortfolios: () => Promise<void>
   createPortfolio: (title: string) => Promise<Portfolio>
@@ -24,9 +28,9 @@ interface PortfolioStore {
   updateTitle: (title: string) => void
   savePortfolio: () => Promise<void>
   scheduleAutoSave: () => void
+  cancelAutoSave: () => void
   publishPortfolio: () => Promise<string> // returns public URL
   unpublishPortfolio: () => Promise<void>
-  exportHTML: () => string
   deletePortfolio: (id: string) => Promise<void>
   duplicatePortfolio: (id: string) => Promise<Portfolio>
 }
@@ -43,14 +47,14 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   portfolios: [],
   loading: false,
   saving: false,
+  isDirty: false,
   autoSaveTimer: null,
 
   loadPortfolio: async (id: string) => {
     set({ loading: true })
     try {
       const portfolio = await portfolioService.getPortfolio(id)
-      set({ currentPortfolio: portfolio, loading: false })
-      get().scheduleAutoSave()
+      set({ currentPortfolio: portfolio, loading: false, isDirty: false })
     } catch (error) {
       console.error('Failed to load portfolio:', error)
       set({ loading: false })
@@ -74,6 +78,12 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     const user = useAuthStore.getState().user
     if (!user) throw new Error('User not authenticated')
 
+    // Enforce portfolio limit
+    const state = get()
+    if (state.portfolios.length >= MAX_PORTFOLIOS) {
+      throw new Error(`You can create up to ${MAX_PORTFOLIOS} portfolios. Please delete an existing one first.`)
+    }
+
     const newPortfolio: Portfolio = {
       id: crypto.randomUUID(),
       title,
@@ -87,8 +97,8 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
       set((state) => ({
         portfolios: [...state.portfolios, saved],
         currentPortfolio: saved,
+        isDirty: false,
       }))
-      get().scheduleAutoSave()
       return saved
     } catch (error) {
       console.error('Failed to create portfolio:', error)
@@ -99,6 +109,12 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   createPortfolioFromTemplate: async (template: PortfolioTemplate, title: string) => {
     const user = useAuthStore.getState().user
     if (!user) throw new Error('User not authenticated')
+
+    // Enforce portfolio limit
+    const state = get()
+    if (state.portfolios.length >= MAX_PORTFOLIOS) {
+      throw new Error(`You can create up to ${MAX_PORTFOLIOS} portfolios. Please delete an existing one first.`)
+    }
 
     // Create portfolio with template's theme and sections
     const newPortfolio: Portfolio = {
@@ -119,8 +135,8 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
       set((state) => ({
         portfolios: [...state.portfolios, saved],
         currentPortfolio: saved,
+        isDirty: false,
       }))
-      get().scheduleAutoSave()
       return saved
     } catch (error) {
       console.error('Failed to create portfolio from template:', error)
@@ -141,6 +157,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         ...state.currentPortfolio,
         sections: updatedSections,
       },
+      isDirty: true,
     })
 
     get().scheduleAutoSave()
@@ -149,6 +166,11 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   addSection: (type: SectionType) => {
     const state = get()
     if (!state.currentPortfolio) return
+
+    // Enforce section limit
+    if (state.currentPortfolio.sections.length >= MAX_SECTIONS_PER_PORTFOLIO) {
+      throw new Error(`Maximum ${MAX_SECTIONS_PER_PORTFOLIO} sections per portfolio.`)
+    }
 
     const newSection: Section = {
       id: crypto.randomUUID(),
@@ -164,6 +186,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         ...state.currentPortfolio,
         sections: [...state.currentPortfolio.sections, newSection],
       },
+      isDirty: true,
     })
 
     get().scheduleAutoSave()
@@ -182,6 +205,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         ...state.currentPortfolio,
         sections: updatedSections,
       },
+      isDirty: true,
     })
 
     get().scheduleAutoSave()
@@ -190,6 +214,11 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   duplicateSection: (sectionId: string) => {
     const state = get()
     if (!state.currentPortfolio) return
+
+    // Enforce section limit
+    if (state.currentPortfolio.sections.length >= MAX_SECTIONS_PER_PORTFOLIO) {
+      throw new Error(`Maximum ${MAX_SECTIONS_PER_PORTFOLIO} sections per portfolio.`)
+    }
 
     const sectionToDuplicate = state.currentPortfolio.sections.find((s) => s.id === sectionId)
     if (!sectionToDuplicate) return
@@ -205,6 +234,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         ...state.currentPortfolio,
         sections: [...state.currentPortfolio.sections, newSection],
       },
+      isDirty: true,
     })
 
     get().scheduleAutoSave()
@@ -225,6 +255,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         ...state.currentPortfolio,
         sections: reordered,
       },
+      isDirty: true,
     })
 
     get().scheduleAutoSave()
@@ -239,6 +270,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         ...state.currentPortfolio,
         theme: { ...state.currentPortfolio.theme, ...theme },
       },
+      isDirty: true,
     })
 
     get().scheduleAutoSave()
@@ -253,6 +285,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
         ...state.currentPortfolio,
         title,
       },
+      isDirty: true,
     })
 
     get().scheduleAutoSave()
@@ -265,15 +298,26 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     }
 
     const timer = setTimeout(() => {
-      get().savePortfolio()
-    }, 3000) // 3 second debounce
+      // Only save if there are actual unsaved changes
+      if (get().isDirty) {
+        get().savePortfolio()
+      }
+    }, 5000) // 5 second debounce (increased from 3s to reduce API load)
 
     set({ autoSaveTimer: timer })
   },
 
+  cancelAutoSave: () => {
+    const state = get()
+    if (state.autoSaveTimer) {
+      clearTimeout(state.autoSaveTimer)
+      set({ autoSaveTimer: null })
+    }
+  },
+
   savePortfolio: async () => {
     const state = get()
-    if (!state.currentPortfolio) return
+    if (!state.currentPortfolio || !state.isDirty) return
 
     set({ saving: true })
     try {
@@ -283,6 +327,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
       set({
         currentPortfolio: saved,
         saving: false,
+        isDirty: false,
         portfolios: state.portfolios.map((p) =>
           p.id === saved.id ? saved : p,
         ),
@@ -290,6 +335,7 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     } catch (error) {
       console.error('Failed to save portfolio:', error)
       set({ saving: false })
+      // Don't clear isDirty on failure — keep retrying on next schedule
       throw error
     }
   },
@@ -297,6 +343,11 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   publishPortfolio: async () => {
     const state = get()
     if (!state.currentPortfolio) return ''
+
+    // Save any pending changes first
+    if (state.isDirty) {
+      await get().savePortfolio()
+    }
 
     try {
       const slug = await portfolioService.publishPortfolio(
@@ -342,72 +393,6 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
     }
   },
 
-  exportHTML: () => {
-    const state = get()
-    if (!state.currentPortfolio) return ''
-
-    const portfolio = state.currentPortfolio
-    const sortedSections = [...portfolio.sections]
-      .filter((s) => s.enabled)
-      .sort((a, b) => a.order - b.order)
-
-    // Generate HTML for each section (simplified - in production, render actual components)
-    const sectionsHTML = sortedSections
-      .map((section) => {
-        // This is a simplified version - in production, you'd render the actual React components to HTML
-        return `<section class="section-${section.type}">
-          <!-- ${section.type} section variant ${section.variant} -->
-          <div class="section-content">
-            ${JSON.stringify(section.data, null, 2)}
-          </div>
-        </section>`
-      })
-      .join('\n')
-
-    const html = `<!DOCTYPE html>
-<html lang="en" data-theme="${portfolio.theme.mode}">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${portfolio.title}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      --primary-color: ${portfolio.theme.primaryColor};
-    }
-    body {
-      font-family: ${portfolio.theme.fontFamily === 'roboto' ? 'Roboto, sans-serif' : 'Inter, sans-serif'};
-      font-size: ${portfolio.theme.baseFontSize || '16px'}; /* Apply user-selected font size */
-      margin: 0;
-      padding: 0;
-    }
-    [data-theme="dark"] {
-      background-color: #111827;
-      color: #ffffff;
-    }
-    [data-theme="light"] {
-      background-color: #ffffff;
-      color: #111827;
-    }
-    .section-content {
-      padding: 2rem;
-    }
-  </style>
-</head>
-<body>
-  ${sectionsHTML}
-  <footer style="background: #f3f4f6; padding: 1rem; text-align: center; font-size: 0.875rem; color: #6b7280;">
-    <p>Built with <a href="https://${ProjectName.toLowerCase()}.com" style="color: ${portfolio.theme.primaryColor}; font-weight: 500;">${ProjectName}</a></p>
-  </footer>
-</body>
-</html>`
-
-    return html
-  },
-
   deletePortfolio: async (id: string) => {
     try {
       await portfolioService.deletePortfolio(id)
@@ -423,6 +408,12 @@ export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
   },
 
   duplicatePortfolio: async (id: string) => {
+    // Enforce portfolio limit
+    const state = get()
+    if (state.portfolios.length >= MAX_PORTFOLIOS) {
+      throw new Error(`You can create up to ${MAX_PORTFOLIOS} portfolios. Please delete an existing one first.`)
+    }
+
     try {
       const original = await portfolioService.getPortfolio(id)
       const duplicated: Portfolio = {

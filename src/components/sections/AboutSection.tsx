@@ -1,5 +1,6 @@
 import type { AboutData, Portfolio } from '@/interfaces/Portfolio'
 import { Facebook, Dribbble, Instagram, Linkedin, Twitter, Github, Download } from 'lucide-react'
+import { sanitizeUrl } from '@/lib/sanitize'
 
 
 
@@ -179,7 +180,7 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
                           url && (
                              <a 
                                 key={platform}
-                                href={url}
+                                href={sanitizeUrl(url)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={`w-10 h-10 border-2 ${borderColor} flex items-center justify-center hover:-translate-y-1 transition-transform ${textColor}`}
@@ -194,7 +195,7 @@ function AboutVariantB({ data, theme }: { data: AboutData; theme: Portfolio['the
 
                  {data.ctaButtons?.primary && (
                     <a
-                      href={data.ctaButtons.primary.link || '#'}
+                      href={sanitizeUrl(data.ctaButtons.primary.link)}
                       className={`
                          ml-auto px-8 py-3 
                          font-bold uppercase tracking-widest text-sm
@@ -325,7 +326,7 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
                       return (
                         <a
                           key={platform}
-                          href={url}
+                          href={sanitizeUrl(url)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`w-12 h-12 flex items-center justify-center border ${borderColor} hover:-translate-y-1 transition-transform`}
@@ -348,7 +349,7 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
                   <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     {data.ctaButtons.primary && (
                       <a
-                        href={data.ctaButtons.primary.link || '#'}
+                        href={sanitizeUrl(data.ctaButtons.primary.link)}
                          className={`
                             px-4 py-3 font-bold text-center uppercase tracking-wider text-xs
                             border-2 ${borderColor}
@@ -365,7 +366,7 @@ function AboutVariantC({ data, theme }: { data: AboutData; theme: Portfolio['the
                     )}
                     {data.ctaButtons.secondary && (
                        <a
-                        href={data.ctaButtons.secondary.link || '#'}
+                        href={sanitizeUrl(data.ctaButtons.secondary.link)}
                         className={`
                             px-4 py-3 font-bold text-center uppercase tracking-wider text-xs
                             border-2 ${borderColor}
