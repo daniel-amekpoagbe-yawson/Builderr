@@ -268,7 +268,6 @@ function GalleryVariantB({ data, theme }: { data: GalleryData; theme: Portfolio[
                     src={image.url}
                     alt={image.title || `Gallery image ${index + 1}`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
                   />
                 ) : (
                   <div
@@ -456,7 +455,6 @@ function GalleryVariantC({ data, theme }: { data: GalleryData; theme: Portfolio[
                           src={image.url}
                           alt={image.title || `Gallery image ${index + 2}`}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          loading="lazy"
                         />
                       ) : (
                         <div
@@ -590,7 +588,6 @@ function GalleryVariantD({ data, theme }: { data: GalleryData; theme: Portfolio[
                     src={image.url}
                     alt={image.title || `Gallery image ${index + 1}`}
                     className="w-full h-full object-cover"
-                    loading="lazy"
                   />
                 ) : (
                   <div
